@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://mc-sep.pages.dev/manifest.json</loc>
+    <loc>http://mc-sep.js.cool/links/index.html</loc>
     
     <lastmod>2024-06-23</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/links/index.html</loc>
+    <loc>http://mc-sep.js.cool/essay/index.html</loc>
     
     <lastmod>2024-05-30</lastmod>
     
@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/essay/index.html</loc>
+    <loc>http://mc-sep.js.cool/license/index.html</loc>
     
     <lastmod>2024-05-30</lastmod>
     
@@ -29,16 +29,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/license/index.html</loc>
-    
-    <lastmod>2024-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://mc-sep.pages.dev/post/%E7%BA%BF%E6%80%A7DP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</loc>
+    <loc>http://mc-sep.js.cool/post/%E7%BA%BF%E6%80%A7DP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</loc>
     
     <lastmod>2024-05-29</lastmod>
     
@@ -47,7 +38,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92DP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</loc>
+    <loc>http://mc-sep.js.cool/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92DP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</loc>
     
     <lastmod>2024-05-29</lastmod>
     
@@ -56,7 +47,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/post/[HTML]%E5%88%A9%E7%94%A8localstrange%E4%B8%B4%E6%97%B6%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE.html</loc>
+    <loc>http://mc-sep.js.cool/post/[HTML]%E5%88%A9%E7%94%A8localstrange%E4%B8%B4%E6%97%B6%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE.html</loc>
     
     <lastmod>2024-05-29</lastmod>
     
@@ -65,7 +56,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/post/[Hexo]%20Hexo+Github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2.html</loc>
+    <loc>http://mc-sep.js.cool/post/[Hexo]%20Hexo+Github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2.html</loc>
     
     <lastmod>2024-05-29</lastmod>
     
@@ -74,7 +65,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/message/index.html</loc>
+    <loc>http://mc-sep.js.cool/message/index.html</loc>
     
     <lastmod>2024-05-29</lastmod>
     
@@ -83,7 +74,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/recentcomments/index.html</loc>
+    <loc>http://mc-sep.js.cool/recentcomments/index.html</loc>
     
     <lastmod>2024-05-27</lastmod>
     
@@ -92,7 +83,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/music/index.html</loc>
+    <loc>http://mc-sep.js.cool/music/index.html</loc>
     
     <lastmod>2024-05-27</lastmod>
     
@@ -101,7 +92,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/about/index.html</loc>
+    <loc>http://mc-sep.js.cool/about/index.html</loc>
     
     <lastmod>2024-05-19</lastmod>
     
@@ -110,7 +101,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/post/GESP%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E7%AD%89%E7%BA%A7%E8%AE%A4%E8%AF%81%E6%A0%87%E5%9B%9B%E7%BA%A7%EF%BC%88%E5%A4%8D%E4%B9%A0%E8%A6%81%E7%82%B9%EF%BC%89.html</loc>
+    <loc>http://mc-sep.js.cool/post/GESP%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E7%AD%89%E7%BA%A7%E8%AE%A4%E8%AF%81%E6%A0%87%E5%9B%9B%E7%BA%A7%EF%BC%88%E5%A4%8D%E4%B9%A0%E8%A6%81%E7%82%B9%EF%BC%89.html</loc>
     
     <lastmod>2024-05-13</lastmod>
     
@@ -119,7 +110,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/post/Sep%E7%9A%84%E7%BD%91%E7%AB%99%E9%99%90%E6%97%B6%E5%86%85%E6%B5%8B.html</loc>
+    <loc>http://mc-sep.js.cool/post/Sep%E7%9A%84%E7%BD%91%E7%AB%99%E9%99%90%E6%97%B6%E5%86%85%E6%B5%8B.html</loc>
     
     <lastmod>2024-05-13</lastmod>
     
@@ -128,7 +119,7 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.pages.dev/post/CPP%E4%B8%83%E5%A4%A7%E7%BB%8F%E5%85%B8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3.html</loc>
+    <loc>http://mc-sep.js.cool/post/CPP%E4%B8%83%E5%A4%A7%E7%BB%8F%E5%85%B8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3.html</loc>
     
     <lastmod>2024-05-12</lastmod>
     
@@ -138,8 +129,8 @@
   
 
   <url>
-    <loc>http://mc-sep.pages.dev/</loc>
-    <lastmod>2024-06-23</lastmod>
+    <loc>http://mc-sep.js.cool/</loc>
+    <lastmod>2024-06-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
