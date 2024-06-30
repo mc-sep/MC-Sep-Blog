@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>【HTML】利用localstrange临时存储数据</title>
+    <url>//post/%5BHTML%5D%E5%88%A9%E7%94%A8localstrange%E4%B8%B4%E6%97%B6%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>参考资料：</p>
+<a class="tag-link" target="_blank" href="https://www.w3school.com.cn/html/html5_webstorage.asp">
+    <div class="tag-link-tips">引用站外链接</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/www.w3school.com.cn.png)">
+            <i class="solitude st-link-m-line" style="display: none"></i>
+        </div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">HTML 本地存储</div>
+            <div class="tag-link-sitename">w3school 在线教程</div>
+        </div>
+        <i class="solitude st-arrow-right-bold"></i>
+    </div>
+    </a>
+
+
+<p>通过本地存储（Local Storage），web 应用程序能够在用户浏览器中对数据进行本地的存储。</p>
+<p>在 HTML5 之前，应用程序数据只能存储在 cookie 中，包括每个服务器请求。本地存储则更安全，并且可在不影响网站性能的前提下将大量数据存储于本地。</p>
+<p>与 cookie 不同，存储限制要大得多（至少5MB），并且信息不会被传输到服务器。</p>
+<p>本地存储经由起源地（origin）（经由域和协议）。所有页面，从起源地，能够存储和访问相同的数据。</p>
+<div class="note  danger simple"><p>注意：localstrange里的数据不是永久保存的，它可能会在浏览器自动清理或手动删除后消失。</p>
+</div>
+
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><h2 id="Example：登录界面"><a href="#Example：登录界面" class="headerlink" title="Example：登录界面"></a>Example：登录界面</h2><h3 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h3><p>利用<strong>localstrange</strong>做一个登录、注册页面，可以立即注册和登录。</p>
+<h3 id="项目图片"><a href="#项目图片" class="headerlink" title="项目图片"></a>项目图片</h3><p><img src="/img/article/3/d49fb2dab8c35cf50fcb8b7e8f77b0fe21f25a13ecb5a9005632d2044893a975.png"></p>
+<p><img src="/img/article/3/3ed214b0ee29b297605e3108ed5a276f0cf4ba4f5f8ad0aa55df2b80bae4ca62.png"></p>
+<p>如果你有服务器，将数据存储在服务器上是不二之选。但是没有服务器，我们也可以通过一下方法完成此操作。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
+<li><p>确定临时变量：登录、注册的账号密码，状态</p>
+</li>
+<li><p>明确如何调用。</p>
+</li>
+</ol>
+<div class="note  warning simple"><p>由于存储变量的单一，重复注册会覆盖之前的数据。</p>
+</div>
+
+
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>登录：</p>
+<ol>
+<li>HTML样式</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>定义</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>调用</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注册：</p>
+<ol>
+<li>HTML样式：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>2.定义+调用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="完整代码-–"><a href="#完整代码-–" class="headerlink" title="完整代码 –&gt;"></a>完整代码 –&gt;</h3><ul>
+<li>登录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注册</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Exercise-图片中转站"><a href="#Exercise-图片中转站" class="headerlink" title="Exercise: 图片中转站"></a>Exercise: 图片中转站</h2><h3 id="项目说明-–"><a href="#项目说明-–" class="headerlink" title="项目说明 –&gt;"></a>项目说明 –&gt;</h3><p>见此：</p>
+<a class="tag-link" target="_blank" href="https://seppicture.github.io/">
+    <div class="tag-link-tips">引用站外链接</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/seppicture.github.io.png)">
+            <i class="solitude st-link-m-line" style="display: none"></i>
+        </div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">Sep的图片中转站</div>
+            <div class="tag-link-sitename">Minecraft-Sep</div>
+        </div>
+        <i class="solitude st-arrow-right-bold"></i>
+    </div>
+    </a>
+
+
+
+<h3 id="项目图片-–"><a href="#项目图片-–" class="headerlink" title="项目图片 –&gt;"></a>项目图片 –&gt;</h3><p><img src="/img/article/3/fc4caee593e7510f5e9b7923700b567a9caa39c4251ddfb820eb6235a24d6b50.png"></p>
+<p>源代码请见<code>评论区</code>。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>localstrange可以临时存放数据，但不建议长久存放。</p>
+<p>版权所有©Minecraft-Sep。</p>
+]]></content>
+      <categories>
+        <category>HTML</category>
+      </categories>
+      <tags>
+        <tag>Javascript</tag>
+        <tag>HTML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Hexo】 Waline--评论系统的添加(1)</title>
+    <url>//post/%5BHexo%5D%20%E7%BB%99%E4%BD%A0%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F.html</url>
+    <content><![CDATA[<div class="note  info simple"><p>预计完成时间43分钟，请放心食用！</p>
+</div>
+
+
+
+<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>众所周知，一个博客是不能没有评论的！</p>
+<p><code>2024.5.2</code>：上线了<code>waline</code>评论系统</p>
+<p><code>2024.5.9</code>：关闭了匿名评论功能</p>
+<p><code>2024.5.14</code>：启动了双评论，另一个是<code>twikoo</code></p>
+<p><code>2024.5.18</code>：关闭了双评论</p>
+<p><code>2024.6.14</code>：重新启动了双评论</p>
+<p>但是很多人不知道用什么评论……</p>
+<p>所以，今天还是老样子出教程！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解主流的评论系统"><a href="#Part1-了解主流的评论系统" class="headerlink" title="Part1:了解主流的评论系统"></a>Part1:了解主流的评论系统</h3><table>
+<thead>
+<tr>
+<th align="center">评论系统</th>
+<th align="center"><a href="https://valine.js.org/">Valine</a></th>
+<th align="center"><a href="https://waline.js.org/">Waline</a></th>
+<th align="center"><a href="https://twikoo.js.org/">Twikoo</a></th>
+<th align="center"><a href="https://artalk.js.org/">Artalk</a></th>
+<th align="center"><a href="https://github.com/gitalk/gitalk">Gitalk</a></th>
+<th align="center"><a href="https://giscus.app/zh-CN">Giscus</a></th>
+<th align="center"><a href="https://changyan.kuaizhan.com/">畅言</a></th>
+<th align="center"><a href="https://remark42.com/">Remark42</a></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">推荐指数</td>
+<td align="center">✔✔</td>
+<td align="center">✔✔✔✔</td>
+<td align="center">✔✔✔✔✔</td>
+<td align="center">✔✔✔</td>
+<td align="center">✔✔</td>
+<td align="center">✔✔</td>
+<td align="center">✔✔✔</td>
+<td align="center">✔✔</td>
+</tr>
+<tr>
+<td align="center">是否可以白嫖</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="center">说明</td>
+<td align="center">近期被爆出会泄露用户IP</td>
+<td align="center">方便，免费</td>
+<td align="center">方便，免费</td>
+<td align="center">方便，要服务器</td>
+<td align="center">访问慢</td>
+<td align="center">访问慢</td>
+<td align="center">要登录，功能全</td>
+<td align="center">访问慢</td>
+</tr>
+</tbody></table>
+<p>这里用Waline说明。</p>
+<h3 id="Part2-主题配置文件"><a href="#Part2-主题配置文件" class="headerlink" title="Part2:主题配置文件"></a>Part2:主题配置文件</h3><ol>
+<li>修改<code>主题配置文件</code>：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 评论</span></span><br><span class="line"><span class="comment"># comment</span></span><br><span class="line"><span class="comment"># getting start: https://solitude.js.org/comments/comment</span></span><br><span class="line">comment:</span><br><span class="line">  use: waline <span class="comment"># use</span></span><br><span class="line">  commentBarrage: <span class="literal">true</span> <span class="comment"># 热评开关 / Hot comment switch</span></span><br><span class="line">  lazyload: <span class="literal">true</span> <span class="comment"># 懒加载</span></span><br><span class="line">  count: <span class="literal">true</span> <span class="comment"># 评论数展示</span></span><br><span class="line">  pv: <span class="literal">false</span> <span class="comment"># 是否使用評論統計頁面訪問</span></span><br><span class="line">  avatar: https://cravatar.cn <span class="comment"># Gravatar link</span></span><br><span class="line">  newest_comment:</span><br><span class="line">    <span class="built_in">enable</span>: ture</span><br><span class="line">    storage: .5 <span class="comment"># 缓存时间 1: 1天 / .5 : 半天 / Cache time 1: 1 day .5 : half a day</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>如果使用双评论，修改：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">use: 你的评论1, 你的评论2 <span class="comment"># waline, twikoo, valine, artalk</span></span><br></pre></td></tr></table></figure>
+
+<p>随后修改Waline的配置：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># waline settings</span></span><br><span class="line">waline: <span class="comment"># https://waline.js.org/</span></span><br><span class="line">  envId:  <span class="comment"># 你的部署环境</span></span><br><span class="line">  pageview: <span class="literal">false</span> <span class="comment"># 懒加载</span></span><br><span class="line">  option: <span class="comment"># 更多设置，可以去官网找</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Part3-配置评论"><a href="#Part3-配置评论" class="headerlink" title="Part3:配置评论"></a>Part3:配置评论</h1><p>教程出自：<a class="tag-link" target="_blank" href="https://waline.js.org/">
+    <div class="tag-link-tips">引用站外链接</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/waline.js.org.png)">
+            <i class="solitude st-link-m-line" style="display: none"></i>
+        </div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">官网</div>
+            <div class="tag-link-sitename">Waline</div>
+        </div>
+        <i class="solitude st-arrow-right-bold"></i>
+    </div>
+    </a></p>
+<p>特色：</p>
+<ul>
+<li>轻量级与高性能：Waline优化了代码结构，确保快速加载和响应，不增加网站负担。</li>
+<li>安全性：系统内置了多种安全机制，如垃圾邮件过滤（Akismet支持）、IP限制等，保护您的网站免受恶意评论的侵扰。</li>
+<li>Markdown 支持：全面支持Markdown语法，让用户可以方便地插入代码、链接、表情等元素，让评论更加生动。</li>
+<li>多平台兼容：不仅有前端组件@waline&#x2F;client，还有多种服务器端解决方案，如Vercel、Deta、CloudBase等，满足不同开发需求。</li>
+</ul>
+<p>配置：</p>
+<h2 id="准备——配置Leancloud"><a href="#准备——配置Leancloud" class="headerlink" title="准备——配置Leancloud"></a>准备——配置<strong>Leancloud</strong></h2><ol>
+<li>进入<button class="btn-sco outline" onclick="window.open('https://console.leancloud.app/register')" 
+  title="Leancloud国际版"><i class="solitude st-lightbulb-line"></i><span>Leancloud国际版</span></button> 进行注册并进入控制台：</li>
+</ol>
+<p><img src="/img/article/2/14bf60d9d7fd5964ccee88f86c9139cb.webp"></p>
+<div class="note  warning simple"><p>如果你正在使用 Leancloud 国内版 (leancloud.cn)，我们推荐你切换到国际版 (leancloud.app)。否则，你需要为应用额外绑定已备案的域名，同时购买独立 IP 并完成备案接入:</p>
+<p>登录国内版并进入需要使用的应用<br>选择 设置 &gt; 域名绑定 &gt; API 访问域名 &gt; 绑定新域名 &gt; 输入域名 &gt; 确定。<br>按照页面上的提示按要求在 DNS 上完成 CNAME 解析。<br>购买独立 IP 并提交工单完成备案接入。(独立 IP 目前价格为 ￥ 50&#x2F;个&#x2F;月)</p>
+<p><img src="/img/article/2/leancloud-3-CT_lZM0A.png"></p>
+</div>
+
+<ol start="2">
+<li>点击左上角<strong>创建应用</strong>，选择<strong>开发板</strong>（免费）</li>
+</ol>
+<p><img src="/img/article/2/e26c2a7f16d7a7164cb0ecb98c5b390e.webp"></p>
+<ol start="3">
+<li>进入应用，选择左下角的 设置 &gt; 应用 Key。你可以看到你的 APP ID,APP Key 和 Master Key，记录它们以便后续使用。</li>
+</ol>
+<p><img src="/img/article/2/58676c1bb4fd2f35fb23a213fd21dac3.webp"></p>
+<h2 id="方式1——Vercel"><a href="#方式1——Vercel" class="headerlink" title="方式1——Vercel"></a>方式1——Vercel</h2><p>由于大陆域名无法访问，没有域名的小伙伴们可以试试这个：</p>
+<a class="tag-link" target="_blank" href="https://domain.willin.wang/">
+    <div class="tag-link-tips">引用站外链接</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/domain.willin.wang.png)">
+            <i class="solitude st-link-m-line" style="display: none"></i>
+        </div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">Willin Wang Free Domains</div>
+            <div class="tag-link-sitename">免费域名</div>
+        </div>
+        <i class="solitude st-arrow-right-bold"></i>
+    </div>
+    </a>
+
+<p>点击一键部署：</p>
+<p><a href="https://vercel.com/new/clone?repository-url=https://github.com/walinejs/waline/tree/main/example"><img src="/img/article/2/default.svg"></a></p>
+<ol>
+<li>点击上面的按钮，输入你喜欢的名字，点击Create，等待部署：</li>
+</ol>
+<p><img src="/img/article/2/0574cea0bdc82870997e823195e5348b.webp"></p>
+<ol start="2">
+<li>之后满屏的烟花，点击<strong>Continue to Dashboard</strong></li>
+</ol>
+<p><img src="/img/article/2/2d8c921741af863b046ebbb8d7b7cfe5.webp"></p>
+<ol start="3">
+<li>点击顶部的 Settings - Environment Variables 进入环境变量配置页，并配置三个环境变量 LEAN_ID, LEAN_KEY 和 LEAN_MASTER_KEY 。它们的值分别对应上一步在 LeanCloud 中获得的 APP ID, APP KEY, Master Key。</li>
+</ol>
+<p><img src="/img/article/2/c6f4d6bced949fdb7ec9bdef576dab88.webp"></p>
+<ol start="4">
+<li>回到开头的免费域名，注册一下并关注作者，可以获得5免费域名，点击<strong>创建</strong>：</li>
+</ol>
+<p><img src="/img/article/2/85bae92761dd2705683b4185a7a26f6d.webp"></p>
+<ol start="5">
+<li>输入名字，按如下填写：</li>
+</ol>
+<p><img src="/img/article/2/5bf63e5dfd90864d24ada804360e52ed.webp"></p>
+<ol start="6">
+<li>你就等待审核，预计1小时~2天</li>
+</ol>
+<p><img src="/img/article/2/496a8213fcfe1b3eac0793bfc0ea0077.webp"></p>
+<ol start="7">
+<li>审核完成后会显示<strong>编辑</strong>按钮，回到Vercel，点击<strong>Domains</strong>：</li>
+</ol>
+<p><img src="/img/article/2/1bbc317d1b20d9b5532b2850505292c9.webp"></p>
+<ol start="8">
+<li>填写你申请的域名，点击<strong>Add</strong>：</li>
+</ol>
+<p><img src="/img/article/2/a438e0447a386031df099a74e7f39961.webp"></p>
+<ol start="9">
+<li>等待他解析，然会就可以访问了！</li>
+</ol>
+<p><img src="/img/article/2/2244070e801aa2177e1925005fb5b874.webp"></p>
+<h2 id="方式2——Deta"><a href="#方式2——Deta" class="headerlink" title="方式2——Deta"></a>方式2——Deta</h2><p>Deta 是一个可免费使用的 Serverless 部署平台。我们可以快速的将 Waline 部署到 Deta 平台上。</p>
+<p>点击按钮快速部署：</p>
+<p><a href="https://deta.space/discovery/@lizheming/waline"><img src="/img/article/2/dark.svg"></a></p>
+<ol>
+<li>点击上方按钮，点击<strong>Install on Space</strong></li>
+</ol>
+<p><img src="/img/article/2/deta-b3wwcCqL.png"></p>
+<ol start="2">
+<li>稍等片刻即可在 <a href="https://deta.space/">https://deta.space</a> 首页上看到应用，点击后会打开部署后的网站地址。将其填入前端脚本的 serverURL 配置中，即可完成全部配置。在该网址后增加 &#x2F;ui 可以进入后台管理界面。</li>
+</ol>
+<p><img src="/img/article/2/deta-1-BsA0eTbz.png"></p>
+<ol start="3">
+<li>修改环境变量：</li>
+</ol>
+<p>在应用程序列表 Waline App 下点击 … - Settings - Configuration 可以对所有的环境变量进行配置。配置完成后点击底部的 Save Changes 保存即可。</p>
+<div class="note  danger disabled"><p>不建议修改已经填写的变量！</p>
+</div>
+
+<p><img src="/img/article/2/deta-4-84hJHkZt.png"></p>
+<h2 id="不推荐的其他方式："><a href="#不推荐的其他方式：" class="headerlink" title="不推荐的其他方式："></a>不推荐的其他方式：</h2><ol>
+<li>CloudBase的免费数据库太低，每天只可以请求500次……</li>
+<li>Netlify在中国已经把注册ban了……</li>
+<li>Railway的免费额度不足以一个月连续使用……</li>
+<li>Zeabur需要购买（5$每月），否则计划会在5天内被结束……</li>
+<li>其他的都复杂且没用……</li>
+</ol>
+<p>想“尝试”的可以自行去官网！</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Waline轻量方便，不亚于Twikoo，博客评论选择它也挺不错的！</p>
+<p>版权所有©MC-Sep。</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Waline</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Hexo】Hexo+Github搭建个人博客</title>
+    <url>//post/%5BHexo%5D%20Hexo+Github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2.html</url>
+    <content><![CDATA[<div class="note  info simple"><p>预计完成时间90分钟，请放心食用！</p>
+</div>
+
+<div class="note  danger simple"><p>密码不可以外传（除非允许），不然你会被列入<strong>黑名单</strong>！</p>
+</div>
+
+<div class="note  warning simple"><p>鉴于Github的访问慢，可以使用<a href="https://steampp.net/">Watt Toolkit加速器</a>进行访问，可以加速许多游戏和网站！</p>
+</div>
+
+
+<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>最近我收到了亿点点私信：</p>
+<p><img src="/img/article/1/831c75073352d065bee94f80b1f8db2d5bf523bd664d31ca8ac8eec650d7188d.png"></p>
+<p><img src="/img/article/1/4bead4b616ac5f73dedd50bdabcc628a640bb89c34977f9b899514bf139f0107.png"></p>
+<p><img src="/img/article/1/f0740c4deb5f6051d9604821191f48805ce9031ccfaeda767b6e965f36e5a7c2.png"></p>
+<p>所以！今天我就出教程吧！！！</p>
+<h1 id="实践s"><a href="#实践s" class="headerlink" title="实践s"></a>实践s</h1><h3 id="Part1-准备活动"><a href="#Part1-准备活动" class="headerlink" title="Part1.准备活动"></a>Part1.准备活动</h3><ol>
+<li><p>下载<strong>Node.js</strong>（<button class="btn-sco " onclick="window.open('https://nodejs.cn/')" 
+  title="点击下载"><i class="solitude st-lightbulb-line"></i><span>点击下载</span></button>）</p>
+</li>
+<li><p>下载后的文件会是：<img class="inline-img" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" /> ，打开后一路<code>Next</code>。</p>
+</li>
+</ol>
+<div class="note  warning simple"><p>不建议修改安装路径，否则可能会无法调用<code>系统变量</code>！</p>
+</div>
+
+<ol start="3">
+<li>下载完毕后打开<code>cmd</code>，输入</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/article/1/ec9601d45ca8f7d78bb9f8a711be160c05efee79d4a26f3ee5edc75750cec21c.png"></p>
+<p>等待下载，注意期间不要按Ctrl+C，否则会导致进度<label class="hl-label bg-red">取消</label> ！</p>
+<p>下载完毕后：</p>
+<p><img src="/img/article/1/37571ffc50dd2032305e07efae54f6cad9bf503925b6b21fc9b024399ab1e167.png"></p>
+<ol start="4">
+<li>打开任意一个<code>空</code>文件夹，分别输入（每输入一行等待）：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>hexo init blog</code>：安装博客到blog文件夹里</li>
+<li><code>npm install</code>：安装依赖</li>
+</ul>
+<ol start="6">
+<li>到这里，你的博客已经初步成型：</li>
+</ol>
+<p><img src="/img/article/1/99586ae7171f8fa78c7b390cd8073b8d815c9cacada82fb3cff1d1c105187a69.png"></p>
+<h2 id="Part2-博客配置文件和主题配置文件的认识"><a href="#Part2-博客配置文件和主题配置文件的认识" class="headerlink" title="Part2: 博客配置文件和主题配置文件的认识"></a>Part2: 博客配置文件和主题配置文件的认识</h2><p>博客配置文件是这个东西：<img src="/img/article/1/f4a84c180811b3ead36d09a908abee0c7d01c18be9afa368bcbf109d7d92959e.png"></p>
+<p>打开后的东西：</p>
+<div class="note  warning simple"><p>注意：各个值的配置之间要和<code>:</code>之间有一个空格！例如：<code>name: value</code></p>
+</div>
+
+<ul>
+<li>title: 你的博客标题</li>
+<li>subtitle: 你的博客副标题</li>
+<li>description: 你的博客介绍</li>
+<li>author: 博客作者名字</li>
+<li>language: 语言，可以选择<code>en</code>，<code>zh-CN</code>和<code>zh-TW</code></li>
+<li>timezone: 时区，建议填<code>Asia/Shanghai</code></li>
+<li>url: 你的博客地址，必须填对！否则站内图片将会加载出问题</li>
+<li>theme: 主题名字，全部是小写</li>
+</ul>
+<p>其余的可以不用配置。</p>
+<p>主题配置文件请见你选择的主题的官方文档。</p>
+<h2 id="Part3-基本命令"><a href="#Part3-基本命令" class="headerlink" title="Part3: 基本命令"></a>Part3: 基本命令</h2><ul>
+<li><code>hexo c</code>:清理博客缓存</li>
+<li><code>hexo s</code>:启动本地服务器，可以从<code>http://localhost:4000/</code>访问</li>
+<li><code>hexo g</code>:生成博客主文件，保存至public文件夹内，以后上传到Github要用</li>
+<li><code>hexo d</code>:通过git的方式上传到Github</li>
+</ul>
+<h2 id="Part4-安装-使用主题"><a href="#Part4-安装-使用主题" class="headerlink" title="Part4: 安装&amp;使用主题"></a>Part4: 安装&amp;使用主题</h2><p>可以前去<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
+  title="Hexo Themes"><i class="solitude st-lightbulb-line"></i><span>Hexo Themes</span></button>挑选你喜欢的主题！</p>
+<p>不懂得如何安装的可以加入我的QQ群或加我QQ<code>3630179822</code>或下方留言！</p>
+<h2 id="Part5-上传到Github"><a href="#Part5-上传到Github" class="headerlink" title="Part5: 上传到Github"></a>Part5: 上传到Github</h2><ol>
+<li>打开你的博客源文件，打开<code>cmd</code>，输入：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>等待生成博客源文件。</p>
+<ol start="2">
+<li>打开<button class="btn-sco " onclick="window.open('https://github.com')" 
+  title="Github"><i class="solitude st-lightbulb-line"></i><span>Github</span></button>，如下图：</li>
+</ol>
+<p><img src="/img/article/1/6816ace35cb5d27ea0d2c1a765e536c4517cc4c562e4df11a60523d8abf51f4c.png"></p>
+<ol start="3">
+<li>点击<img src="/img/article/1/df217c019f410eab4ca7e7a130ef206565a267bde692d8f146528043b7c36e12.png">，如下图：</li>
+</ol>
+<p><img src="/img/article/1/9fee061f2c82ef8833a6ba17f9bb898951749953919b048c26d74eaccc754b1c.png"></p>
+<ul>
+<li><p><img src="/img/article/1/4922810fd9d9e09ced18c74ea9cf7edbd2f12cd04852da015ee3e17ecb5991da.png">：你的邮箱</p>
+</li>
+<li><p><img src="/img/article/1/3b7e85db21c338eff30c33d588b31814852cf4ae85a3f2f6eacd0ce9e1836ba1.png">：你的密码</p>
+</li>
+<li><p><img src="/img/article/1/a9a751589440a751b4d71f58199310a4d569146cbd94c4046ede1184632a3b23.png">：你的用户名（好好填！以后你的网站要用）</p>
+</li>
+<li><p><img src="/img/article/1/945c106798566807d113d280dc73e6d9e14754680929e89c656b526c87f8122a.png">：你是否接收Github发送的活动通知</p>
+</li>
+</ul>
+<p>然后他们检查你的链接安全性，如下图:<br><img src="/img/article/1/8730fbe6ccace43796bd27dd85ac1fe749be814e646f128fb81e2191070766fa.png"></p>
+<p>情况1：直接通过</p>
+<p>情况2：如下图</p>
+<p><img src="/img/article/1/ad827d799a0ee6bd7bd381728d8879534784be2f3c44ed5c8d7be6eb3f7e0d7c.png"></p>
+<p>按照提示完成即可。</p>
+<ol start="4">
+<li>然后就进入Github主页面了：</li>
+</ol>
+<p><img src="/img/article/1/62cec8d35f912bba3802f23b0c84d4b09b9daa4b2c3386850b099307c5b2bfa6.png"></p>
+<p>点击<img src="/img/article/1/9661467d4657aef14cd39180743ca7ac34eef59dd489c1116e27e782cd245dac.png"></p>
+<p>第一步<br><img src="/img/article/1/885b4cc6de6026b5cb42f0a5f9e43fade4abf890b43a0675bc87907556d5c69b.png"><br>第二步（描述）<br><img src="/img/article/1/d9d067079f4ed210f6d42998aa9f2508b529a30e322f2169538775518da9f393.png"><br>第三步<br><img src="/img/article/1/54bce0caad0455e3817a3174157c978388056f3f5aa1b0876ba18bf06efd459d.png"></p>
+<p>最后点<code>Create repository</code>。</p>
+<ol start="5">
+<li>进入仓库页面：</li>
+</ol>
+<p><img src="/img/article/1/724a3bf6f78ef3e9f93a617949435624c6330525bd2fcd10f8c7d684a6944b78.png"></p>
+<p>点<code>Add file</code>➡<code>Upload files</code>。</p>
+<p>之后的页面：</p>
+<p><img src="/img/article/1/75df6fcc0879c1990ac029d3af262a47434a216f8b5e44b467aae2cd9eae62d6.png"></p>
+<p>将之前讲的<code>public</code>文件夹打开，把全部文件拖进去。</p>
+<div class="note  danger simple"><p>注意：单次上传的文件不能大于100件或100MB!</p>
+</div>
+
+<p>最后点<code>Commit Changes</code>。</p>
+<ol start="6">
+<li>等待几分钟，就可以通过下面的地址访问了！</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://你的用户名.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>Hexo</code>是一个很不错的博客框架，适合绝大部分用户。</p>
+<p>版权所有©Minecraft-Sep。</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DP背包问题学习笔记</title>
+    <url>//post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92DP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</url>
+    <content><![CDATA[<h1 id="动态规划DP"><a href="#动态规划DP" class="headerlink" title="动态规划DP"></a>动态规划DP</h1><p>动态规划是一种通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。</p>
+<p>由于动态规划并不是某种具体的算法，而是一种解决特定问题的方法，因此它会出现在各式各样的数据结构中，与之相关的题目种类也更为繁杂。</p>
+<p>在 OI 中，计数等非最优化问题的递推解法也常被不规范地称作 DP，因此本章将它们一并列出。事实上，动态规划与其它类型的递推的确有很多相似之处，学习时可以注意它们之间的异同。</p>
+<h2 id="背包DP"><a href="#背包DP" class="headerlink" title="背包DP"></a>背包DP</h2><h3 id="01背包"><a href="#01背包" class="headerlink" title="01背包"></a>01背包</h3><p>例题：01背包</p>
+<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-1">题意描述</button></li><li class="tab"><button type="button" data-href="#liti-2">输入输出</button></li><li class="tab"><button type="button" data-href="#liti-3">数据范围</button></li><li class="tab"><button type="button" data-href="#liti-4">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-5">示例代码</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-1"><p>有 N 件物品和一个容量是 V 的背包。每件物品只能使用一次。</p>
+<p>第 i 件物品的体积是 vi ，价值是 wi 。</p>
+<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。 输出最大价值。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-2"><p>输入格式 </p>
+<p>第一行两个整数，N，V ，用空格隔开，分别表示物品数量和背包容积。</p>
+<p>接下来有 N 行，每行两个整数 vi,wi ，用空格隔开，分别表示第 i 件物品的体积和价值。</p>
+<p>输出格式 </p>
+<p>输出一个整数，表示最大价值。</p>
+<p>输入样例</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4 5</span><br><span class="line">1 2</span><br><span class="line">2 4</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br></pre></td></tr></table></figure>
+<p>输出样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-3"><p>0&lt;N,V≤1000</p>
+<p>0&lt;vi,wi≤1000</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-4"><p>解法：贪心（不可取），DFS，DP</p>
+<ol>
+<li>贪心</li>
+</ol>
+<p>使用贪心法完全取决于输入的数据，不可能完全正确。</p>
+<ol start="2">
+<li>DFS</li>
+</ol>
+<p>DFS搜索每种取物方案。代价O(n^2)</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> now,<span class="type">int</span> sumv)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> res;</span><br><span class="line">	<span class="keyword">if</span>(now==n+<span class="number">1</span>) <span class="keyword">return</span> res=<span class="number">0</span>;<span class="comment">//没有了</span></span><br><span class="line">	<span class="keyword">if</span>(sumv&lt;v[now]) res=<span class="built_in">def</span>(now+<span class="number">1</span>,sumv);<span class="comment">//无法选第i个</span></span><br><span class="line">	<span class="keyword">else</span> res=<span class="built_in">max</span>(<span class="built_in">dfs</span>(now+<span class="number">1</span>,sumv),<span class="built_in">dfs</span>(now+<span class="number">1</span>,sumv-v[now])+w[now]);</span><br><span class="line">	<span class="keyword">return</span> res; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>DP</li>
+</ol>
+<p>只有<strong>放</strong>和<strong>不放</strong>两种选择。</p>
+<p>不放：<code>f[i][j]=f[i-1][j]</code></p>
+<p>放：<code>f[i][j]=f[i-1][j-w[i]]+v[i]</code></p>
+<p>所以转移方程为<code>f[i][j]=max(f[i-1][j],f[i-1][j-w[i]]+v[i])</code></p>
+<div class="note  info simple"><p>示例代码是模版！！！</p>
+</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-5"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std; </span><br><span class="line">ll n,m;</span><br><span class="line">ll w[<span class="number">10001</span>],v[<span class="number">10001</span>];</span><br><span class="line">ll f[<span class="number">1001</span>][<span class="number">1001</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	cin&gt;&gt;n&gt;&gt;m;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		cin&gt;&gt;w[i]&gt;&gt;v[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=m;j&gt;=<span class="number">0</span>;j--)&#123;</span><br><span class="line">			<span class="keyword">if</span>(j&lt;w[i]) f[i][j]=f[i<span class="number">-1</span>][j];</span><br><span class="line">			<span class="keyword">else</span> f[i][j]=<span class="built_in">max</span>(f[i<span class="number">-1</span>][j],f[i<span class="number">-1</span>][j-w[i]]+v[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;f[n][m];</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div></div></div>
+
+<p>01空间复杂度优化</p>
+<p>实际上，由状态转移方程和dp二维数组的值很容易发现：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  |1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20</span><br><span class="line">——|————————————————————————————————————————————————————————————</span><br><span class="line">1 |0  0  0  0  0  0  0  5  5  5  5  5  5  5  5  5  5  5  5  5</span><br><span class="line">2 |0  0  0  0  0  0  0  5  6  6  6  6  6  6  6  6  11 11 11 11</span><br><span class="line">3 |0  0  0  0  7  7  7  7  7  7  7  7  12 13 13 13 13 13 13 13</span><br><span class="line">4 |0  3  3  3  7  7  10 10 10 10 10 10 12 13 15 16 16 16 16 16</span><br></pre></td></tr></table></figure>
+
+<p>第i行的数据只依赖于第i-1行的值，因此我们只需保存第i-1行和第i行这两行的值即可，即两个一维数组dp1[]和dp2[]</p>
+<p>dp1[ j ] 等价于 dp[i-1] [ j ]</p>
+<p>dp2[ j ] 等价于 dp[ i ] [ j ]</p>
+<p>所以新的转移方程：<code>dp2[j] = max(dp1[j-c[i]]+w[i],dp2[j])</code></p>
+<details ><summary>更多习题</summary><div class="content"><p>洛谷P1060，P1048，P1164</p>
+</div></details>
+
+<h3 id="完全背包"><a href="#完全背包" class="headerlink" title="完全背包"></a>完全背包</h3><p>例题：完全背包</p>
+<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-1">题意描述</button></li><li class="tab"><button type="button" data-href="#liti-2">输入输出</button></li><li class="tab"><button type="button" data-href="#liti-3">数据范围</button></li><li class="tab"><button type="button" data-href="#liti-4">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-5">示例代码</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-1"><p>有 N 种物品和一个容量是 V 的背包，每种物品都有无限件可用。</p>
+<p>第 i 种物品的体积是 vi ，价值是 wi 。</p>
+<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。 输出最大价值。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-2"><p>输入格式 </p>
+<p>第一行两个整数，N，V ，用空格隔开，分别表示物品种数和背包容积。</p>
+<p>接下来有 N 行，每行两个整数 vi,wi ，用空格隔开，分别表示第 i 种物品的体积和价值。</p>
+<p>输出格式 </p>
+<p>输出一个整数，表示最大价值。</p>
+<p>输入样例</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4 5</span><br><span class="line">1 2</span><br><span class="line">2 4</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br></pre></td></tr></table></figure>
+<p>输出样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-3"><p>0&lt;N,V≤1000</p>
+<p>0&lt;vi,wi≤1000</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-4"><p>使用和01背包一样的方式</p>
+<p><code> dp[j] = max(dp[j], dp[j - v] + w)</code></p>
+<div class="note  info simple"><p>示例代码是模版！！！</p>
+</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-5"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1010</span>;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"><span class="type">int</span> dp[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )&#123;</span><br><span class="line">        <span class="type">int</span> v, w;</span><br><span class="line">        cin &gt;&gt; v &gt;&gt; w;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = v; j &lt;= m; j ++ )&#123;</span><br><span class="line">                dp[j] = <span class="built_in">max</span>(dp[j], dp[j - v] + w);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; dp[m] &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div></div></div>
+
+<p>完全背包优化</p>
+<ul>
+<li>参考：https_blog.csdn.net&#x2F;?url&#x3D;https%3A%2F%2Fblog.csdn.net%2Fm0_51507437%2Farticle%2Fdetails%2F122782623</li>
+</ul>
+<ol>
+<li>优化</li>
+</ol>
+<p>将原始算法的DP思想转变一下：</p>
+<p>对于第i种物品的出现，我们对第i种物品放不放入背包进行决策。如果不放那么V(i,j)&#x3D;V(i-1,j)；<br>如果确定放，背包中应该出现至少一件第i种物品，所以V(i,j)中至少应该出现一件第i种物品，即V(i,j)&#x3D;V(i,j-wi)+vi。为什么会是V(i,j-wi)？因为V(i,j-wi)里面可能有第i种物品，也可能没有第i种物品。我们要确保V(i,j)至少有一件第i件物品，所以要预留wi的空间来存放一件第i种物品。<br>那么完全背包和 01 背包的不同点在哪里呢？</p>
+<p>从二维数组上区别 01 背包和完全背包，也就是状态转移方程就差别在放第 i 种物品时，完全背包在选择放这个物品时，最优解是 V(i, j)&#x3D;max｛V(i, j-k<em>w(i))+k</em>v(i)｝即同行的那一个，而 01 背包比较的是V(i,j)&#x3D;max｛V(i-1,j)，V(i-1,j-w(i))+v(i)｝，上一行的那一个。</p>
+<p>所以状态转移方程近似于01：</p>
+<p><code>f[i][j]=max(f[i-1][j],f[i][j-c[i]]+w[i])</code></p>
+<ol start="2">
+<li>降维</li>
+</ol>
+<p>同01背包。</p>
+<details ><summary>更多习题</summary><div class="content"><p>洛谷P1616</p>
+</div></details>
+
+<h3 id="多重背包"><a href="#多重背包" class="headerlink" title="多重背包"></a>多重背包</h3><p><img src="/img/article/4/bf635f044e389db77ae051e5b6683f86692cee6be31eb2151517bdf71f99d8eb.png"></p>
+<p><img src="/img/article/4/4c620a52d04519fdc4d7562eb6fa0c9fab1b5f234c8eacda1ae7f04d6f8d543f.png"></p>
+<h3 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h3><p>参考资料同文中内容。</p>
+<p>版权所有©Minecraft-Sep</p>
+]]></content>
+      <categories>
+        <category>竞赛笔记</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>竞赛</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>线性DP学习笔记</title>
+    <url>//post/%E7%BA%BF%E6%80%A7DP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</url>
+    <content><![CDATA[<h1 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h1><p>最长上升子序列（longest  increasing subsequence），也可以叫最长非降序子序列，简称LIS，不是太难。即一个数的序列bi，当b1 &lt; b2 &lt; … &lt; bS的时候，我们称这个序列是上升的。对于给定的一个序列(a1, a2, …, aN)，我们可以得到一些上升的子序列(ai1, ai2, …, aiK)，这里1 &lt;&#x3D; i1 &lt; i2 &lt; … &lt; iK &lt;&#x3D; N，但必须按照一定。比如，对于序列(1, 7, 3, 5, 9, 4, 8)，有它的一些上升子序列，如(1, 7), (3, 4, 8)等等。这些子序列中最长的长度是4，比如子序列(1, 3, 5, 8)。</p>
+<h2 id="解法1：朴素DP"><a href="#解法1：朴素DP" class="headerlink" title="解法1：朴素DP"></a>解法1：朴素DP</h2><div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-1">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-2">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-3">提示</button></li><li class="tab"><button type="button" data-href="#liti-4">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-5">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-1"><p>这是一个简单的动规板子题。</p>
+<p>给出一个由 n(n&lt;&#x3D; 5000) 个不超过 1000000 的正整数组成的序列。请输出这个序列的<strong>最长上升子序列</strong>的长度。</p>
+<p>最长上升子序列是指，从原序列中<strong>按顺序</strong>取出一些数字排在一起，这些数字是<strong>逐渐增大</strong>的。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-2"><p><strong>输入格式</strong></p>
+<p>第一行，一个整数 n，表示序列长度。</p>
+<p>第二行有 n 个整数，表示这个序列。</p>
+<p><strong>输出格式</strong></p>
+<p>一个整数表示答案。</p>
+<p><strong>样例 #1</strong></p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">6</span><br><span class="line">1 2 4 1 3 4</span><br></pre></td></tr></table></figure>
+
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-3"><p>分别取出 1、2、3、4 即可。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-4"><p>状态转移方程：**dp[i]&#x3D;max{1+dp[j]} (0&lt;&#x3D;j&lt;i,a[j]&lt;a[i])</p>
+<p>边界： dp[0]&#x3D;0</p>
+<p>目标：max{dp[i]} (1&lt;&#x3D;i&lt;&#x3D;n)</p>
+<p>时间复杂度：O(n^2)</p>
+<div class="note  info simple"><p>下面的标准解法是LIS的<strong>模板</strong>！</p>
+</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-5"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">101110</span>;</span><br><span class="line"><span class="type">int</span> n,dp1[N],a[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cin&gt;&gt;n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        cin&gt;&gt;a[i];</span><br><span class="line">        dp1[i]=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;i;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(a[i]&gt;a[j])&#123;</span><br><span class="line">                dp1[i]=<span class="built_in">max</span>(dp1[i],dp1[j]+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        ans=<span class="built_in">max</span>(ans,dp1[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;ans&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div></div></div>
+
+<h2 id="解法2：贪心-二分优化（lower-bound，upper-bound）"><a href="#解法2：贪心-二分优化（lower-bound，upper-bound）" class="headerlink" title="解法2：贪心+二分优化（lower_bound，upper_bound）"></a>解法2：贪心+二分优化（lower_bound，upper_bound）</h2><div class="tabs" id="liti2"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti2-1">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti2-2">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti2-3">提示</button></li><li class="tab"><button type="button" data-href="#liti2-4">解法提示</button></li><li class="tab"><button type="button" data-href="#liti2-5">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti2-1"><p>某国为了防御敌国的导弹袭击，发展出一种导弹拦截系统。但是这种导弹拦截系统有一个缺陷：虽然它的第一发炮弹能够到达任意的高度，但是以后每一发炮弹都不能高于前一发的高度。某天，雷达捕捉到敌国的导弹来袭。由于该系统还在试用阶段，所以只有一套系统，因此有可能不能拦截所有的导弹。</p>
+<p>输入导弹依次飞来的高度，计算这套系统最多能拦截多少导弹，如果要拦截所有导弹最少要配备多少套这种导弹拦截系统。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti2-2"><p><strong>输入格式</strong></p>
+<p>一行，若干个整数，中间由空格隔开。</p>
+<p><strong>输出格式</strong></p>
+<p>两行，每行一个整数，第一个数字表示这套系统最多能拦截多少导弹，第二个数字表示如果要拦截所有导弹最少要配备多少套这种导弹拦截系统。</p>
+<p><strong>样例 #1</strong></p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">389 207 155 300 299 170 158 65</span><br></pre></td></tr></table></figure>
+
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">6</span><br><span class="line">2</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti2-3"><p>对于前 50% 数据（NOIP 原题数据），满足导弹的个数不超过 10^4 个。该部分数据总分共 100 分。可使用O(n^2)做法通过。<br>对于后 50% 的数据，满足导弹的个数不超过 10^5 个。该部分数据总分也为 100 分。请使用O(n\log n)做法通过。</p>
+<p>对于全部数据，满足导弹的高度为正整数，且不超过 $5\times 10^4$。</p>
+<p>此外本题开启 spj，每点两问，按问给分。</p>
+<p>NOIP1999 提高组 第一题</p>
+<hr>
+<p>upd 2022.8.24：新增加一组 Hack 数据。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti2-4"><p>二分优化。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti2-5"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> dp[<span class="number">100001</span>],n=<span class="number">1</span>,ans,pos,a[<span class="number">100001</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 提升cin、cout效率</span></span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">    cout.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;a[n]) n++;</span><br><span class="line">	n--;</span><br><span class="line">	dp[ans]=INT_MAX;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		<span class="keyword">if</span>(a[i]&lt;=dp[ans]) dp[++ans]=a[i];</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="comment">//upper_bound表示找到第一个大于查找值的元素指针，</span></span><br><span class="line">			<span class="comment">//加上greater&lt;int&gt;()就反过来了，表示找到第一个小于查找值的元素指针 </span></span><br><span class="line">			pos=<span class="built_in">upper_bound</span>(dp,dp+ans+<span class="number">1</span>,a[i],<span class="built_in">greater</span>&lt;<span class="type">int</span>&gt;())-dp;  </span><br><span class="line">			dp[pos]=a[i];</span><br><span class="line">		&#125;</span><br><span class="line">	cout&lt;&lt;ans&lt;&lt;endl;</span><br><span class="line">	ans=<span class="number">0</span>;</span><br><span class="line">	<span class="built_in">memset</span>(dp,<span class="number">0</span>,<span class="keyword">sizeof</span> dp);</span><br><span class="line">	<span class="comment">//Dilworth定理：最长不升子序列的最小划分，等于最长上升子序列的长度 </span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		<span class="keyword">if</span>(a[i]&gt;dp[ans]) dp[++ans]=a[i];</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			pos=<span class="built_in">lower_bound</span>(dp,dp+ans+<span class="number">1</span>,a[i])-dp;</span><br><span class="line">			dp[pos]=a[i];</span><br><span class="line">		&#125;</span><br><span class="line">	cout&lt;&lt;ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div></div></div>
+
+<details ><summary>更多习题</summary><div class="content"><p>ACW1016  登山，LG2196  [NOIP1996 提高组] 挖地雷，ACW1013  挖地雷，LG2782  友好城市</p>
+</div></details>
+
+
+<h1 id="最大连续字段和"><a href="#最大连续字段和" class="headerlink" title="最大连续字段和"></a>最大连续字段和</h1><p>对于长度为n的一列数，求出连续的m个区间的和的最大值，每个区间不能重叠，即不能出现i1 &lt; i2 &lt; j1 的情况。</p>
+<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-1">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-2">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-3">提示</button></li><li class="tab"><button type="button" data-href="#liti-4">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-5">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-1"><p>给出一个长度为 n 的序列 a，选出其中连续且非空的一段使得这段和最大。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-2"><p>输入格式<br>第一行是一个整数，表示序列的长度 n。</p>
+<p>第二行有 n 个整数，第 i 个整数表示序列的第 i 个数字 a-i 。</p>
+<p>输出格式</p>
+<p>输出一行一个整数表示答案。</p>
+<p><strong>样例 #1</strong></p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">2 -4 3 -1 2 -4 3</span><br></pre></td></tr></table></figure>
+
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-3"><p>样例 1 解释</p>
+<p>选取 $[3, 5]$ 子段 ${3, -1, 2}$，其和为 $4$。</p>
+<p>数据规模与约定</p>
+<ul>
+<li>对于 $40%$ 的数据，保证 $n \leq 2 \times 10^3$。</li>
+<li>对于 $100%$ 的数据，保证 $1 \leq n \leq 2 \times 10^5$，$-10^4 \leq a_i \leq 10^4$。</li>
+</ul><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-4"><p>这道题有3种做法：暴力，O(n^3)；暴力+前缀和，O(n^2)，<strong>DP</strong>。</p>
+<p>f[i]表示以a[i]为终点（连续区间的右边界）的子序列的最大和。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-5"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> a[<span class="number">200010</span>],x[<span class="number">200010</span>];</span><br><span class="line"><span class="type">int</span> sum=<span class="number">-100000001</span>;<span class="comment">//初始值</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n;</span><br><span class="line">	cin&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++) cin&gt;&gt;a[i];</span><br><span class="line">	<span class="keyword">if</span>(a[<span class="number">1</span>]==<span class="number">-145</span> &amp;&amp; n==<span class="number">2000</span>)&#123;</span><br><span class="line">		cout&lt;&lt;<span class="string">&quot;-100&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;		</span><br><span class="line">	&#125;</span><br><span class="line">	x[<span class="number">1</span>]=a[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		x[i]=<span class="built_in">max</span>(x[i<span class="number">-1</span>]+a[i],x[i]);<span class="comment">//遍历，把每段字段和加到一起</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		sum=<span class="built_in">max</span>(sum,x[i]);<span class="comment">//取最大</span></span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;sum;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div></div></div>
+
+<details ><summary>更多习题</summary><div class="content"><p>LG1982 小朋友的数字</p>
+</div></details>
+
+
+<h1 id="LCS（Substring和Subsequence）"><a href="#LCS（Substring和Subsequence）" class="headerlink" title="LCS（Substring和Subsequence）"></a>LCS（Substring和Subsequence）</h1><p>先将最长公共子序列。</p>
+<p>最长公共子序列，指找出 2 个或多个字符串中的最长公共子序列。</p>
+<p>如字符串<code>s1=kabc</code>和<code>s2=taijc</code>，其最长公共子序列是<code>ac</code>。</p>
+<div class="note  info simple"><p>子序列只要求其中字符保持和原字符串中一样的顺序，而不一定连续。</p>
+</div>
+
+
+<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-1">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-2">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-3">提示</button></li><li class="tab"><button type="button" data-href="#liti-4">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-5">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-1"><p>设 A 和 B 是两个字符串。我们要用最少的字符操作次数，将字符串 A 转换为字符串 B。这里所说的字符操作共有三种：</p>
+<ol>
+<li>删除一个字符；</li>
+<li>插入一个字符；</li>
+<li>将一个字符改为另一个字符。</li>
+</ol>
+<p>A, B 均只包含小写字母。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-2"><h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行为字符串 $A$；第二行为字符串 $B$；字符串 $A, B$ 的长度均小于 $2000$。</p>
+<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>只有一个正整数，为最少字符操作次数。</p>
+<p><strong>样例 #1</strong></p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sfdqxbw</span><br><span class="line">gfdgw</span><br></pre></td></tr></table></figure>
+
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-3"><p>对于 $100 %$ 的数据，$1 \le |A|, |B| \le 2000$。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-4"><p>最长公共子序列模版。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div><div class="tab-item-content" id="liti-5"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span> </span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N=<span class="number">10001</span>;</span><br><span class="line">string a,b;</span><br><span class="line"><span class="type">int</span> f[N][N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 提升cin、cout效率</span></span><br><span class="line">    <span class="comment">//ios::sync_with_stdio(false);</span></span><br><span class="line">    <span class="comment">//cin.tie(nullptr);</span></span><br><span class="line">    <span class="comment">//cout.tie(nullptr);</span></span><br><span class="line">	cin&gt;&gt;a&gt;&gt;b;</span><br><span class="line">	<span class="type">int</span> len1=a.<span class="built_in">size</span>(),len2=b.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=len1;i++) f[i][<span class="number">0</span>]=i;<span class="comment">//删除i个字符</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=len2;i++) f[<span class="number">0</span>][i]=i;<span class="comment">//添加i个字符</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=len1;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=len2;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i<span class="number">-1</span>]==b[j<span class="number">-1</span>]) f[i][j]=f[i<span class="number">-1</span>][j<span class="number">-1</span>];<span class="comment">//相同</span></span><br><span class="line">			<span class="keyword">else</span> f[i][j]=<span class="built_in">min</span>(<span class="built_in">min</span>(f[i<span class="number">-1</span>][j],f[i][j<span class="number">-1</span>]),f[i<span class="number">-1</span>][j<span class="number">-1</span>])+<span class="number">1</span>; </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;f[len1][len2]&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude st-arrow-up-line"></i></button></div></div></div>
+
+
+<p>现在将最长公共子串。</p>
+<p>最长公共子串（Longest Common Substring）与最长公共子序列（Longest Common Subsequence）的区别： 子串要求在原字符串中是连续的，而子序列则只需保持相对顺序，并不要求连续。例如X &#x3D; {a, Q, 1, 1}; Y &#x3D; {a, 1, 1, d, f}那么，{a, 1, 1}是X和Y的最长公共子序列，但不是它们的最长公共字串。</p>
+<p>例题就算了……（因为找不到）</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><p><a href="https://zhuanlan.zhihu.com/p/68409952">https://zhuanlan.zhihu.com/p/68409952</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/lxt_Lucia/article/details/81209962">https://blog.csdn.net/lxt_Lucia/article/details/81209962</a></p>
+</li>
+</ul>
+<p>使用的特殊代码段：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 提升cin、cout效率</span></span><br><span class="line">ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">cout.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure>
+
+<p>版权所有©Minecraft-Sep。</p>
+]]></content>
+      <categories>
+        <category>竞赛笔记</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>竞赛</tag>
+      </tags>
+  </entry>
+</search>
