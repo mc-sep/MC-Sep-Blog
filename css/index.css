@@ -3045,7 +3045,7 @@ span.tags-punctuation::before {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  background: url("https://gitee.com/minecraft-sep/my-picture/raw/master/2024-5-19-769e3e65e344bfe4c8bcc7efc69a9b6a") center center no-repeat;
+  background: url("https://s21.ax1x.com/2024/07/10/pkh9kng.png") center center no-repeat;
   background-size: 100%;
 }
 #aside-content .card-widget.card-platform #flip-wrapper #flip-content .face.back {
@@ -3053,7 +3053,7 @@ span.tags-punctuation::before {
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
   box-sizing: border-box;
-  background: url("https://gitee.com/minecraft-sep/my-picture/raw/master/2024-5-19-bed9e047a00b11e6603fceeed43d7441") center center no-repeat;
+  background: url("https://s21.ax1x.com/2024/07/10/pkh9ABQ.png") center center no-repeat;
   background-size: 100%;
 }
 #aside-content .card-widget.card-adsense {
@@ -10093,8 +10093,15 @@ div#banners .bannerText {
   position: inherit;
   border: var(--style-border-always);
 }
-#post #pagination div:only-child {
-  width: 100% !important;
+#post #pagination div:only-child.next-post,
+#post #pagination div:only-child.prev-post {
+  width: 100%;
+}
+#post #pagination div:only-child.next-post a {
+  border-left: 0;
+}
+#post #pagination div:only-child.prev-post a {
+  border-right: 0;
 }
 @media screen and (min-width: 1300px) {
   #post #pagination {
@@ -10249,7 +10256,7 @@ div#banners .bannerText {
 @media screen and (min-width: 768px) {
   #post #pagination .prev-post a {
     border-right: var(--efu-main-op);
-    border-right-width: 1px;
+    border-right-width: 0.5px;
     border-right-style: solid;
   }
 }
@@ -10271,7 +10278,7 @@ div#banners .bannerText {
 @media screen and (min-width: 768px) {
   #post #pagination .next-post a {
     border-left: var(--efu-main-op);
-    border-left-width: 1px;
+    border-left-width: 0.5px;
     border-left-style: solid;
     display: flex;
     align-items: flex-start;
