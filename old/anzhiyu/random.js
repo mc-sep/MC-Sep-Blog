@@ -1,0 +1,3 @@
+var posts=["/post/2024-03-23周赛赛后总结.html","/post/2024-03-30竞赛笔记&周赛总结笔记.html","/post/GESP编程能力等级认证标四级（复习要点）.html","/post/Sep的网站限时内测.html","/post/CPP七大经典排序算法详解.html","/post/博客域名开发公告.html","/post/Minecraft-Sep的竞赛笔记书.html","/post/2024-04-12周赛总结笔记.html","/post/LIS-LCS学习笔记.html","/post/2023-10-27初一编程马拉松赛赛后总结.html","/post/2023-11-21初一周赛总结.html","/post/2023竞赛笔记合集.html","/post/2024竞赛笔记合集.html"];function toRandomPost(){
+    pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);
+  };
