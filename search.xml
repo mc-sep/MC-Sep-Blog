@@ -22,7 +22,7 @@
 <li><p>下载<strong>Node.js</strong>（<button class="btn-sco " onclick="window.open('https://nodejs.cn/')" 
   title="点击下载"><i class="solitude st-lightbulb-line"></i><span>点击下载</span></button>）</p>
 </li>
-<li><p>下载后的文件会是：<img no-lazy class="inline" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" style="height:1.5em"/> ，打开后一路<code>Next</code>。</p>
+<li><p>下载后的文件会是：<img class="inline-img" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" /> ，打开后一路<code>Next</code>。</p>
 </li>
 </ol>
 <div class="note  warning simple"><p>不建议修改安装路径，否则可能会无法调用<code>系统变量</code>！</p>
@@ -210,6 +210,9 @@
 <h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
 
 ]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
       <tags>
         <tag>C++</tag>
         <tag>数据结构</tag>
@@ -320,7 +323,7 @@
 <p>版权所有©Minecraft-Sep。</p>
 ]]></content>
       <categories>
-        <category>竞赛笔记</category>
+        <category>C++</category>
       </categories>
       <tags>
         <tag>C++</tag>
@@ -576,6 +579,9 @@
 <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>更多练习请见: <a href="https://www.luogu.com.cn/training/463808">https://www.luogu.com.cn/training/463808</a></p>
 <p>本文的作者是<strong>Minecraft-Sep</strong>，本文原创，禁止抄袭！</p>
 ]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
       <tags>
         <tag>C++</tag>
         <tag>搜索</tag>
@@ -778,7 +784,7 @@
 <p>版权所有©Minecraft-Sep</p>
 ]]></content>
       <categories>
-        <category>竞赛笔记</category>
+        <category>C++</category>
       </categories>
       <tags>
         <tag>C++</tag>
