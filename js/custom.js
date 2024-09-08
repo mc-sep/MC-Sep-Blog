@@ -1,5 +1,5 @@
 // 进行 fetch 请求
-fetch('https://api.76.al/api/ip/query?key=你的key') //申请key:https://api.76.al
+fetch('https://api.76.al/api/ip/query?key=kl7y1nygTMNJcSivnTCRY5dqHU') //申请key:https://api.76.al
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
