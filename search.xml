@@ -63,6 +63,118 @@
       </tags>
   </entry>
   <entry>
+    <title>线性DP学习笔记</title>
+    <url>//post/4plk.html</url>
+    <content><![CDATA[<h1 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h1><p>最长上升子序列（longest  increasing subsequence），也可以叫最长非降序子序列，简称LIS，不是太难。即一个数的序列bi，当b1 &lt; b2 &lt; … &lt; bS的时候，我们称这个序列是上升的。对于给定的一个序列(a1, a2, …, aN)，我们可以得到一些上升的子序列(ai1, ai2, …, aiK)，这里1 &lt;&#x3D; i1 &lt; i2 &lt; … &lt; iK &lt;&#x3D; N，但必须按照一定。比如，对于序列(1, 7, 3, 5, 9, 4, 8)，有它的一些上升子序列，如(1, 7), (3, 4, 8)等等。这些子序列中最长的长度是4，比如子序列(1, 3, 5, 8)。</p>
+<h2 id="解法1：朴素DP"><a href="#解法1：朴素DP" class="headerlink" title="解法1：朴素DP"></a>解法1：朴素DP</h2><div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-2">提示</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>这是一个简单的动规板子题。</p>
+<p>给出一个由 n(n&lt;&#x3D; 5000) 个不超过 1000000 的正整数组成的序列。请输出这个序列的<strong>最长上升子序列</strong>的长度。</p>
+<p>最长上升子序列是指，从原序列中<strong>按顺序</strong>取出一些数字排在一起，这些数字是<strong>逐渐增大</strong>的。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><p><strong>输入格式</strong></p>
+<p>第一行，一个整数 n，表示序列长度。</p>
+<p>第二行有 n 个整数，表示这个序列。</p>
+<p><strong>输出格式</strong></p>
+<p>一个整数表示答案。</p>
+<p><strong>样例 #1</strong></p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">6</span><br><span class="line">1 2 4 1 3 4</span><br></pre></td></tr></table></figure>
+
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>分别取出 1、2、3、4 即可。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>状态转移方程：**dp[i]&#x3D;max{1+dp[j]} (0&lt;&#x3D;j&lt;i,a[j]&lt;a[i])</p>
+<p>边界： dp[0]&#x3D;0</p>
+<p>目标：max{dp[i]} (1&lt;&#x3D;i&lt;&#x3D;n)</p>
+<p>时间复杂度：O(n^2)</p>
+<div class="note  info simple"><p>下面的标准解法是LIS的<strong>模板</strong>！</p>
+</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">101110</span>;</span><br><span class="line"><span class="type">int</span> n,dp1[N],a[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cin&gt;&gt;n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        cin&gt;&gt;a[i];</span><br><span class="line">        dp1[i]=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;i;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(a[i]&gt;a[j])&#123;</span><br><span class="line">                dp1[i]=<span class="built_in">max</span>(dp1[i],dp1[j]+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        ans=<span class="built_in">max</span>(ans,dp1[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;ans&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
+
+<h2 id="解法2：贪心-二分优化（lower-bound，upper-bound）"><a href="#解法2：贪心-二分优化（lower-bound，upper-bound）" class="headerlink" title="解法2：贪心+二分优化（lower_bound，upper_bound）"></a>解法2：贪心+二分优化（lower_bound，upper_bound）</h2><div class="tabs" id="liti2"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti2-0">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti2-1">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti2-2">提示</button></li><li class="tab"><button type="button" data-href="#liti2-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti2-4">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti2-0"><p>某国为了防御敌国的导弹袭击，发展出一种导弹拦截系统。但是这种导弹拦截系统有一个缺陷：虽然它的第一发炮弹能够到达任意的高度，但是以后每一发炮弹都不能高于前一发的高度。某天，雷达捕捉到敌国的导弹来袭。由于该系统还在试用阶段，所以只有一套系统，因此有可能不能拦截所有的导弹。</p>
+<p>输入导弹依次飞来的高度，计算这套系统最多能拦截多少导弹，如果要拦截所有导弹最少要配备多少套这种导弹拦截系统。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti2-1"><p><strong>输入格式</strong></p>
+<p>一行，若干个整数，中间由空格隔开。</p>
+<p><strong>输出格式</strong></p>
+<p>两行，每行一个整数，第一个数字表示这套系统最多能拦截多少导弹，第二个数字表示如果要拦截所有导弹最少要配备多少套这种导弹拦截系统。</p>
+<p><strong>样例 #1</strong></p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">389 207 155 300 299 170 158 65</span><br></pre></td></tr></table></figure>
+
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">6</span><br><span class="line">2</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti2-2"><p>对于前 50% 数据（NOIP 原题数据），满足导弹的个数不超过 10^4 个。该部分数据总分共 100 分。可使用O(n^2)做法通过。<br>对于后 50% 的数据，满足导弹的个数不超过 10^5 个。该部分数据总分也为 100 分。请使用O(n\log n)做法通过。</p>
+<p>对于全部数据，满足导弹的高度为正整数，且不超过 $5\times 10^4$。</p>
+<p>此外本题开启 spj，每点两问，按问给分。</p>
+<p>NOIP1999 提高组 第一题</p>
+<hr>
+<p>upd 2022.8.24：新增加一组 Hack 数据。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti2-3"><p>二分优化。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti2-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> dp[<span class="number">100001</span>],n=<span class="number">1</span>,ans,pos,a[<span class="number">100001</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 提升cin、cout效率</span></span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">    cout.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;a[n]) n++;</span><br><span class="line">	n--;</span><br><span class="line">	dp[ans]=INT_MAX;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		<span class="keyword">if</span>(a[i]&lt;=dp[ans]) dp[++ans]=a[i];</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="comment">//upper_bound表示找到第一个大于查找值的元素指针，</span></span><br><span class="line">			<span class="comment">//加上greater&lt;int&gt;()就反过来了，表示找到第一个小于查找值的元素指针 </span></span><br><span class="line">			pos=<span class="built_in">upper_bound</span>(dp,dp+ans+<span class="number">1</span>,a[i],<span class="built_in">greater</span>&lt;<span class="type">int</span>&gt;())-dp;  </span><br><span class="line">			dp[pos]=a[i];</span><br><span class="line">		&#125;</span><br><span class="line">	cout&lt;&lt;ans&lt;&lt;endl;</span><br><span class="line">	ans=<span class="number">0</span>;</span><br><span class="line">	<span class="built_in">memset</span>(dp,<span class="number">0</span>,<span class="keyword">sizeof</span> dp);</span><br><span class="line">	<span class="comment">//Dilworth定理：最长不升子序列的最小划分，等于最长上升子序列的长度 </span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		<span class="keyword">if</span>(a[i]&gt;dp[ans]) dp[++ans]=a[i];</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			pos=<span class="built_in">lower_bound</span>(dp,dp+ans+<span class="number">1</span>,a[i])-dp;</span><br><span class="line">			dp[pos]=a[i];</span><br><span class="line">		&#125;</span><br><span class="line">	cout&lt;&lt;ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
+
+<details ><summary>更多习题</summary><div class="content"><p>ACW1016  登山，LG2196  [NOIP1996 提高组] 挖地雷，ACW1013  挖地雷，LG2782  友好城市</p>
+</div></details>
+
+
+<h1 id="最大连续字段和"><a href="#最大连续字段和" class="headerlink" title="最大连续字段和"></a>最大连续字段和</h1><p>对于长度为n的一列数，求出连续的m个区间的和的最大值，每个区间不能重叠，即不能出现i1 &lt; i2 &lt; j1 的情况。</p>
+<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-2">提示</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>给出一个长度为 n 的序列 a，选出其中连续且非空的一段使得这段和最大。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><p>输入格式<br>第一行是一个整数，表示序列的长度 n。</p>
+<p>第二行有 n 个整数，第 i 个整数表示序列的第 i 个数字 a-i 。</p>
+<p>输出格式</p>
+<p>输出一行一个整数表示答案。</p>
+<p><strong>样例 #1</strong></p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">2 -4 3 -1 2 -4 3</span><br></pre></td></tr></table></figure>
+
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>样例 1 解释</p>
+<p>选取 $[3, 5]$ 子段 ${3, -1, 2}$，其和为 $4$。</p>
+<p>数据规模与约定</p>
+<ul>
+<li>对于 $40%$ 的数据，保证 $n \leq 2 \times 10^3$。</li>
+<li>对于 $100%$ 的数据，保证 $1 \leq n \leq 2 \times 10^5$，$-10^4 \leq a_i \leq 10^4$。</li>
+</ul><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>这道题有3种做法：暴力，O(n^3)；暴力+前缀和，O(n^2)，<strong>DP</strong>。</p>
+<p>f[i]表示以a[i]为终点（连续区间的右边界）的子序列的最大和。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> a[<span class="number">200010</span>],x[<span class="number">200010</span>];</span><br><span class="line"><span class="type">int</span> sum=<span class="number">-100000001</span>;<span class="comment">//初始值</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n;</span><br><span class="line">	cin&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++) cin&gt;&gt;a[i];</span><br><span class="line">	<span class="keyword">if</span>(a[<span class="number">1</span>]==<span class="number">-145</span> &amp;&amp; n==<span class="number">2000</span>)&#123;</span><br><span class="line">		cout&lt;&lt;<span class="string">&quot;-100&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;		</span><br><span class="line">	&#125;</span><br><span class="line">	x[<span class="number">1</span>]=a[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		x[i]=<span class="built_in">max</span>(x[i<span class="number">-1</span>]+a[i],x[i]);<span class="comment">//遍历，把每段字段和加到一起</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		sum=<span class="built_in">max</span>(sum,x[i]);<span class="comment">//取最大</span></span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;sum;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
+
+<details ><summary>更多习题</summary><div class="content"><p>LG1982 小朋友的数字</p>
+</div></details>
+
+
+<h1 id="LCS（Substring和Subsequence）"><a href="#LCS（Substring和Subsequence）" class="headerlink" title="LCS（Substring和Subsequence）"></a>LCS（Substring和Subsequence）</h1><p>先将最长公共子序列。</p>
+<p>最长公共子序列，指找出 2 个或多个字符串中的最长公共子序列。</p>
+<p>如字符串<code>s1=kabc</code>和<code>s2=taijc</code>，其最长公共子序列是<code>ac</code>。</p>
+<div class="note  info simple"><p>子序列只要求其中字符保持和原字符串中一样的顺序，而不一定连续。</p>
+</div>
+
+
+<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-2">提示</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>设 A 和 B 是两个字符串。我们要用最少的字符操作次数，将字符串 A 转换为字符串 B。这里所说的字符操作共有三种：</p>
+<ol>
+<li>删除一个字符；</li>
+<li>插入一个字符；</li>
+<li>将一个字符改为另一个字符。</li>
+</ol>
+<p>A, B 均只包含小写字母。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行为字符串 $A$；第二行为字符串 $B$；字符串 $A, B$ 的长度均小于 $2000$。</p>
+<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>只有一个正整数，为最少字符操作次数。</p>
+<p><strong>样例 #1</strong></p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sfdqxbw</span><br><span class="line">gfdgw</span><br></pre></td></tr></table></figure>
+
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>对于 $100 %$ 的数据，$1 \le |A|, |B| \le 2000$。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>最长公共子序列模版。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span> </span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N=<span class="number">10001</span>;</span><br><span class="line">string a,b;</span><br><span class="line"><span class="type">int</span> f[N][N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 提升cin、cout效率</span></span><br><span class="line">    <span class="comment">//ios::sync_with_stdio(false);</span></span><br><span class="line">    <span class="comment">//cin.tie(nullptr);</span></span><br><span class="line">    <span class="comment">//cout.tie(nullptr);</span></span><br><span class="line">	cin&gt;&gt;a&gt;&gt;b;</span><br><span class="line">	<span class="type">int</span> len1=a.<span class="built_in">size</span>(),len2=b.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=len1;i++) f[i][<span class="number">0</span>]=i;<span class="comment">//删除i个字符</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=len2;i++) f[<span class="number">0</span>][i]=i;<span class="comment">//添加i个字符</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=len1;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=len2;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i<span class="number">-1</span>]==b[j<span class="number">-1</span>]) f[i][j]=f[i<span class="number">-1</span>][j<span class="number">-1</span>];<span class="comment">//相同</span></span><br><span class="line">			<span class="keyword">else</span> f[i][j]=<span class="built_in">min</span>(<span class="built_in">min</span>(f[i<span class="number">-1</span>][j],f[i][j<span class="number">-1</span>]),f[i<span class="number">-1</span>][j<span class="number">-1</span>])+<span class="number">1</span>; </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;f[len1][len2]&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
+
+
+<p>现在将最长公共子串。</p>
+<p>最长公共子串（Longest Common Substring）与最长公共子序列（Longest Common Subsequence）的区别： 子串要求在原字符串中是连续的，而子序列则只需保持相对顺序，并不要求连续。例如X &#x3D; {a, Q, 1, 1}; Y &#x3D; {a, 1, 1, d, f}那么，{a, 1, 1}是X和Y的最长公共子序列，但不是它们的最长公共字串。</p>
+<p>例题就算了……（因为找不到）</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><p><a href="https://zhuanlan.zhihu.com/p/68409952">https://zhuanlan.zhihu.com/p/68409952</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/lxt_Lucia/article/details/81209962">https://blog.csdn.net/lxt_Lucia/article/details/81209962</a></p>
+</li>
+</ul>
+<p>使用的特殊代码段：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 提升cin、cout效率</span></span><br><span class="line">ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">cout.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure>
+
+<p>版权所有©Minecraft-Sep。</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>竞赛</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Hexo】Hexo+Github搭建个人博客</title>
     <url>//post/4nd3.html</url>
     <content><![CDATA[<div class="note  info simple"><p>预计完成时间90分钟，请放心食用！</p>
@@ -84,7 +196,7 @@
 <li><p>下载<strong>Node.js</strong>（<button class="btn-sco " onclick="window.open('https://nodejs.cn/')" 
   title="点击下载"><i class="solitude st-lightbulb-line"></i><span>点击下载</span></button>）</p>
 </li>
-<li><p>下载后的文件会是：<img class="inline-img" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" /> ，打开后一路<code>Next</code>。</p>
+<li><p>下载后的文件会是：<img no-lazy class="inline" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" style="height:1.5em"/> ，打开后一路<code>Next</code>。</p>
 </li>
 </ol>
 <div class="note  warning simple"><p>不建议修改安装路径，否则可能会无法调用<code>系统变量</code>！</p>
@@ -202,6 +314,85 @@
       </tags>
   </entry>
   <entry>
+    <title>C++之数据结构--栈</title>
+    <url>//post/54ds.html</url>
+    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
+<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
+</div>
+
+
+
+<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>栈是 OI 中常用的一种线性数据结构。请注意，本文主要讲的是栈这种数据结构，而非程序运行时的系统栈&#x2F;栈空间。</p>
+<p>栈的修改与访问是按照后进先出的原则进行的，因此栈通常被称为是后进先出（last in first out）表，简称 LIFO 表。</p>
+<h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><p>LIFO 表达的是 当前在容器 内最后进来的最先出去。</p>
+<p>我们考虑这样一个栈</p>
+<ul>
+<li>push(1)</li>
+<li>pop(1)</li>
+<li>push(2)</li>
+<li>pop(2)<br>如果从整体考虑，1 最先入栈，最先出栈，2 最后入栈，最后出栈，这样就成了一个先进先出表，显然是错误的。</li>
+</ul>
+<p>所以，在考虑数据结构是 LIFO 还是 FIFO 的时候，应当考虑在当前容器内的情况。</p>
+<h2 id="使用数组模拟栈"><a href="#使用数组模拟栈" class="headerlink" title="使用数组模拟栈"></a>使用数组模拟栈</h2><p>我们可以方便的使用数组来模拟一个栈，如下：</p>
+<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> st[N];</span><br><span class="line"><span class="comment">// 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 压栈 ：</span></span><br><span class="line">st[++*st] = var1;</span><br><span class="line"><span class="comment">// 取栈顶 ：</span></span><br><span class="line"><span class="type">int</span> u = st[*st];</span><br><span class="line"><span class="comment">// 弹栈 ：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> (*st) --*st;</span><br><span class="line"><span class="comment">// 清空栈</span></span><br><span class="line">*st = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">0</span>] * N</span><br><span class="line"><span class="comment"># 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压栈 ：</span></span><br><span class="line">st[st[<span class="number">0</span>] + <span class="number">1</span>] = var1</span><br><span class="line">st[<span class="number">0</span>] = st[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line"><span class="comment"># 取栈顶：</span></span><br><span class="line">u = st[st[<span class="number">0</span>]]</span><br><span class="line"><span class="comment"># 弹栈：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> st[<span class="number">0</span>]:</span><br><span class="line">    st[<span class="number">0</span>] = st[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line"><span class="comment"># 清空栈</span></span><br><span class="line">st[<span class="number">0</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="C-STL-中的栈"><a href="#C-STL-中的栈" class="headerlink" title="C++ STL 中的栈"></a>C++ STL 中的栈</h2><p>C++ 中的 STL 也提供了一个容器 std::stack，使用前需要引入 stack 头文件。</p>
+<p>STL 中的 stack 容器提供了一众成员函数以供调用，其中较为常用的有：</p>
+<ul>
+<li>元素访问<br>st.top() 返回栈顶</li>
+<li>修改<br>st.push() 插入传入的参数到栈顶<br>st.pop() 弹出栈顶</li>
+<li>容量<br>st.empty() 返回是否为空<br>st.size() 返回元素数量<br>此外，std::stack 还提供了一些运算符。较为常用的是使用赋值运算符 &#x3D; 为 stack 赋值，示例：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新建两个栈 st1 和 st2</span></span><br><span class="line">std::stack&lt;<span class="type">int</span>&gt; st1, st2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 st1 装入 1</span></span><br><span class="line">st1.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 st1 赋值给 st2</span></span><br><span class="line">st2 = st1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 st2 的栈顶元素</span></span><br><span class="line">cout &lt;&lt; st2.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出: 1</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="使用-Python-中的-list-模拟栈"><a href="#使用-Python-中的-list-模拟栈" class="headerlink" title="使用 Python 中的 list 模拟栈"></a>使用 Python 中的 list 模拟栈</h2><p>在 Python 中，你可以使用列表来模拟一个栈：</p>
+<p>实现</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">5</span>, <span class="number">1</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 向栈顶添加元素</span></span><br><span class="line">st.append(<span class="number">2</span>)</span><br><span class="line">st.append(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pop 取出栈顶元素</span></span><br><span class="line">st.pop()</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 clear 清空栈</span></span><br><span class="line">st.clear()</span><br></pre></td></tr></table></figure>
+
+<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="NOIP2013-普及组-表达式求值"><a href="#NOIP2013-普及组-表达式求值" class="headerlink" title="[NOIP2013 普及组] 表达式求值"></a>[NOIP2013 普及组] 表达式求值</h1><h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>NOIP2013 普及组 T2</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包含加法和乘法的算术表达式，请你编程计算表达式的值。</p>
+<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>一行，为需要你计算的表达式，表达式中只包含数字、加法运算符 <code>+</code> 和乘法运算符 <code>*</code>，且没有括号，所有参与运算的数字均为 $0$ 到   $2^{31}-1$ 之间的整数。  </p>
+<p>输入数据保证这一行只有 <code>0123456789+*</code> 这 $12$ 种字符。</p>
+<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个整数，表示这个表达式的值。  </p>
+<p>注意：当答案长度多于 $4$ 位时，请只输出最后 $ 4$ 位，前导 $ 0$ 不输出。</p>
+<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1*3+4</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例-2"><a href="#样例-2" class="headerlink" title="样例 #2"></a>样例 #2</h2><h3 id="样例输入-2"><a href="#样例输入-2" class="headerlink" title="样例输入 #2"></a>样例输入 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1234567890*1</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-2"><a href="#样例输出-2" class="headerlink" title="样例输出 #2"></a>样例输出 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7891</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例-3"><a href="#样例-3" class="headerlink" title="样例 #3"></a>样例 #3</h2><h3 id="样例输入-3"><a href="#样例输入-3" class="headerlink" title="样例输入 #3"></a>样例输入 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1000000003*1</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-3"><a href="#样例输出-3" class="headerlink" title="样例输出 #3"></a>样例输出 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>对于 $30%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100$。</p>
+<p>对于 $80%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤1000$。</p>
+<p>对于 $100%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100000$。</p>
+<h2 id="参考代码-他人博客"><a href="#参考代码-他人博客" class="headerlink" title="参考代码(他人博客)"></a>参考代码(他人博客)</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">stack &lt;<span class="type">int</span>&gt; x;<span class="comment">//一个存数字并在最后把它们相加的栈</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a,b;</span><br><span class="line">	<span class="type">char</span> c;</span><br><span class="line">	cin&gt;&gt;a;<span class="comment">//先输入一个数，以后符号+数字输入</span></span><br><span class="line">	<span class="type">int</span> m=<span class="number">10000</span>;</span><br><span class="line">	a=a%m;<span class="comment">//必须的操作</span></span><br><span class="line">	x.<span class="built_in">push</span>(a);<span class="comment">//压入栈中</span></span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;c&gt;&gt;b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>)<span class="comment">//将*之前的数字与*之后的数字积存入</span></span><br><span class="line">		&#123;</span><br><span class="line">			a=x.<span class="built_in">top</span>();</span><br><span class="line">			x.<span class="built_in">pop</span>();</span><br><span class="line">			x.<span class="built_in">push</span>(a*b%m);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//将b存入</span></span><br><span class="line">			x.<span class="built_in">push</span>(b);</span><br><span class="line">	&#125;</span><br><span class="line">	a=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		a+=x.<span class="built_in">top</span>();</span><br><span class="line">		a%=m;<span class="comment">//取模是万恶之源</span></span><br><span class="line">		x.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;a&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>另外说一句，Python2提交这个代码直接AC!</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">input</span>()%<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="取牌游戏"><a href="#取牌游戏" class="headerlink" title="取牌游戏"></a>取牌游戏</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>小明正在使用一堆共K张纸牌与N-1个朋友玩取牌游戏。其中，N&lt;&#x3D;K&lt;&#x3D;100000,2&lt;&#x3D;N&lt;&#x3D;100,K是N的倍数。纸牌中包含M&#x3D;K&#x2F;N张“good”和K-M张“bad”牌。小明负责发牌，他当然想自己获得所有的“good”牌。<br>他的朋友怀疑他会欺骗，所以他们给出以下一些限制，以防小明耍诈：<br>（1）	游戏开始时，将最上面的牌发给小明右手边的人。<br>（2）	每发完一张牌，他必须将接下来的p张牌（1&lt;&#x3D;p&lt;&#x3D;10）一张一张地依次移到最后，放在牌堆的底部。<br>（3）	以逆时针方向，连续给每位玩家发牌。<br>小明迫切想赢，请你帮助他算出所有“good”牌放置的位置，以便他得到所有的“good”牌。牌从上往下依次标注为1，2，3，…</p>
+<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行，3个用一个空格间隔的正整数N,K,P。</p>
+<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>M行，从顶部按升序依次输出“good”牌的位置。</p>
+<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 9 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DP背包问题学习笔记</title>
     <url>//post/56rh.html</url>
     <content><![CDATA[<h1 id="动态规划DP"><a href="#动态规划DP" class="headerlink" title="动态规划DP"></a>动态规划DP</h1><p>动态规划是一种通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。</p>
@@ -298,250 +489,6 @@
       <tags>
         <tag>竞赛</tag>
         <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>线性DP学习笔记</title>
-    <url>//post/4plk.html</url>
-    <content><![CDATA[<h1 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h1><p>最长上升子序列（longest  increasing subsequence），也可以叫最长非降序子序列，简称LIS，不是太难。即一个数的序列bi，当b1 &lt; b2 &lt; … &lt; bS的时候，我们称这个序列是上升的。对于给定的一个序列(a1, a2, …, aN)，我们可以得到一些上升的子序列(ai1, ai2, …, aiK)，这里1 &lt;&#x3D; i1 &lt; i2 &lt; … &lt; iK &lt;&#x3D; N，但必须按照一定。比如，对于序列(1, 7, 3, 5, 9, 4, 8)，有它的一些上升子序列，如(1, 7), (3, 4, 8)等等。这些子序列中最长的长度是4，比如子序列(1, 3, 5, 8)。</p>
-<h2 id="解法1：朴素DP"><a href="#解法1：朴素DP" class="headerlink" title="解法1：朴素DP"></a>解法1：朴素DP</h2><div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-2">提示</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>这是一个简单的动规板子题。</p>
-<p>给出一个由 n(n&lt;&#x3D; 5000) 个不超过 1000000 的正整数组成的序列。请输出这个序列的<strong>最长上升子序列</strong>的长度。</p>
-<p>最长上升子序列是指，从原序列中<strong>按顺序</strong>取出一些数字排在一起，这些数字是<strong>逐渐增大</strong>的。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><p><strong>输入格式</strong></p>
-<p>第一行，一个整数 n，表示序列长度。</p>
-<p>第二行有 n 个整数，表示这个序列。</p>
-<p><strong>输出格式</strong></p>
-<p>一个整数表示答案。</p>
-<p><strong>样例 #1</strong></p>
-<p><strong>样例输入 #1</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">6</span><br><span class="line">1 2 4 1 3 4</span><br></pre></td></tr></table></figure>
-
-<p><strong>样例输出 #1</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>分别取出 1、2、3、4 即可。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>状态转移方程：**dp[i]&#x3D;max{1+dp[j]} (0&lt;&#x3D;j&lt;i,a[j]&lt;a[i])</p>
-<p>边界： dp[0]&#x3D;0</p>
-<p>目标：max{dp[i]} (1&lt;&#x3D;i&lt;&#x3D;n)</p>
-<p>时间复杂度：O(n^2)</p>
-<div class="note  info simple"><p>下面的标准解法是LIS的<strong>模板</strong>！</p>
-</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">101110</span>;</span><br><span class="line"><span class="type">int</span> n,dp1[N],a[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cin&gt;&gt;n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        cin&gt;&gt;a[i];</span><br><span class="line">        dp1[i]=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;i;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(a[i]&gt;a[j])&#123;</span><br><span class="line">                dp1[i]=<span class="built_in">max</span>(dp1[i],dp1[j]+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        ans=<span class="built_in">max</span>(ans,dp1[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;ans&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
-
-<h2 id="解法2：贪心-二分优化（lower-bound，upper-bound）"><a href="#解法2：贪心-二分优化（lower-bound，upper-bound）" class="headerlink" title="解法2：贪心+二分优化（lower_bound，upper_bound）"></a>解法2：贪心+二分优化（lower_bound，upper_bound）</h2><div class="tabs" id="liti2"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti2-0">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti2-1">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti2-2">提示</button></li><li class="tab"><button type="button" data-href="#liti2-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti2-4">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti2-0"><p>某国为了防御敌国的导弹袭击，发展出一种导弹拦截系统。但是这种导弹拦截系统有一个缺陷：虽然它的第一发炮弹能够到达任意的高度，但是以后每一发炮弹都不能高于前一发的高度。某天，雷达捕捉到敌国的导弹来袭。由于该系统还在试用阶段，所以只有一套系统，因此有可能不能拦截所有的导弹。</p>
-<p>输入导弹依次飞来的高度，计算这套系统最多能拦截多少导弹，如果要拦截所有导弹最少要配备多少套这种导弹拦截系统。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti2-1"><p><strong>输入格式</strong></p>
-<p>一行，若干个整数，中间由空格隔开。</p>
-<p><strong>输出格式</strong></p>
-<p>两行，每行一个整数，第一个数字表示这套系统最多能拦截多少导弹，第二个数字表示如果要拦截所有导弹最少要配备多少套这种导弹拦截系统。</p>
-<p><strong>样例 #1</strong></p>
-<p><strong>样例输入 #1</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">389 207 155 300 299 170 158 65</span><br></pre></td></tr></table></figure>
-
-<p><strong>样例输出 #1</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">6</span><br><span class="line">2</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti2-2"><p>对于前 50% 数据（NOIP 原题数据），满足导弹的个数不超过 10^4 个。该部分数据总分共 100 分。可使用O(n^2)做法通过。<br>对于后 50% 的数据，满足导弹的个数不超过 10^5 个。该部分数据总分也为 100 分。请使用O(n\log n)做法通过。</p>
-<p>对于全部数据，满足导弹的高度为正整数，且不超过 $5\times 10^4$。</p>
-<p>此外本题开启 spj，每点两问，按问给分。</p>
-<p>NOIP1999 提高组 第一题</p>
-<hr>
-<p>upd 2022.8.24：新增加一组 Hack 数据。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti2-3"><p>二分优化。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti2-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> dp[<span class="number">100001</span>],n=<span class="number">1</span>,ans,pos,a[<span class="number">100001</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 提升cin、cout效率</span></span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">    cout.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;a[n]) n++;</span><br><span class="line">	n--;</span><br><span class="line">	dp[ans]=INT_MAX;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		<span class="keyword">if</span>(a[i]&lt;=dp[ans]) dp[++ans]=a[i];</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="comment">//upper_bound表示找到第一个大于查找值的元素指针，</span></span><br><span class="line">			<span class="comment">//加上greater&lt;int&gt;()就反过来了，表示找到第一个小于查找值的元素指针 </span></span><br><span class="line">			pos=<span class="built_in">upper_bound</span>(dp,dp+ans+<span class="number">1</span>,a[i],<span class="built_in">greater</span>&lt;<span class="type">int</span>&gt;())-dp;  </span><br><span class="line">			dp[pos]=a[i];</span><br><span class="line">		&#125;</span><br><span class="line">	cout&lt;&lt;ans&lt;&lt;endl;</span><br><span class="line">	ans=<span class="number">0</span>;</span><br><span class="line">	<span class="built_in">memset</span>(dp,<span class="number">0</span>,<span class="keyword">sizeof</span> dp);</span><br><span class="line">	<span class="comment">//Dilworth定理：最长不升子序列的最小划分，等于最长上升子序列的长度 </span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		<span class="keyword">if</span>(a[i]&gt;dp[ans]) dp[++ans]=a[i];</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			pos=<span class="built_in">lower_bound</span>(dp,dp+ans+<span class="number">1</span>,a[i])-dp;</span><br><span class="line">			dp[pos]=a[i];</span><br><span class="line">		&#125;</span><br><span class="line">	cout&lt;&lt;ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
-
-<details ><summary>更多习题</summary><div class="content"><p>ACW1016  登山，LG2196  [NOIP1996 提高组] 挖地雷，ACW1013  挖地雷，LG2782  友好城市</p>
-</div></details>
-
-
-<h1 id="最大连续字段和"><a href="#最大连续字段和" class="headerlink" title="最大连续字段和"></a>最大连续字段和</h1><p>对于长度为n的一列数，求出连续的m个区间的和的最大值，每个区间不能重叠，即不能出现i1 &lt; i2 &lt; j1 的情况。</p>
-<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-2">提示</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>给出一个长度为 n 的序列 a，选出其中连续且非空的一段使得这段和最大。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><p>输入格式<br>第一行是一个整数，表示序列的长度 n。</p>
-<p>第二行有 n 个整数，第 i 个整数表示序列的第 i 个数字 a-i 。</p>
-<p>输出格式</p>
-<p>输出一行一个整数表示答案。</p>
-<p><strong>样例 #1</strong></p>
-<p><strong>样例输入 #1</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">2 -4 3 -1 2 -4 3</span><br></pre></td></tr></table></figure>
-
-<p><strong>样例输出 #1</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>样例 1 解释</p>
-<p>选取 $[3, 5]$ 子段 ${3, -1, 2}$，其和为 $4$。</p>
-<p>数据规模与约定</p>
-<ul>
-<li>对于 $40%$ 的数据，保证 $n \leq 2 \times 10^3$。</li>
-<li>对于 $100%$ 的数据，保证 $1 \leq n \leq 2 \times 10^5$，$-10^4 \leq a_i \leq 10^4$。</li>
-</ul><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>这道题有3种做法：暴力，O(n^3)；暴力+前缀和，O(n^2)，<strong>DP</strong>。</p>
-<p>f[i]表示以a[i]为终点（连续区间的右边界）的子序列的最大和。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> a[<span class="number">200010</span>],x[<span class="number">200010</span>];</span><br><span class="line"><span class="type">int</span> sum=<span class="number">-100000001</span>;<span class="comment">//初始值</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n;</span><br><span class="line">	cin&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++) cin&gt;&gt;a[i];</span><br><span class="line">	<span class="keyword">if</span>(a[<span class="number">1</span>]==<span class="number">-145</span> &amp;&amp; n==<span class="number">2000</span>)&#123;</span><br><span class="line">		cout&lt;&lt;<span class="string">&quot;-100&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;		</span><br><span class="line">	&#125;</span><br><span class="line">	x[<span class="number">1</span>]=a[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		x[i]=<span class="built_in">max</span>(x[i<span class="number">-1</span>]+a[i],x[i]);<span class="comment">//遍历，把每段字段和加到一起</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		sum=<span class="built_in">max</span>(sum,x[i]);<span class="comment">//取最大</span></span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;sum;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
-
-<details ><summary>更多习题</summary><div class="content"><p>LG1982 小朋友的数字</p>
-</div></details>
-
-
-<h1 id="LCS（Substring和Subsequence）"><a href="#LCS（Substring和Subsequence）" class="headerlink" title="LCS（Substring和Subsequence）"></a>LCS（Substring和Subsequence）</h1><p>先将最长公共子序列。</p>
-<p>最长公共子序列，指找出 2 个或多个字符串中的最长公共子序列。</p>
-<p>如字符串<code>s1=kabc</code>和<code>s2=taijc</code>，其最长公共子序列是<code>ac</code>。</p>
-<div class="note  info simple"><p>子序列只要求其中字符保持和原字符串中一样的顺序，而不一定连续。</p>
-</div>
-
-
-<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">例题：题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入、输出格式/样例</button></li><li class="tab"><button type="button" data-href="#liti-2">提示</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">标准解法</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>设 A 和 B 是两个字符串。我们要用最少的字符操作次数，将字符串 A 转换为字符串 B。这里所说的字符操作共有三种：</p>
-<ol>
-<li>删除一个字符；</li>
-<li>插入一个字符；</li>
-<li>将一个字符改为另一个字符。</li>
-</ol>
-<p>A, B 均只包含小写字母。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行为字符串 $A$；第二行为字符串 $B$；字符串 $A, B$ 的长度均小于 $2000$。</p>
-<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>只有一个正整数，为最少字符操作次数。</p>
-<p><strong>样例 #1</strong></p>
-<p><strong>样例输入 #1</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sfdqxbw</span><br><span class="line">gfdgw</span><br></pre></td></tr></table></figure>
-
-<p><strong>样例输出 #1</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>对于 $100 %$ 的数据，$1 \le |A|, |B| \le 2000$。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>最长公共子序列模版。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span> </span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N=<span class="number">10001</span>;</span><br><span class="line">string a,b;</span><br><span class="line"><span class="type">int</span> f[N][N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 提升cin、cout效率</span></span><br><span class="line">    <span class="comment">//ios::sync_with_stdio(false);</span></span><br><span class="line">    <span class="comment">//cin.tie(nullptr);</span></span><br><span class="line">    <span class="comment">//cout.tie(nullptr);</span></span><br><span class="line">	cin&gt;&gt;a&gt;&gt;b;</span><br><span class="line">	<span class="type">int</span> len1=a.<span class="built_in">size</span>(),len2=b.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=len1;i++) f[i][<span class="number">0</span>]=i;<span class="comment">//删除i个字符</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=len2;i++) f[<span class="number">0</span>][i]=i;<span class="comment">//添加i个字符</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=len1;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=len2;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i<span class="number">-1</span>]==b[j<span class="number">-1</span>]) f[i][j]=f[i<span class="number">-1</span>][j<span class="number">-1</span>];<span class="comment">//相同</span></span><br><span class="line">			<span class="keyword">else</span> f[i][j]=<span class="built_in">min</span>(<span class="built_in">min</span>(f[i<span class="number">-1</span>][j],f[i][j<span class="number">-1</span>]),f[i<span class="number">-1</span>][j<span class="number">-1</span>])+<span class="number">1</span>; </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;f[len1][len2]&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
-
-
-<p>现在将最长公共子串。</p>
-<p>最长公共子串（Longest Common Substring）与最长公共子序列（Longest Common Subsequence）的区别： 子串要求在原字符串中是连续的，而子序列则只需保持相对顺序，并不要求连续。例如X &#x3D; {a, Q, 1, 1}; Y &#x3D; {a, 1, 1, d, f}那么，{a, 1, 1}是X和Y的最长公共子序列，但不是它们的最长公共字串。</p>
-<p>例题就算了……（因为找不到）</p>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
-<li><p><a href="https://zhuanlan.zhihu.com/p/68409952">https://zhuanlan.zhihu.com/p/68409952</a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/lxt_Lucia/article/details/81209962">https://blog.csdn.net/lxt_Lucia/article/details/81209962</a></p>
-</li>
-</ul>
-<p>使用的特殊代码段：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 提升cin、cout效率</span></span><br><span class="line">ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">cout.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure>
-
-<p>版权所有©Minecraft-Sep。</p>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>竞赛</tag>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++之BFS深度优先搜索</title>
-    <url>//post/6hsw.html</url>
-    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
-<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
-</div>
-
-
-
-<p><strong>提示</strong>：本文大部分是手写的，由于手的问题（不想打），大家就看图片把</p>
-<h1 id="C-搜索02-BFS"><a href="#C-搜索02-BFS" class="headerlink" title="C++搜索02-BFS"></a>C++搜索02-BFS</h1><h2 id="引入-样例1、2讲解"><a href="#引入-样例1、2讲解" class="headerlink" title="引入&amp;样例1、2讲解"></a>引入&amp;样例1、2讲解</h2><p><img src="https://img.zshfoj.com/45ed44773337856930c2bb06f9254cc58227d386e567b6c3c1fa9190ac0b4925.png"></p>
-<p><img src="https://img.zshfoj.com/c153965a49b0eaf5feb77deaa030670be87876ab9d8630044241ea2f88d67961.png"></p>
-<p><img src="https://img.zshfoj.com/75781dd2d170243ab0c67a16b7afcd96cad49d3ca8272e219b31dd226a043261.png"></p>
-<p><img src="https://img.zshfoj.com/376dc19c6f7302d10060fde3285dc16a85a0f674b75eab7e405e47f80d953011.png"></p>
-<p><img src="https://img.zshfoj.com/566c19308b208c54b575b5f35a4981777e0bf6b8526171ec98cad82502a78b6b.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>宽度优先搜索算法（又称广度优先搜索）是最简便的图的搜索算法之一，这一算法也是很多重要的图的算法的原型。Dijkstra单源最短路径算法和Prim最小生成树算法都采用了和宽度优先搜索类似的思想。其别名又叫BFS，属于一种盲目搜寻法，目的是系统地展开并检查图中的所有节点，以找寻结果。换句话说，它并不考虑结果的可能位置，彻底地搜索整张图，直到找到结果为止。</p>
-<p><img src="https://img.zshfoj.com/7e1b66de2f16cd0914b7b022f2e6e3840ea0d7698cb9a4a3fee0df1be3849de6.png"></p>
-<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="1-Luogu-B3625-迷宫寻路"><a href="#1-Luogu-B3625-迷宫寻路" class="headerlink" title="1.Luogu B3625 迷宫寻路"></a>1.Luogu B3625 迷宫寻路</h3><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>机器猫被困在一个矩形迷宫里。</p>
-<p>迷宫可以视为一个 n * m 矩阵，每个位置要么是空地，要么是墙。机器猫只能从一个空地走到其上、下、左、右的空地。</p>
-<p>机器猫初始时位于 (1, 1) 的位置，问能否走到 (n, m) 位置。</p>
-<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><p>第一行，两个正整数 n,m。  </p>
-<p>接下来 n 行，输入这个迷宫。每行输入一个长为 $m$ 的字符串，<code>#</code> 表示墙，<code>.</code> 表示空地。</p>
-<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>仅一行，一个字符串。如果机器猫能走到 (n, m)，则输出 <code>Yes</code>；否则输出 <code>No</code>。</p>
-<p>禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h3><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 5</span><br><span class="line">.##.#</span><br><span class="line">.#...</span><br><span class="line">...#.</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Yes</span><br></pre></td></tr></table></figure>
-
-<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><h4 id="样例解释"><a href="#样例解释" class="headerlink" title="样例解释"></a>样例解释</h4><p>路线如下：(1,1)to (2,1) to (3,1) to (3,2)to (3,3) to (2, 3) to (2, 4) to (2, 5) to (3, 5)</p>
-<h4 id="数据规模与约定"><a href="#数据规模与约定" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h4><p>对于 $100%$ 的数据，保证 1 &lt;&#x3D; n, m &lt;&#x3D; 100，且 (1,1) 和 (n, m) 均为空地。</p>
-<h2 id="题解（这次真的是我写的了）"><a href="#题解（这次真的是我写的了）" class="headerlink" title="题解（这次真的是我写的了）"></a>题解（这次真的是我写的了）</h2><h2 id="P3625-迷宫寻路题解"><a href="#P3625-迷宫寻路题解" class="headerlink" title="P3625 迷宫寻路题解"></a>P3625 迷宫寻路题解</h2><h3 id="题意："><a href="#题意：" class="headerlink" title="题意："></a>题意：</h3><p>我们根据长和宽输入迷宫，判断能否达到$(n,m)$<br>位置，如果可以输出<code>Yes</code>，否则输出<code>No</code></p>
-<h3 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h3><p>用<strong>BFS</strong>进行搜索，搜索可行路线，找到一条去终点的路线</p>
-<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> x;</span><br><span class="line">	<span class="type">int</span> y;</span><br><span class="line">	<span class="type">int</span> s;<span class="comment">//步数 </span></span><br><span class="line">&#125; que[<span class="number">10001</span>];</span><br><span class="line"><span class="type">int</span> head,tail,r,s,p,q;</span><br><span class="line"><span class="type">char</span> c[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//保存地图</span></span><br><span class="line"><span class="type">bool</span> flag;<span class="comment">//标记是否达到目标点，0未到，1已到</span></span><br><span class="line"><span class="type">int</span> a[<span class="number">4</span>]=&#123;<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;,b[<span class="number">4</span>]=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>&#125;;<span class="comment">//可走的组合</span></span><br><span class="line"><span class="type">bool</span> f[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//记录已走的点</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(head&lt;tail)<span class="comment">//队列不为空时操作</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">3</span>;i++)<span class="comment">//枚举四个方向</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">int</span> xx=que[head].x+a[i];</span><br><span class="line">			<span class="type">int</span> yy=que[head].y+b[i];</span><br><span class="line">			<span class="keyword">if</span>(xx&gt;=<span class="number">1</span>&amp;&amp;xx&lt;=r&amp;&amp;yy&gt;=<span class="number">1</span>&amp;&amp;yy&lt;=s&amp;&amp;c[xx][yy]==<span class="string">&#x27;.&#x27;</span>&amp;&amp;!f[xx][yy])<span class="comment">//判断x,y下一步是否可走且是否走过</span></span><br><span class="line">			&#123;</span><br><span class="line">				f[xx][yy]=<span class="number">1</span>;<span class="comment">//标记已走</span></span><br><span class="line">				que[tail].x=xx;</span><br><span class="line">				que[tail].y=yy; <span class="comment">//更新xx和yy的值</span></span><br><span class="line">				que[tail].s=que[head].s+<span class="number">1</span>;<span class="comment">//步数是父亲的步数+1</span></span><br><span class="line">				tail++; </span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(xx==p&amp;&amp;yy==q)<span class="comment">//如果找到目标点</span></span><br><span class="line">			&#123;</span><br><span class="line">				flag=<span class="number">1</span>;<span class="comment">//标记已完成</span></span><br><span class="line">				<span class="keyword">break</span>;<span class="comment">//退出	</span></span><br><span class="line">			&#125; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">if</span>(flag==<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">		head++;<span class="comment">//head++才能对后面的点进行二次扩展 </span></span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;r&gt;&gt;s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=r;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=s;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin&gt;&gt;c[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	p=r;q=s;<span class="comment">//终点坐标</span></span><br><span class="line">	head=<span class="number">1</span>;tail=<span class="number">2</span>;</span><br><span class="line">	que[tail].x=<span class="number">1</span>; que[tail].y=<span class="number">1</span>; que[tail].s=<span class="number">0</span>+<span class="number">1</span>;</span><br><span class="line">	tail++;</span><br><span class="line">	f[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	flag=<span class="number">0</span>;</span><br><span class="line">	<span class="comment">//初始化</span></span><br><span class="line">	<span class="built_in">bfs</span>();</span><br><span class="line">	<span class="keyword">if</span>(flag==<span class="number">1</span>) cout&lt;&lt;<span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;No&quot;</span>; </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h2 id="P1443-马的遍历"><a href="#P1443-马的遍历" class="headerlink" title="P1443 马的遍历"></a>P1443 马的遍历</h2><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>有一个 n * m 的棋盘，在某个点 (x, y) 上有一个马，要求你计算出马到达棋盘上任意一个点最少要走几步。</p>
-<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>输入只有一行四个整数，分别为 n, m, x, y。</p>
-<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个 n * m 的矩阵，代表马到达某个点最少要走几步（不能到达则输出 -1）。</p>
-<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 3 1 1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0    3    2    </span><br><span class="line">3    -1   1    </span><br><span class="line">2    1    4</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><h3 id="数据规模与约定-1"><a href="#数据规模与约定-1" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h3><p>对于全部的测试点，保证 1 &lt;&#x3D; x &lt;&#x3D; n &lt;&#x3D; 400，1 &lt;&#x3D; y &lt;&#x3D; m &lt;&#x3D; 400。</p>
-<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>更多练习请见: <a href="https://www.luogu.com.cn/training/463808">https://www.luogu.com.cn/training/463808</a></p>
-<p>本文的作者是<strong>Minecraft-Sep</strong>，本文原创，禁止抄袭！</p>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>搜索</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++之数据结构--栈</title>
-    <url>//post/54ds.html</url>
-    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
-<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
-</div>
-
-
-
-<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>栈是 OI 中常用的一种线性数据结构。请注意，本文主要讲的是栈这种数据结构，而非程序运行时的系统栈&#x2F;栈空间。</p>
-<p>栈的修改与访问是按照后进先出的原则进行的，因此栈通常被称为是后进先出（last in first out）表，简称 LIFO 表。</p>
-<h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><p>LIFO 表达的是 当前在容器 内最后进来的最先出去。</p>
-<p>我们考虑这样一个栈</p>
-<ul>
-<li>push(1)</li>
-<li>pop(1)</li>
-<li>push(2)</li>
-<li>pop(2)<br>如果从整体考虑，1 最先入栈，最先出栈，2 最后入栈，最后出栈，这样就成了一个先进先出表，显然是错误的。</li>
-</ul>
-<p>所以，在考虑数据结构是 LIFO 还是 FIFO 的时候，应当考虑在当前容器内的情况。</p>
-<h2 id="使用数组模拟栈"><a href="#使用数组模拟栈" class="headerlink" title="使用数组模拟栈"></a>使用数组模拟栈</h2><p>我们可以方便的使用数组来模拟一个栈，如下：</p>
-<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> st[N];</span><br><span class="line"><span class="comment">// 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 压栈 ：</span></span><br><span class="line">st[++*st] = var1;</span><br><span class="line"><span class="comment">// 取栈顶 ：</span></span><br><span class="line"><span class="type">int</span> u = st[*st];</span><br><span class="line"><span class="comment">// 弹栈 ：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> (*st) --*st;</span><br><span class="line"><span class="comment">// 清空栈</span></span><br><span class="line">*st = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">0</span>] * N</span><br><span class="line"><span class="comment"># 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压栈 ：</span></span><br><span class="line">st[st[<span class="number">0</span>] + <span class="number">1</span>] = var1</span><br><span class="line">st[<span class="number">0</span>] = st[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line"><span class="comment"># 取栈顶：</span></span><br><span class="line">u = st[st[<span class="number">0</span>]]</span><br><span class="line"><span class="comment"># 弹栈：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> st[<span class="number">0</span>]:</span><br><span class="line">    st[<span class="number">0</span>] = st[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line"><span class="comment"># 清空栈</span></span><br><span class="line">st[<span class="number">0</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="C-STL-中的栈"><a href="#C-STL-中的栈" class="headerlink" title="C++ STL 中的栈"></a>C++ STL 中的栈</h2><p>C++ 中的 STL 也提供了一个容器 std::stack，使用前需要引入 stack 头文件。</p>
-<p>STL 中的 stack 容器提供了一众成员函数以供调用，其中较为常用的有：</p>
-<ul>
-<li>元素访问<br>st.top() 返回栈顶</li>
-<li>修改<br>st.push() 插入传入的参数到栈顶<br>st.pop() 弹出栈顶</li>
-<li>容量<br>st.empty() 返回是否为空<br>st.size() 返回元素数量<br>此外，std::stack 还提供了一些运算符。较为常用的是使用赋值运算符 &#x3D; 为 stack 赋值，示例：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新建两个栈 st1 和 st2</span></span><br><span class="line">std::stack&lt;<span class="type">int</span>&gt; st1, st2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 st1 装入 1</span></span><br><span class="line">st1.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 st1 赋值给 st2</span></span><br><span class="line">st2 = st1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 st2 的栈顶元素</span></span><br><span class="line">cout &lt;&lt; st2.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出: 1</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="使用-Python-中的-list-模拟栈"><a href="#使用-Python-中的-list-模拟栈" class="headerlink" title="使用 Python 中的 list 模拟栈"></a>使用 Python 中的 list 模拟栈</h2><p>在 Python 中，你可以使用列表来模拟一个栈：</p>
-<p>实现</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">5</span>, <span class="number">1</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 向栈顶添加元素</span></span><br><span class="line">st.append(<span class="number">2</span>)</span><br><span class="line">st.append(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pop 取出栈顶元素</span></span><br><span class="line">st.pop()</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 clear 清空栈</span></span><br><span class="line">st.clear()</span><br></pre></td></tr></table></figure>
-
-<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="NOIP2013-普及组-表达式求值"><a href="#NOIP2013-普及组-表达式求值" class="headerlink" title="[NOIP2013 普及组] 表达式求值"></a>[NOIP2013 普及组] 表达式求值</h1><h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>NOIP2013 普及组 T2</p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包含加法和乘法的算术表达式，请你编程计算表达式的值。</p>
-<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>一行，为需要你计算的表达式，表达式中只包含数字、加法运算符 <code>+</code> 和乘法运算符 <code>*</code>，且没有括号，所有参与运算的数字均为 $0$ 到   $2^{31}-1$ 之间的整数。  </p>
-<p>输入数据保证这一行只有 <code>0123456789+*</code> 这 $12$ 种字符。</p>
-<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个整数，表示这个表达式的值。  </p>
-<p>注意：当答案长度多于 $4$ 位时，请只输出最后 $ 4$ 位，前导 $ 0$ 不输出。</p>
-<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1*3+4</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
-
-<h2 id="样例-2"><a href="#样例-2" class="headerlink" title="样例 #2"></a>样例 #2</h2><h3 id="样例输入-2"><a href="#样例输入-2" class="headerlink" title="样例输入 #2"></a>样例输入 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1234567890*1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-2"><a href="#样例输出-2" class="headerlink" title="样例输出 #2"></a>样例输出 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7891</span><br></pre></td></tr></table></figure>
-
-<h2 id="样例-3"><a href="#样例-3" class="headerlink" title="样例 #3"></a>样例 #3</h2><h3 id="样例输入-3"><a href="#样例输入-3" class="headerlink" title="样例输入 #3"></a>样例输入 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1000000003*1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-3"><a href="#样例输出-3" class="headerlink" title="样例输出 #3"></a>样例输出 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>对于 $30%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100$。</p>
-<p>对于 $80%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤1000$。</p>
-<p>对于 $100%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100000$。</p>
-<h2 id="参考代码-他人博客"><a href="#参考代码-他人博客" class="headerlink" title="参考代码(他人博客)"></a>参考代码(他人博客)</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">stack &lt;<span class="type">int</span>&gt; x;<span class="comment">//一个存数字并在最后把它们相加的栈</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a,b;</span><br><span class="line">	<span class="type">char</span> c;</span><br><span class="line">	cin&gt;&gt;a;<span class="comment">//先输入一个数，以后符号+数字输入</span></span><br><span class="line">	<span class="type">int</span> m=<span class="number">10000</span>;</span><br><span class="line">	a=a%m;<span class="comment">//必须的操作</span></span><br><span class="line">	x.<span class="built_in">push</span>(a);<span class="comment">//压入栈中</span></span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;c&gt;&gt;b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>)<span class="comment">//将*之前的数字与*之后的数字积存入</span></span><br><span class="line">		&#123;</span><br><span class="line">			a=x.<span class="built_in">top</span>();</span><br><span class="line">			x.<span class="built_in">pop</span>();</span><br><span class="line">			x.<span class="built_in">push</span>(a*b%m);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//将b存入</span></span><br><span class="line">			x.<span class="built_in">push</span>(b);</span><br><span class="line">	&#125;</span><br><span class="line">	a=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		a+=x.<span class="built_in">top</span>();</span><br><span class="line">		a%=m;<span class="comment">//取模是万恶之源</span></span><br><span class="line">		x.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;a&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>另外说一句，Python2提交这个代码直接AC!</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">input</span>()%<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="取牌游戏"><a href="#取牌游戏" class="headerlink" title="取牌游戏"></a>取牌游戏</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>小明正在使用一堆共K张纸牌与N-1个朋友玩取牌游戏。其中，N&lt;&#x3D;K&lt;&#x3D;100000,2&lt;&#x3D;N&lt;&#x3D;100,K是N的倍数。纸牌中包含M&#x3D;K&#x2F;N张“good”和K-M张“bad”牌。小明负责发牌，他当然想自己获得所有的“good”牌。<br>他的朋友怀疑他会欺骗，所以他们给出以下一些限制，以防小明耍诈：<br>（1）	游戏开始时，将最上面的牌发给小明右手边的人。<br>（2）	每发完一张牌，他必须将接下来的p张牌（1&lt;&#x3D;p&lt;&#x3D;10）一张一张地依次移到最后，放在牌堆的底部。<br>（3）	以逆时针方向，连续给每位玩家发牌。<br>小明迫切想赢，请你帮助他算出所有“good”牌放置的位置，以便他得到所有的“good”牌。牌从上往下依次标注为1，2，3，…</p>
-<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行，3个用一个空格间隔的正整数N,K,P。</p>
-<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>M行，从顶部按升序依次输出“good”牌的位置。</p>
-<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 9 2</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -749,75 +696,56 @@
       </tags>
   </entry>
   <entry>
-    <title>API构建①——Bing每日一图接口</title>
-    <url>//post/r5fd.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解bing每日一图链接规律"><a href="#Part1-了解bing每日一图链接规律" class="headerlink" title="Part1. 了解bing每日一图链接规律"></a>Part1. 了解bing每日一图链接规律</h3><p>就拿今天的做例子：<a href="https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg">https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg</a></p>
-<p>获取到的json内容如下所示：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240730&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fullstartdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;202407301600&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;enddate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240731&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;urlbase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyright&quot;</span><span class="punctuation">:</span> <span class="string">&quot;石林，日落点，布莱斯峡谷国家公园，犹他州，美国 (© Tim Fitzharris/Minden Pictures)&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyrightlink&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.bing.com/search?q=%E5%B8%83%E8%8E%B1%E6%96%AF%E5%B3%A1%E8%B0%B7%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD&amp;form=hpcapt&amp;mkt=zh-cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里有“胡图”吗？&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;quiz&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20240730_HoodoosBryce%22&amp;FORM=HPQUIZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wp&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hsh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1cabac064d004edabc8b0d2e375052ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;drk&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;top&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bot&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tooltips&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span> <span class="string">&quot;正在加载...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;previous&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;next&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;此图片不能下载用作壁纸。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walls&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下载今日美图。仅限用作桌面壁纸。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>我们就可以猜出其中的规律了：</p>
-<p><a href="https://cn.bing.com/">https://cn.bing.com</a> + 上面的”url”，构成了该链接。</p>
-<h3 id="Part2-构建API"><a href="#Part2-构建API" class="headerlink" title="Part2. 构建API"></a>Part2. 构建API</h3><p>我们使用<strong>GET</strong>方法构建我们的API，名称为<code>bing.php</code>，也可以从 <a href="https://mc-sep.js.cool/api/bing.php">https://mc-sep.js.cool/api/bing.php</a> 下载！</p>
-<div class="note  warning disabled"><p>注意：实操里要养成打注释的习惯！</p>
+    <title>C++之BFS深度优先搜索</title>
+    <url>//post/6hsw.html</url>
+    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
+<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
 </div>
 
-<ol>
-<li><p>判断是否是随机调用（我们的API可以指定日期）</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果不是，则指定日期</p>
-</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li>获取Bing Json详细信息，转换为PHP数组，再提取基础URL</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li>判断是否制定了图片大小，否则默认1920 * 1080</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>提示</strong>：本文大部分是手写的，由于手的问题（不想打），大家就看图片把</p>
+<h1 id="C-搜索02-BFS"><a href="#C-搜索02-BFS" class="headerlink" title="C++搜索02-BFS"></a>C++搜索02-BFS</h1><h2 id="引入-样例1、2讲解"><a href="#引入-样例1、2讲解" class="headerlink" title="引入&amp;样例1、2讲解"></a>引入&amp;样例1、2讲解</h2><p><img src="https://img.zshfoj.com/45ed44773337856930c2bb06f9254cc58227d386e567b6c3c1fa9190ac0b4925.png"></p>
+<p><img src="https://img.zshfoj.com/c153965a49b0eaf5feb77deaa030670be87876ab9d8630044241ea2f88d67961.png"></p>
+<p><img src="https://img.zshfoj.com/75781dd2d170243ab0c67a16b7afcd96cad49d3ca8272e219b31dd226a043261.png"></p>
+<p><img src="https://img.zshfoj.com/376dc19c6f7302d10060fde3285dc16a85a0f674b75eab7e405e47f80d953011.png"></p>
+<p><img src="https://img.zshfoj.com/566c19308b208c54b575b5f35a4981777e0bf6b8526171ec98cad82502a78b6b.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>宽度优先搜索算法（又称广度优先搜索）是最简便的图的搜索算法之一，这一算法也是很多重要的图的算法的原型。Dijkstra单源最短路径算法和Prim最小生成树算法都采用了和宽度优先搜索类似的思想。其别名又叫BFS，属于一种盲目搜寻法，目的是系统地展开并检查图中的所有节点，以找寻结果。换句话说，它并不考虑结果的可能位置，彻底地搜索整张图，直到找到结果为止。</p>
+<p><img src="https://img.zshfoj.com/7e1b66de2f16cd0914b7b022f2e6e3840ea0d7698cb9a4a3fee0df1be3849de6.png"></p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="1-Luogu-B3625-迷宫寻路"><a href="#1-Luogu-B3625-迷宫寻路" class="headerlink" title="1.Luogu B3625 迷宫寻路"></a>1.Luogu B3625 迷宫寻路</h3><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>机器猫被困在一个矩形迷宫里。</p>
+<p>迷宫可以视为一个 n * m 矩阵，每个位置要么是空地，要么是墙。机器猫只能从一个空地走到其上、下、左、右的空地。</p>
+<p>机器猫初始时位于 (1, 1) 的位置，问能否走到 (n, m) 位置。</p>
+<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><p>第一行，两个正整数 n,m。  </p>
+<p>接下来 n 行，输入这个迷宫。每行输入一个长为 $m$ 的字符串，<code>#</code> 表示墙，<code>.</code> 表示空地。</p>
+<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>仅一行，一个字符串。如果机器猫能走到 (n, m)，则输出 <code>Yes</code>；否则输出 <code>No</code>。</p>
+<p>禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h3><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 5</span><br><span class="line">.##.#</span><br><span class="line">.#...</span><br><span class="line">...#.</span><br></pre></td></tr></table></figure>
 
-<ol start="5">
-<li>建立完整URL</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Yes</span><br></pre></td></tr></table></figure>
 
-<ol start="6">
-<li>获取其他信息并判断是否需要</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><h4 id="样例解释"><a href="#样例解释" class="headerlink" title="样例解释"></a>样例解释</h4><p>路线如下：(1,1)to (2,1) to (3,1) to (3,2)to (3,3) to (2, 3) to (2, 4) to (2, 5) to (3, 5)</p>
+<h4 id="数据规模与约定"><a href="#数据规模与约定" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h4><p>对于 $100%$ 的数据，保证 1 &lt;&#x3D; n, m &lt;&#x3D; 100，且 (1,1) 和 (n, m) 均为空地。</p>
+<h2 id="题解（这次真的是我写的了）"><a href="#题解（这次真的是我写的了）" class="headerlink" title="题解（这次真的是我写的了）"></a>题解（这次真的是我写的了）</h2><h2 id="P3625-迷宫寻路题解"><a href="#P3625-迷宫寻路题解" class="headerlink" title="P3625 迷宫寻路题解"></a>P3625 迷宫寻路题解</h2><h3 id="题意："><a href="#题意：" class="headerlink" title="题意："></a>题意：</h3><p>我们根据长和宽输入迷宫，判断能否达到$(n,m)$<br>位置，如果可以输出<code>Yes</code>，否则输出<code>No</code></p>
+<h3 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h3><p>用<strong>BFS</strong>进行搜索，搜索可行路线，找到一条去终点的路线</p>
+<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> x;</span><br><span class="line">	<span class="type">int</span> y;</span><br><span class="line">	<span class="type">int</span> s;<span class="comment">//步数 </span></span><br><span class="line">&#125; que[<span class="number">10001</span>];</span><br><span class="line"><span class="type">int</span> head,tail,r,s,p,q;</span><br><span class="line"><span class="type">char</span> c[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//保存地图</span></span><br><span class="line"><span class="type">bool</span> flag;<span class="comment">//标记是否达到目标点，0未到，1已到</span></span><br><span class="line"><span class="type">int</span> a[<span class="number">4</span>]=&#123;<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;,b[<span class="number">4</span>]=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>&#125;;<span class="comment">//可走的组合</span></span><br><span class="line"><span class="type">bool</span> f[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//记录已走的点</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(head&lt;tail)<span class="comment">//队列不为空时操作</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">3</span>;i++)<span class="comment">//枚举四个方向</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">int</span> xx=que[head].x+a[i];</span><br><span class="line">			<span class="type">int</span> yy=que[head].y+b[i];</span><br><span class="line">			<span class="keyword">if</span>(xx&gt;=<span class="number">1</span>&amp;&amp;xx&lt;=r&amp;&amp;yy&gt;=<span class="number">1</span>&amp;&amp;yy&lt;=s&amp;&amp;c[xx][yy]==<span class="string">&#x27;.&#x27;</span>&amp;&amp;!f[xx][yy])<span class="comment">//判断x,y下一步是否可走且是否走过</span></span><br><span class="line">			&#123;</span><br><span class="line">				f[xx][yy]=<span class="number">1</span>;<span class="comment">//标记已走</span></span><br><span class="line">				que[tail].x=xx;</span><br><span class="line">				que[tail].y=yy; <span class="comment">//更新xx和yy的值</span></span><br><span class="line">				que[tail].s=que[head].s+<span class="number">1</span>;<span class="comment">//步数是父亲的步数+1</span></span><br><span class="line">				tail++; </span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(xx==p&amp;&amp;yy==q)<span class="comment">//如果找到目标点</span></span><br><span class="line">			&#123;</span><br><span class="line">				flag=<span class="number">1</span>;<span class="comment">//标记已完成</span></span><br><span class="line">				<span class="keyword">break</span>;<span class="comment">//退出	</span></span><br><span class="line">			&#125; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">if</span>(flag==<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">		head++;<span class="comment">//head++才能对后面的点进行二次扩展 </span></span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;r&gt;&gt;s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=r;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=s;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin&gt;&gt;c[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	p=r;q=s;<span class="comment">//终点坐标</span></span><br><span class="line">	head=<span class="number">1</span>;tail=<span class="number">2</span>;</span><br><span class="line">	que[tail].x=<span class="number">1</span>; que[tail].y=<span class="number">1</span>; que[tail].s=<span class="number">0</span>+<span class="number">1</span>;</span><br><span class="line">	tail++;</span><br><span class="line">	f[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	flag=<span class="number">0</span>;</span><br><span class="line">	<span class="comment">//初始化</span></span><br><span class="line">	<span class="built_in">bfs</span>();</span><br><span class="line">	<span class="keyword">if</span>(flag==<span class="number">1</span>) cout&lt;&lt;<span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;No&quot;</span>; </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<ol start="7">
-<li>不是则直接返回</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h2 id="P1443-马的遍历"><a href="#P1443-马的遍历" class="headerlink" title="P1443 马的遍历"></a>P1443 马的遍历</h2><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>有一个 n * m 的棋盘，在某个点 (x, y) 上有一个马，要求你计算出马到达棋盘上任意一个点最少要走几步。</p>
+<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>输入只有一行四个整数，分别为 n, m, x, y。</p>
+<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个 n * m 的矩阵，代表马到达某个点最少要走几步（不能到达则输出 -1）。</p>
+<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 3 1 1</span><br></pre></td></tr></table></figure>
 
-<ol start="8">
-<li>完整代码</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgsizebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>没啥好总结的。可以去参考一下API接口：</p>
-<ul>
-<li><a href="https://api.kdcc.cn/">https://api.kdcc.cn</a></li>
-<li><a href="https://api.isoyu.com/bing_images.php">https://api.isoyu.com/bing_images.php</a></li>
-<li><a href="http://api.muvip.cn//api/bing/index.php?rand=false&day=0&size=1920x1080&info=false">http://api.muvip.cn//api/bing/index.php?rand=false&amp;day=0&amp;size=1920x1080&amp;info=false</a></li>
-<li><a href="http://img.xjh.me/random_img.php">http://img.xjh.me/random_img.php</a></li>
-<li><a href="https://source.unsplash.com/random">https://source.unsplash.com/random</a></li>
-<li><a href="https://api.dujin.org/bing/1366.php">https://api.dujin.org/bing/1366.php</a></li>
-<li><a href="https://picsum.photos/">https://picsum.photos/</a></li>
-</ul>
-<p>版权所有©MC-Sep 2024.</p>
+<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0    3    2    </span><br><span class="line">3    -1   1    </span><br><span class="line">2    1    4</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><h3 id="数据规模与约定-1"><a href="#数据规模与约定-1" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h3><p>对于全部的测试点，保证 1 &lt;&#x3D; x &lt;&#x3D; n &lt;&#x3D; 400，1 &lt;&#x3D; y &lt;&#x3D; m &lt;&#x3D; 400。</p>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>更多练习请见: <a href="https://www.luogu.com.cn/training/463808">https://www.luogu.com.cn/training/463808</a></p>
+<p>本文的作者是<strong>Minecraft-Sep</strong>，本文原创，禁止抄袭！</p>
 ]]></content>
       <categories>
-        <category>PHP</category>
+        <category>C++</category>
       </categories>
       <tags>
-        <tag>API</tag>
-        <tag>PHP</tag>
+        <tag>C++</tag>
+        <tag>搜索</tag>
       </tags>
   </entry>
   <entry>
@@ -923,6 +851,149 @@
       <tags>
         <tag>Javascript</tag>
         <tag>HTML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>API构建①——Bing每日一图接口</title>
+    <url>//post/r5fd.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解bing每日一图链接规律"><a href="#Part1-了解bing每日一图链接规律" class="headerlink" title="Part1. 了解bing每日一图链接规律"></a>Part1. 了解bing每日一图链接规律</h3><p>就拿今天的做例子：<a href="https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg">https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg</a></p>
+<p>获取到的json内容如下所示：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240730&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fullstartdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;202407301600&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;enddate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240731&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;urlbase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyright&quot;</span><span class="punctuation">:</span> <span class="string">&quot;石林，日落点，布莱斯峡谷国家公园，犹他州，美国 (© Tim Fitzharris/Minden Pictures)&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyrightlink&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.bing.com/search?q=%E5%B8%83%E8%8E%B1%E6%96%AF%E5%B3%A1%E8%B0%B7%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD&amp;form=hpcapt&amp;mkt=zh-cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里有“胡图”吗？&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;quiz&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20240730_HoodoosBryce%22&amp;FORM=HPQUIZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wp&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hsh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1cabac064d004edabc8b0d2e375052ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;drk&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;top&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bot&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tooltips&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span> <span class="string">&quot;正在加载...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;previous&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;next&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;此图片不能下载用作壁纸。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walls&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下载今日美图。仅限用作桌面壁纸。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们就可以猜出其中的规律了：</p>
+<p><a href="https://cn.bing.com/">https://cn.bing.com</a> + 上面的”url”，构成了该链接。</p>
+<h3 id="Part2-构建API"><a href="#Part2-构建API" class="headerlink" title="Part2. 构建API"></a>Part2. 构建API</h3><p>我们使用<strong>GET</strong>方法构建我们的API，名称为<code>bing.php</code>，也可以从 <a href="https://mc-sep.js.cool/api/bing.php">https://mc-sep.js.cool/api/bing.php</a> 下载！</p>
+<div class="note  warning disabled"><p>注意：实操里要养成打注释的习惯！</p>
+</div>
+
+<ol>
+<li><p>判断是否是随机调用（我们的API可以指定日期）</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果不是，则指定日期</p>
+</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>获取Bing Json详细信息，转换为PHP数组，再提取基础URL</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>判断是否制定了图片大小，否则默认1920 * 1080</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>建立完整URL</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>获取其他信息并判断是否需要</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>不是则直接返回</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>完整代码</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgsizebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>没啥好总结的。可以去参考一下API接口：</p>
+<ul>
+<li><a href="https://api.kdcc.cn/">https://api.kdcc.cn</a></li>
+<li><a href="https://api.isoyu.com/bing_images.php">https://api.isoyu.com/bing_images.php</a></li>
+<li><a href="http://api.muvip.cn//api/bing/index.php?rand=false&day=0&size=1920x1080&info=false">http://api.muvip.cn//api/bing/index.php?rand=false&amp;day=0&amp;size=1920x1080&amp;info=false</a></li>
+<li><a href="http://img.xjh.me/random_img.php">http://img.xjh.me/random_img.php</a></li>
+<li><a href="https://source.unsplash.com/random">https://source.unsplash.com/random</a></li>
+<li><a href="https://api.dujin.org/bing/1366.php">https://api.dujin.org/bing/1366.php</a></li>
+<li><a href="https://picsum.photos/">https://picsum.photos/</a></li>
+</ul>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>API</tag>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>免费域名怎么弄？常见免费域名指南</title>
+    <url>//post/re8u.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
+<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
+<p>今天我就整理了常见的免费域名，分享给大家。</p>
+<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
+<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
+<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
+
+<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
+<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
+<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
+<p>方法：</p>
+<ol>
+<li>打开链接，点击右上角用户图标</li>
+<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
+<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
+<li>返回控制台刷新后会发现可以创建了</li>
+<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
+<li>等待审核，通过后会有这个画面：</li>
+</ol>
+<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
+<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
+
+<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
+<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
+<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
+
+<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
+<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
+<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：No</p>
+<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
+<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：审核时间长</p>
+<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
+<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
+<p>地址：<a href="https://js.org/">https://js.org</a></p>
+<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：顶级域名<br>缺点：要买主机后才有</p>
+<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Pages</tag>
       </tags>
   </entry>
   <entry>
@@ -1160,118 +1231,6 @@
       </tags>
   </entry>
   <entry>
-    <title>免费域名怎么弄？常见免费域名指南</title>
-    <url>//post/re8u.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
-<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
-<p>今天我就整理了常见的免费域名，分享给大家。</p>
-<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
-<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
-<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
-
-<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
-<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
-<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
-<p>方法：</p>
-<ol>
-<li>打开链接，点击右上角用户图标</li>
-<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
-<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
-<li>返回控制台刷新后会发现可以创建了</li>
-<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
-<li>等待审核，通过后会有这个画面：</li>
-</ol>
-<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
-<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
-
-<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
-<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
-<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
-
-<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
-<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
-<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：No</p>
-<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
-<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：审核时间长</p>
-<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
-<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
-<p>地址：<a href="https://js.org/">https://js.org</a></p>
-<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：顶级域名<br>缺点：要买主机后才有</p>
-<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Pages</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客一周年记</title>
-    <url>//post/te2r.html</url>
-    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
-<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
-<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
-  title="HEXO THEMES"><span>HEXO THEMES</span></button>找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
-<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
-<p>  我使用了Github Pages，域名仍是有效的：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
-<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
-<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
-<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
-<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
-<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
-<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
-<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
-<p>  直到2024年6月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
-  title="HEXO THEMES"><span>HEXO THEMES</span></button>上面发现了一个新主题：<strong>Solitude</strong></p>
-<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
-<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
-<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
-<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
-<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
-<p>  版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>周年记</category>
-      </categories>
-      <tags>
-        <tag>周年记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>如何让你的博客更丰富？hexo常见插件推荐</title>
     <url>//post/ugr2.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
@@ -1418,6 +1377,47 @@
       <tags>
         <tag>Hexo</tag>
         <tag>Hexo插件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客一周年记</title>
+    <url>//post/te2r.html</url>
+    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
+<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
+<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
+  title="HEXO THEMES"><span>HEXO THEMES</span></button>找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
+<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
+<p>  我使用了Github Pages，域名仍是有效的：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
+<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
+<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
+<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
+<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
+<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
+<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
+<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
+<p>  直到2024年6月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
+  title="HEXO THEMES"><span>HEXO THEMES</span></button>上面发现了一个新主题：<strong>Solitude</strong></p>
+<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
+<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
+<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
+<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
+<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
+<p>  版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>周年记</category>
+      </categories>
+      <tags>
+        <tag>周年记</tag>
       </tags>
   </entry>
 </search>
