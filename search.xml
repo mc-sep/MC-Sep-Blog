@@ -1420,4 +1420,128 @@
         <tag>周年记</tag>
       </tags>
   </entry>
+  <entry>
+    <title>免费小型数据库——Vercel Blob初体验</title>
+    <url>//post/239d.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
+<a class="tag-link" target="_blank" href="https://mcsep-files.js.cool/">
+    <div class="tag-link-tips">引用站外链接</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/mcsep-files.js.cool.png)">
+            <i class="solitude st-link-m-line" style="display: none"></i>
+        </div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">MC-Sep 图床</div>
+            <div class="tag-link-sitename">Sep开发的小型图床</div>
+        </div>
+        <i class="solitude st-arrow-right-bold"></i>
+    </div>
+    </a>
+
+<p>他的配置还不错的：</p>
+<table>
+<thead>
+<tr>
+<th align="center">计划</th>
+<th align="center">数据库大小</th>
+<th align="center">读</th>
+<th align="center">写</th>
+<th align="center">请求数</th>
+<th align="center">请求时长</th>
+<th align="center">是否要Projects</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Hobby</td>
+<td align="center">250MB&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">1 hour&#x2F;Month</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="center">Pro</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="center">Team</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">✅</td>
+</tr>
+</tbody></table>
+<p>今天就teach你怎么搞！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li><p>准备一个Vercel账号，可以直接用Github登录</p>
+</li>
+<li><p>创建存储库（点击快速创建）：<button class="btn-sco outline" onclick="window.open('https://vercel.com/new/mc-sep-vercel-team/clone?demo-description=Simple%20Next.js%20template%20that%20uses%20Vercel%20Blob%20for%20image%20uploads&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2FW7szxXAHpF3eZ4RFT33Cb%2F4d8a64904b67980e449b487089dd7b2b%2Fopengraph-image.png&demo-title=Vercel%20Blob%20Next.js%20Starter&demo-url=https%3A%2F%2Fblob-starter.vercel.app%2F&project-name=blob-starter&repository-name=blob-starter&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fstorage%2Fblob-starter&stores=%5B%7B%22type%22%3A%22blob%22%7D%5D')" 
+  title="Vercel Blob Starter"><i class="solitude fas fa-train"></i><span>Vercel Blob Starter</span></button></p>
+</li>
+<li><p>在接下来的页面中，名字自己填，然后 Add 一个 Blob Store，确定即可</p>
+</li>
+</ol>
+<p><img src="/img/article/13/db6a8c47c47a8e6a1a8612261ed977e7c6081bf45a699d8b675c2e2a7837a32c.png" alt="add vercel blob storage"></p>
+<div class="note  warning modern"><p>注意，每个用户只允许创建一个Vercel Blob Storage!</p>
+</div>
+
+<ol start="4">
+<li><p>直到满屏烟花，点击 <strong>Continue to Dashboard</strong>。</p>
+</li>
+<li><p>点击 <strong>Settings</strong> -&gt; <strong>Environment Variables</strong>，最下面找到名为 <code>BLOB_READ_WRITE_TOKEN</code> 的环境变量，点击复制，格式是这样的：</p>
+</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">vercel_blob_rw_*************************************</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/article/13/055fc988aad255241065ea6737692f16aee76e52558272107f3633d3a171d77a.png" alt="copy the envirnment variables"></p>
+<ol start="6">
+<li>回到 <strong>Settings</strong> -&gt; <strong>Functions</strong>，将区域改为 <strong>Hong Kong (East) – hkg1</strong> 或 <strong>Tokyo, Japan (Northeast) – hnd1</strong></li>
+</ol>
+<p><img src="/img/article/13/9c1fdfb473e882beb42399ea02144f61e24fe5dfb0f49cc3e377db3d4007b6c8.png" alt="set functions"></p>
+<ol start="7">
+<li>回到 Dashboard 主页面，点击这个进入创建的Github Repo:</li>
+</ol>
+<p><img src="/img/article/13/aefa06c390feaa84978126eafd0247ebf1e6eaa33fd90308ff7e46241f9b5321.png"></p>
+<ol start="8">
+<li>打开文件 <strong>.env.example</strong>，将复制的内容粘贴在末尾，格式如下：</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">BLOB_READ_WRITE_TOKEN=vercel_blob_rw_*******************************</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>打开 [Main Blob Storage] &#x2F; app &#x2F; page.tsx，修改里面的内容为中文（建议保留原站链接），可参照我的配置</li>
+</ol>
+<figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Image</span> <span class="keyword">from</span> <span class="string">&#x27;next/image&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Link</span> <span class="keyword">from</span> <span class="string">&#x27;next/link&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ExpandingArrow</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/expanding-arrow&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Uploader</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/uploader&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Toaster</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/components/toaster&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">Home</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">main</span> <span class="attr">className</span>=<span class="string">&quot;relative flex min-h-screen flex-col items-center justify-center&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Toaster</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/templates/next.js/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">className</span>=<span class="string">&quot;group mt-20 sm:mt-0 rounded-full flex space-x-1 bg-white/30 shadow-sm ring-1 ring-gray-900/5 text-gray-600 text-sm font-medium px-10 py-2 hover:shadow-lg active:shadow-sm transition-all&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>🎉使用Vercel免费搭建🎉<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">ExpandingArrow</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">&quot;pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        MC-Sep 免费网盘</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Uploader</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light text-gray-600 w-full max-w-lg text-center mt-6&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/blob&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Vercel Blob</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span>&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        Web. Built with&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://nextjs.org/docs&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Next.js App Router</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        .</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;sm:absolute sm:bottom-0 w-full px-20 py-10 flex justify-between&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span> <span class="attr">href</span>=<span class="string">&quot;https://vercel.com&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/vercel.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;Vercel Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;100&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://github.com/vercel/examples/tree/main/storage/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;flex items-center space-x-2&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/github.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;GitHub Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light&quot;</span>&gt;</span>Github<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>保存后，系统会重新部署一次，回到 <strong>Settings</strong> -&gt; <strong>Domains</strong>，添加你的域名（确保你的域名托管商已经添加记录为<code>A</code>:<strong>76.76.21.98</strong> 的记录，Add 即可。</li>
+</ol>
+<p><img src="/img/article/13/902e66cfb6bd99a53d7402fc6d61eb9d57b7995dac607c36b5190af4d7ba6771.png" alt="add domain"></p>
+<ol start="11">
+<li>完工！</li>
+</ol>
+<div class="note  info modern"><p>提示：可以在 <strong>Storage</strong> 页面查看存储库，状态，如大小、读写次数统计等。</p>
+<p><img src="/img/article/13/790eebd56379643ae8fcb33c5994ddb0845a0720020a20fb9891829e4b49e42b.png" alt="View the Storage"></p>
+<p><img src="/img/article/13/e20224e68a0c4f90f5d488748b8ddd1d0f01ea03d275ec8d10f6c05d948b940c.png" alt="See the storage message"></p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel Blob是一个不错的存储系统，对Hobby计划用户很友好。</p>
+<p>还有，我的电脑可经不起你们这样折腾啊！！！</p>
+<p><img src="/img/article/13/ade3816e006999635c9caa24b9713ce75adf8c794a0f337184fb74ccb1842e00.png" alt="SB"></p>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>图床</tag>
+      </tags>
+  </entry>
 </search>
