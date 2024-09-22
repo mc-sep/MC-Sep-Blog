@@ -1,53 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>利用Cloudflare Workers搭建镜像网站</title>
-    <url>//post/437r.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
-<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li>准备你的Cloudflare账号</li>
-<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
-<ol start="3">
-<li>选择<strong>创建Workers</strong></li>
-<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
-<ol start="5">
-<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
-</ol>
-<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
-<ol start="6">
-<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
-</ol>
-<p><img src="/img/article/9/66ab1781dad21.png"></p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
-
-<div class="note  warning modern"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
-</div>
-
-<div class="note  danger modern"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
-<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
-</div>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Cloudflare</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>免费小型数据库——Vercel Blob初体验</title>
     <url>//post/239d.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
@@ -316,6 +269,53 @@
       </tags>
   </entry>
   <entry>
+    <title>利用Cloudflare Workers搭建镜像网站</title>
+    <url>//post/437r.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
+<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li>准备你的Cloudflare账号</li>
+<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
+</ol>
+<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
+<ol start="3">
+<li>选择<strong>创建Workers</strong></li>
+<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
+</ol>
+<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
+<ol start="5">
+<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
+</ol>
+<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
+<ol start="6">
+<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
+</ol>
+<p><img src="/img/article/9/66ab1781dad21.png"></p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
+
+<div class="note  warning modern"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
+</div>
+
+<div class="note  danger modern"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
+<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Cloudflare</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>线性DP学习笔记</title>
     <url>//post/4plk.html</url>
     <content><![CDATA[<h1 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h1><p>最长上升子序列（longest  increasing subsequence），也可以叫最长非降序子序列，简称LIS，不是太难。即一个数的序列bi，当b1 &lt; b2 &lt; … &lt; bS的时候，我们称这个序列是上升的。对于给定的一个序列(a1, a2, …, aN)，我们可以得到一些上升的子序列(ai1, ai2, …, aiK)，这里1 &lt;&#x3D; i1 &lt; i2 &lt; … &lt; iK &lt;&#x3D; N，但必须按照一定。比如，对于序列(1, 7, 3, 5, 9, 4, 8)，有它的一些上升子序列，如(1, 7), (3, 4, 8)等等。这些子序列中最长的长度是4，比如子序列(1, 3, 5, 8)。</p>
@@ -507,59 +507,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++之BFS深度优先搜索</title>
-    <url>//post/6hsw.html</url>
-    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
-<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
-</div>
-
-
-
-<p><strong>提示</strong>：本文大部分是手写的，由于手的问题（不想打），大家就看图片把</p>
-<h1 id="C-搜索02-BFS"><a href="#C-搜索02-BFS" class="headerlink" title="C++搜索02-BFS"></a>C++搜索02-BFS</h1><h2 id="引入-样例1、2讲解"><a href="#引入-样例1、2讲解" class="headerlink" title="引入&amp;样例1、2讲解"></a>引入&amp;样例1、2讲解</h2><p><img src="https://img.zshfoj.com/45ed44773337856930c2bb06f9254cc58227d386e567b6c3c1fa9190ac0b4925.png"></p>
-<p><img src="https://img.zshfoj.com/c153965a49b0eaf5feb77deaa030670be87876ab9d8630044241ea2f88d67961.png"></p>
-<p><img src="https://img.zshfoj.com/75781dd2d170243ab0c67a16b7afcd96cad49d3ca8272e219b31dd226a043261.png"></p>
-<p><img src="https://img.zshfoj.com/376dc19c6f7302d10060fde3285dc16a85a0f674b75eab7e405e47f80d953011.png"></p>
-<p><img src="https://img.zshfoj.com/566c19308b208c54b575b5f35a4981777e0bf6b8526171ec98cad82502a78b6b.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>宽度优先搜索算法（又称广度优先搜索）是最简便的图的搜索算法之一，这一算法也是很多重要的图的算法的原型。Dijkstra单源最短路径算法和Prim最小生成树算法都采用了和宽度优先搜索类似的思想。其别名又叫BFS，属于一种盲目搜寻法，目的是系统地展开并检查图中的所有节点，以找寻结果。换句话说，它并不考虑结果的可能位置，彻底地搜索整张图，直到找到结果为止。</p>
-<p><img src="https://img.zshfoj.com/7e1b66de2f16cd0914b7b022f2e6e3840ea0d7698cb9a4a3fee0df1be3849de6.png"></p>
-<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="1-Luogu-B3625-迷宫寻路"><a href="#1-Luogu-B3625-迷宫寻路" class="headerlink" title="1.Luogu B3625 迷宫寻路"></a>1.Luogu B3625 迷宫寻路</h3><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>机器猫被困在一个矩形迷宫里。</p>
-<p>迷宫可以视为一个 n * m 矩阵，每个位置要么是空地，要么是墙。机器猫只能从一个空地走到其上、下、左、右的空地。</p>
-<p>机器猫初始时位于 (1, 1) 的位置，问能否走到 (n, m) 位置。</p>
-<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><p>第一行，两个正整数 n,m。  </p>
-<p>接下来 n 行，输入这个迷宫。每行输入一个长为 $m$ 的字符串，<code>#</code> 表示墙，<code>.</code> 表示空地。</p>
-<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>仅一行，一个字符串。如果机器猫能走到 (n, m)，则输出 <code>Yes</code>；否则输出 <code>No</code>。</p>
-<p>禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h3><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 5</span><br><span class="line">.##.#</span><br><span class="line">.#...</span><br><span class="line">...#.</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Yes</span><br></pre></td></tr></table></figure>
-
-<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><h4 id="样例解释"><a href="#样例解释" class="headerlink" title="样例解释"></a>样例解释</h4><p>路线如下：(1,1)to (2,1) to (3,1) to (3,2)to (3,3) to (2, 3) to (2, 4) to (2, 5) to (3, 5)</p>
-<h4 id="数据规模与约定"><a href="#数据规模与约定" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h4><p>对于 $100%$ 的数据，保证 1 &lt;&#x3D; n, m &lt;&#x3D; 100，且 (1,1) 和 (n, m) 均为空地。</p>
-<h2 id="题解（这次真的是我写的了）"><a href="#题解（这次真的是我写的了）" class="headerlink" title="题解（这次真的是我写的了）"></a>题解（这次真的是我写的了）</h2><h2 id="P3625-迷宫寻路题解"><a href="#P3625-迷宫寻路题解" class="headerlink" title="P3625 迷宫寻路题解"></a>P3625 迷宫寻路题解</h2><h3 id="题意："><a href="#题意：" class="headerlink" title="题意："></a>题意：</h3><p>我们根据长和宽输入迷宫，判断能否达到$(n,m)$<br>位置，如果可以输出<code>Yes</code>，否则输出<code>No</code></p>
-<h3 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h3><p>用<strong>BFS</strong>进行搜索，搜索可行路线，找到一条去终点的路线</p>
-<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> x;</span><br><span class="line">	<span class="type">int</span> y;</span><br><span class="line">	<span class="type">int</span> s;<span class="comment">//步数 </span></span><br><span class="line">&#125; que[<span class="number">10001</span>];</span><br><span class="line"><span class="type">int</span> head,tail,r,s,p,q;</span><br><span class="line"><span class="type">char</span> c[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//保存地图</span></span><br><span class="line"><span class="type">bool</span> flag;<span class="comment">//标记是否达到目标点，0未到，1已到</span></span><br><span class="line"><span class="type">int</span> a[<span class="number">4</span>]=&#123;<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;,b[<span class="number">4</span>]=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>&#125;;<span class="comment">//可走的组合</span></span><br><span class="line"><span class="type">bool</span> f[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//记录已走的点</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(head&lt;tail)<span class="comment">//队列不为空时操作</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">3</span>;i++)<span class="comment">//枚举四个方向</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">int</span> xx=que[head].x+a[i];</span><br><span class="line">			<span class="type">int</span> yy=que[head].y+b[i];</span><br><span class="line">			<span class="keyword">if</span>(xx&gt;=<span class="number">1</span>&amp;&amp;xx&lt;=r&amp;&amp;yy&gt;=<span class="number">1</span>&amp;&amp;yy&lt;=s&amp;&amp;c[xx][yy]==<span class="string">&#x27;.&#x27;</span>&amp;&amp;!f[xx][yy])<span class="comment">//判断x,y下一步是否可走且是否走过</span></span><br><span class="line">			&#123;</span><br><span class="line">				f[xx][yy]=<span class="number">1</span>;<span class="comment">//标记已走</span></span><br><span class="line">				que[tail].x=xx;</span><br><span class="line">				que[tail].y=yy; <span class="comment">//更新xx和yy的值</span></span><br><span class="line">				que[tail].s=que[head].s+<span class="number">1</span>;<span class="comment">//步数是父亲的步数+1</span></span><br><span class="line">				tail++; </span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(xx==p&amp;&amp;yy==q)<span class="comment">//如果找到目标点</span></span><br><span class="line">			&#123;</span><br><span class="line">				flag=<span class="number">1</span>;<span class="comment">//标记已完成</span></span><br><span class="line">				<span class="keyword">break</span>;<span class="comment">//退出	</span></span><br><span class="line">			&#125; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">if</span>(flag==<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">		head++;<span class="comment">//head++才能对后面的点进行二次扩展 </span></span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;r&gt;&gt;s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=r;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=s;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin&gt;&gt;c[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	p=r;q=s;<span class="comment">//终点坐标</span></span><br><span class="line">	head=<span class="number">1</span>;tail=<span class="number">2</span>;</span><br><span class="line">	que[tail].x=<span class="number">1</span>; que[tail].y=<span class="number">1</span>; que[tail].s=<span class="number">0</span>+<span class="number">1</span>;</span><br><span class="line">	tail++;</span><br><span class="line">	f[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	flag=<span class="number">0</span>;</span><br><span class="line">	<span class="comment">//初始化</span></span><br><span class="line">	<span class="built_in">bfs</span>();</span><br><span class="line">	<span class="keyword">if</span>(flag==<span class="number">1</span>) cout&lt;&lt;<span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;No&quot;</span>; </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h2 id="P1443-马的遍历"><a href="#P1443-马的遍历" class="headerlink" title="P1443 马的遍历"></a>P1443 马的遍历</h2><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>有一个 n * m 的棋盘，在某个点 (x, y) 上有一个马，要求你计算出马到达棋盘上任意一个点最少要走几步。</p>
-<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>输入只有一行四个整数，分别为 n, m, x, y。</p>
-<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个 n * m 的矩阵，代表马到达某个点最少要走几步（不能到达则输出 -1）。</p>
-<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 3 1 1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0    3    2    </span><br><span class="line">3    -1   1    </span><br><span class="line">2    1    4</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><h3 id="数据规模与约定-1"><a href="#数据规模与约定-1" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h3><p>对于全部的测试点，保证 1 &lt;&#x3D; x &lt;&#x3D; n &lt;&#x3D; 400，1 &lt;&#x3D; y &lt;&#x3D; m &lt;&#x3D; 400。</p>
-<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>更多练习请见: <a href="https://www.luogu.com.cn/training/463808">https://www.luogu.com.cn/training/463808</a></p>
-<p>本文的作者是<strong>Minecraft-Sep</strong>，本文原创，禁止抄袭！</p>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>搜索</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DP背包问题学习笔记</title>
     <url>//post/56rh.html</url>
     <content><![CDATA[<h1 id="动态规划DP"><a href="#动态规划DP" class="headerlink" title="动态规划DP"></a>动态规划DP</h1><p>动态规划是一种通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。</p>
@@ -656,6 +603,78 @@
       <tags>
         <tag>竞赛</tag>
         <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于博客评论更换的通知</title>
+    <url>//post/73dh.html</url>
+    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
+<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
+<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+
+<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+]]></content>
+      <categories>
+        <category>公告</category>
+      </categories>
+      <tags>
+        <tag>Waline</tag>
+        <tag>Twikoo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++之BFS深度优先搜索</title>
+    <url>//post/6hsw.html</url>
+    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
+<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
+</div>
+
+
+
+<p><strong>提示</strong>：本文大部分是手写的，由于手的问题（不想打），大家就看图片把</p>
+<h1 id="C-搜索02-BFS"><a href="#C-搜索02-BFS" class="headerlink" title="C++搜索02-BFS"></a>C++搜索02-BFS</h1><h2 id="引入-样例1、2讲解"><a href="#引入-样例1、2讲解" class="headerlink" title="引入&amp;样例1、2讲解"></a>引入&amp;样例1、2讲解</h2><p><img src="https://img.zshfoj.com/45ed44773337856930c2bb06f9254cc58227d386e567b6c3c1fa9190ac0b4925.png"></p>
+<p><img src="https://img.zshfoj.com/c153965a49b0eaf5feb77deaa030670be87876ab9d8630044241ea2f88d67961.png"></p>
+<p><img src="https://img.zshfoj.com/75781dd2d170243ab0c67a16b7afcd96cad49d3ca8272e219b31dd226a043261.png"></p>
+<p><img src="https://img.zshfoj.com/376dc19c6f7302d10060fde3285dc16a85a0f674b75eab7e405e47f80d953011.png"></p>
+<p><img src="https://img.zshfoj.com/566c19308b208c54b575b5f35a4981777e0bf6b8526171ec98cad82502a78b6b.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>宽度优先搜索算法（又称广度优先搜索）是最简便的图的搜索算法之一，这一算法也是很多重要的图的算法的原型。Dijkstra单源最短路径算法和Prim最小生成树算法都采用了和宽度优先搜索类似的思想。其别名又叫BFS，属于一种盲目搜寻法，目的是系统地展开并检查图中的所有节点，以找寻结果。换句话说，它并不考虑结果的可能位置，彻底地搜索整张图，直到找到结果为止。</p>
+<p><img src="https://img.zshfoj.com/7e1b66de2f16cd0914b7b022f2e6e3840ea0d7698cb9a4a3fee0df1be3849de6.png"></p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="1-Luogu-B3625-迷宫寻路"><a href="#1-Luogu-B3625-迷宫寻路" class="headerlink" title="1.Luogu B3625 迷宫寻路"></a>1.Luogu B3625 迷宫寻路</h3><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>机器猫被困在一个矩形迷宫里。</p>
+<p>迷宫可以视为一个 n * m 矩阵，每个位置要么是空地，要么是墙。机器猫只能从一个空地走到其上、下、左、右的空地。</p>
+<p>机器猫初始时位于 (1, 1) 的位置，问能否走到 (n, m) 位置。</p>
+<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><p>第一行，两个正整数 n,m。  </p>
+<p>接下来 n 行，输入这个迷宫。每行输入一个长为 $m$ 的字符串，<code>#</code> 表示墙，<code>.</code> 表示空地。</p>
+<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>仅一行，一个字符串。如果机器猫能走到 (n, m)，则输出 <code>Yes</code>；否则输出 <code>No</code>。</p>
+<p>禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h3><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 5</span><br><span class="line">.##.#</span><br><span class="line">.#...</span><br><span class="line">...#.</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Yes</span><br></pre></td></tr></table></figure>
+
+<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><h4 id="样例解释"><a href="#样例解释" class="headerlink" title="样例解释"></a>样例解释</h4><p>路线如下：(1,1)to (2,1) to (3,1) to (3,2)to (3,3) to (2, 3) to (2, 4) to (2, 5) to (3, 5)</p>
+<h4 id="数据规模与约定"><a href="#数据规模与约定" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h4><p>对于 $100%$ 的数据，保证 1 &lt;&#x3D; n, m &lt;&#x3D; 100，且 (1,1) 和 (n, m) 均为空地。</p>
+<h2 id="题解（这次真的是我写的了）"><a href="#题解（这次真的是我写的了）" class="headerlink" title="题解（这次真的是我写的了）"></a>题解（这次真的是我写的了）</h2><h2 id="P3625-迷宫寻路题解"><a href="#P3625-迷宫寻路题解" class="headerlink" title="P3625 迷宫寻路题解"></a>P3625 迷宫寻路题解</h2><h3 id="题意："><a href="#题意：" class="headerlink" title="题意："></a>题意：</h3><p>我们根据长和宽输入迷宫，判断能否达到$(n,m)$<br>位置，如果可以输出<code>Yes</code>，否则输出<code>No</code></p>
+<h3 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h3><p>用<strong>BFS</strong>进行搜索，搜索可行路线，找到一条去终点的路线</p>
+<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> x;</span><br><span class="line">	<span class="type">int</span> y;</span><br><span class="line">	<span class="type">int</span> s;<span class="comment">//步数 </span></span><br><span class="line">&#125; que[<span class="number">10001</span>];</span><br><span class="line"><span class="type">int</span> head,tail,r,s,p,q;</span><br><span class="line"><span class="type">char</span> c[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//保存地图</span></span><br><span class="line"><span class="type">bool</span> flag;<span class="comment">//标记是否达到目标点，0未到，1已到</span></span><br><span class="line"><span class="type">int</span> a[<span class="number">4</span>]=&#123;<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;,b[<span class="number">4</span>]=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>&#125;;<span class="comment">//可走的组合</span></span><br><span class="line"><span class="type">bool</span> f[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//记录已走的点</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(head&lt;tail)<span class="comment">//队列不为空时操作</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">3</span>;i++)<span class="comment">//枚举四个方向</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">int</span> xx=que[head].x+a[i];</span><br><span class="line">			<span class="type">int</span> yy=que[head].y+b[i];</span><br><span class="line">			<span class="keyword">if</span>(xx&gt;=<span class="number">1</span>&amp;&amp;xx&lt;=r&amp;&amp;yy&gt;=<span class="number">1</span>&amp;&amp;yy&lt;=s&amp;&amp;c[xx][yy]==<span class="string">&#x27;.&#x27;</span>&amp;&amp;!f[xx][yy])<span class="comment">//判断x,y下一步是否可走且是否走过</span></span><br><span class="line">			&#123;</span><br><span class="line">				f[xx][yy]=<span class="number">1</span>;<span class="comment">//标记已走</span></span><br><span class="line">				que[tail].x=xx;</span><br><span class="line">				que[tail].y=yy; <span class="comment">//更新xx和yy的值</span></span><br><span class="line">				que[tail].s=que[head].s+<span class="number">1</span>;<span class="comment">//步数是父亲的步数+1</span></span><br><span class="line">				tail++; </span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(xx==p&amp;&amp;yy==q)<span class="comment">//如果找到目标点</span></span><br><span class="line">			&#123;</span><br><span class="line">				flag=<span class="number">1</span>;<span class="comment">//标记已完成</span></span><br><span class="line">				<span class="keyword">break</span>;<span class="comment">//退出	</span></span><br><span class="line">			&#125; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">if</span>(flag==<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">		head++;<span class="comment">//head++才能对后面的点进行二次扩展 </span></span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;r&gt;&gt;s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=r;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=s;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin&gt;&gt;c[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	p=r;q=s;<span class="comment">//终点坐标</span></span><br><span class="line">	head=<span class="number">1</span>;tail=<span class="number">2</span>;</span><br><span class="line">	que[tail].x=<span class="number">1</span>; que[tail].y=<span class="number">1</span>; que[tail].s=<span class="number">0</span>+<span class="number">1</span>;</span><br><span class="line">	tail++;</span><br><span class="line">	f[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	flag=<span class="number">0</span>;</span><br><span class="line">	<span class="comment">//初始化</span></span><br><span class="line">	<span class="built_in">bfs</span>();</span><br><span class="line">	<span class="keyword">if</span>(flag==<span class="number">1</span>) cout&lt;&lt;<span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;No&quot;</span>; </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h2 id="P1443-马的遍历"><a href="#P1443-马的遍历" class="headerlink" title="P1443 马的遍历"></a>P1443 马的遍历</h2><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>有一个 n * m 的棋盘，在某个点 (x, y) 上有一个马，要求你计算出马到达棋盘上任意一个点最少要走几步。</p>
+<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>输入只有一行四个整数，分别为 n, m, x, y。</p>
+<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个 n * m 的矩阵，代表马到达某个点最少要走几步（不能到达则输出 -1）。</p>
+<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 3 1 1</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0    3    2    </span><br><span class="line">3    -1   1    </span><br><span class="line">2    1    4</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><h3 id="数据规模与约定-1"><a href="#数据规模与约定-1" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h3><p>对于全部的测试点，保证 1 &lt;&#x3D; x &lt;&#x3D; n &lt;&#x3D; 400，1 &lt;&#x3D; y &lt;&#x3D; m &lt;&#x3D; 400。</p>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>更多练习请见: <a href="https://www.luogu.com.cn/training/463808">https://www.luogu.com.cn/training/463808</a></p>
+<p>本文的作者是<strong>Minecraft-Sep</strong>，本文原创，禁止抄袭！</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>搜索</tag>
       </tags>
   </entry>
   <entry>
@@ -863,25 +882,6 @@
       </tags>
   </entry>
   <entry>
-    <title>关于博客评论更换的通知</title>
-    <url>//post/73dh.html</url>
-    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
-<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
-<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
-
-<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
-]]></content>
-      <categories>
-        <category>公告</category>
-      </categories>
-      <tags>
-        <tag>Waline</tag>
-        <tag>Twikoo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【HTML】利用localstrange临时存储数据</title>
     <url>//post/8g66.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>参考资料：</p>
@@ -987,6 +987,77 @@
       </tags>
   </entry>
   <entry>
+    <title>免费域名怎么弄？常见免费域名指南</title>
+    <url>//post/re8u.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
+<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
+<p>今天我就整理了常见的免费域名，分享给大家。</p>
+<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
+<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
+<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
+
+<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
+<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
+<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
+<p>方法：</p>
+<ol>
+<li>打开链接，点击右上角用户图标</li>
+<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
+<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
+<li>返回控制台刷新后会发现可以创建了</li>
+<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
+<li>等待审核，通过后会有这个画面：</li>
+</ol>
+<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
+<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
+
+<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
+<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
+<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
+
+<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
+<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
+<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：No</p>
+<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
+<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：审核时间长</p>
+<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
+<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
+<p>地址：<a href="https://js.org/">https://js.org</a></p>
+<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：顶级域名<br>缺点：要买主机后才有</p>
+<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Pages</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>API构建①——Bing每日一图接口</title>
     <url>//post/r5fd.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
@@ -1057,77 +1128,6 @@
       <tags>
         <tag>API</tag>
         <tag>PHP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>免费域名怎么弄？常见免费域名指南</title>
-    <url>//post/re8u.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
-<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
-<p>今天我就整理了常见的免费域名，分享给大家。</p>
-<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
-<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
-<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
-
-<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
-<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
-<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
-<p>方法：</p>
-<ol>
-<li>打开链接，点击右上角用户图标</li>
-<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
-<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
-<li>返回控制台刷新后会发现可以创建了</li>
-<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
-<li>等待审核，通过后会有这个画面：</li>
-</ol>
-<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
-<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
-
-<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
-<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
-<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
-
-<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
-<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
-<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：No</p>
-<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
-<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：审核时间长</p>
-<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
-<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
-<p>地址：<a href="https://js.org/">https://js.org</a></p>
-<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：顶级域名<br>缺点：要买主机后才有</p>
-<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Pages</tag>
       </tags>
   </entry>
   <entry>
@@ -1365,6 +1365,47 @@
       </tags>
   </entry>
   <entry>
+    <title>博客一周年记</title>
+    <url>//post/te2r.html</url>
+    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
+<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
+<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
+  title="HEXO THEMES"><span>HEXO THEMES</span></button>找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
+<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
+<p>  我使用了Github Pages，域名仍是有效的：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
+<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
+<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
+<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
+<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
+<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
+<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
+<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
+<p>  直到2024年6月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
+  title="HEXO THEMES"><span>HEXO THEMES</span></button>上面发现了一个新主题：<strong>Solitude</strong></p>
+<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
+<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
+<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
+<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
+<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
+<p>  版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>周年记</category>
+      </categories>
+      <tags>
+        <tag>周年记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>如何让你的博客更丰富？hexo常见插件推荐</title>
     <url>//post/ugr2.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
@@ -1511,47 +1552,6 @@
       <tags>
         <tag>Hexo</tag>
         <tag>Hexo插件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客一周年记</title>
-    <url>//post/te2r.html</url>
-    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
-<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
-<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
-  title="HEXO THEMES"><span>HEXO THEMES</span></button>找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
-<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
-<p>  我使用了Github Pages，域名仍是有效的：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
-<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
-<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
-<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
-<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
-<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
-<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
-<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
-<p>  直到2024年6月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
-  title="HEXO THEMES"><span>HEXO THEMES</span></button>上面发现了一个新主题：<strong>Solitude</strong></p>
-<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
-<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
-<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
-<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
-<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
-<p>  版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>周年记</category>
-      </categories>
-      <tags>
-        <tag>周年记</tag>
       </tags>
   </entry>
 </search>

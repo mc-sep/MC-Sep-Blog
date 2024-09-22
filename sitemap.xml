@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://mc-sep.js.cool/links/index.html</loc>
+    
+    <lastmod>2024-09-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://mc-sep.js.cool/post/73dh.html</loc>
     
     <lastmod>2024-09-21</lastmod>
@@ -140,15 +149,6 @@
     <loc>http://mc-sep.js.cool/post/6hsw.html</loc>
     
     <lastmod>2024-07-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://mc-sep.js.cool/links/index.html</loc>
-    
-    <lastmod>2024-07-16</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
