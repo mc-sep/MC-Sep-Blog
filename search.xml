@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>利用Cloudflare Workers搭建镜像网站</title>
+    <url>//post/437r.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
+<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li>准备你的Cloudflare账号</li>
+<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
+</ol>
+<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
+<ol start="3">
+<li>选择<strong>创建Workers</strong></li>
+<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
+</ol>
+<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
+<ol start="5">
+<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
+</ol>
+<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
+<ol start="6">
+<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
+</ol>
+<p><img src="/img/article/9/66ab1781dad21.png"></p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
+
+<div class="note  warning modern"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
+</div>
+
+<div class="note  danger modern"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
+<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Cloudflare</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>免费小型数据库——Vercel Blob初体验</title>
     <url>//post/239d.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
@@ -125,231 +172,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++之数据结构--栈</title>
-    <url>//post/54ds.html</url>
-    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
-<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
-</div>
-
-
-
-<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>栈是 OI 中常用的一种线性数据结构。请注意，本文主要讲的是栈这种数据结构，而非程序运行时的系统栈&#x2F;栈空间。</p>
-<p>栈的修改与访问是按照后进先出的原则进行的，因此栈通常被称为是后进先出（last in first out）表，简称 LIFO 表。</p>
-<h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><p>LIFO 表达的是 当前在容器 内最后进来的最先出去。</p>
-<p>我们考虑这样一个栈</p>
-<ul>
-<li>push(1)</li>
-<li>pop(1)</li>
-<li>push(2)</li>
-<li>pop(2)<br>如果从整体考虑，1 最先入栈，最先出栈，2 最后入栈，最后出栈，这样就成了一个先进先出表，显然是错误的。</li>
-</ul>
-<p>所以，在考虑数据结构是 LIFO 还是 FIFO 的时候，应当考虑在当前容器内的情况。</p>
-<h2 id="使用数组模拟栈"><a href="#使用数组模拟栈" class="headerlink" title="使用数组模拟栈"></a>使用数组模拟栈</h2><p>我们可以方便的使用数组来模拟一个栈，如下：</p>
-<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> st[N];</span><br><span class="line"><span class="comment">// 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 压栈 ：</span></span><br><span class="line">st[++*st] = var1;</span><br><span class="line"><span class="comment">// 取栈顶 ：</span></span><br><span class="line"><span class="type">int</span> u = st[*st];</span><br><span class="line"><span class="comment">// 弹栈 ：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> (*st) --*st;</span><br><span class="line"><span class="comment">// 清空栈</span></span><br><span class="line">*st = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">0</span>] * N</span><br><span class="line"><span class="comment"># 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压栈 ：</span></span><br><span class="line">st[st[<span class="number">0</span>] + <span class="number">1</span>] = var1</span><br><span class="line">st[<span class="number">0</span>] = st[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line"><span class="comment"># 取栈顶：</span></span><br><span class="line">u = st[st[<span class="number">0</span>]]</span><br><span class="line"><span class="comment"># 弹栈：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> st[<span class="number">0</span>]:</span><br><span class="line">    st[<span class="number">0</span>] = st[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line"><span class="comment"># 清空栈</span></span><br><span class="line">st[<span class="number">0</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="C-STL-中的栈"><a href="#C-STL-中的栈" class="headerlink" title="C++ STL 中的栈"></a>C++ STL 中的栈</h2><p>C++ 中的 STL 也提供了一个容器 std::stack，使用前需要引入 stack 头文件。</p>
-<p>STL 中的 stack 容器提供了一众成员函数以供调用，其中较为常用的有：</p>
-<ul>
-<li>元素访问<br>st.top() 返回栈顶</li>
-<li>修改<br>st.push() 插入传入的参数到栈顶<br>st.pop() 弹出栈顶</li>
-<li>容量<br>st.empty() 返回是否为空<br>st.size() 返回元素数量<br>此外，std::stack 还提供了一些运算符。较为常用的是使用赋值运算符 &#x3D; 为 stack 赋值，示例：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新建两个栈 st1 和 st2</span></span><br><span class="line">std::stack&lt;<span class="type">int</span>&gt; st1, st2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 st1 装入 1</span></span><br><span class="line">st1.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 st1 赋值给 st2</span></span><br><span class="line">st2 = st1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 st2 的栈顶元素</span></span><br><span class="line">cout &lt;&lt; st2.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出: 1</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="使用-Python-中的-list-模拟栈"><a href="#使用-Python-中的-list-模拟栈" class="headerlink" title="使用 Python 中的 list 模拟栈"></a>使用 Python 中的 list 模拟栈</h2><p>在 Python 中，你可以使用列表来模拟一个栈：</p>
-<p>实现</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">5</span>, <span class="number">1</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 向栈顶添加元素</span></span><br><span class="line">st.append(<span class="number">2</span>)</span><br><span class="line">st.append(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pop 取出栈顶元素</span></span><br><span class="line">st.pop()</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 clear 清空栈</span></span><br><span class="line">st.clear()</span><br></pre></td></tr></table></figure>
-
-<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="NOIP2013-普及组-表达式求值"><a href="#NOIP2013-普及组-表达式求值" class="headerlink" title="[NOIP2013 普及组] 表达式求值"></a>[NOIP2013 普及组] 表达式求值</h1><h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>NOIP2013 普及组 T2</p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包含加法和乘法的算术表达式，请你编程计算表达式的值。</p>
-<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>一行，为需要你计算的表达式，表达式中只包含数字、加法运算符 <code>+</code> 和乘法运算符 <code>*</code>，且没有括号，所有参与运算的数字均为 $0$ 到   $2^{31}-1$ 之间的整数。  </p>
-<p>输入数据保证这一行只有 <code>0123456789+*</code> 这 $12$ 种字符。</p>
-<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个整数，表示这个表达式的值。  </p>
-<p>注意：当答案长度多于 $4$ 位时，请只输出最后 $ 4$ 位，前导 $ 0$ 不输出。</p>
-<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1*3+4</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
-
-<h2 id="样例-2"><a href="#样例-2" class="headerlink" title="样例 #2"></a>样例 #2</h2><h3 id="样例输入-2"><a href="#样例输入-2" class="headerlink" title="样例输入 #2"></a>样例输入 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1234567890*1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-2"><a href="#样例输出-2" class="headerlink" title="样例输出 #2"></a>样例输出 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7891</span><br></pre></td></tr></table></figure>
-
-<h2 id="样例-3"><a href="#样例-3" class="headerlink" title="样例 #3"></a>样例 #3</h2><h3 id="样例输入-3"><a href="#样例输入-3" class="headerlink" title="样例输入 #3"></a>样例输入 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1000000003*1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-3"><a href="#样例输出-3" class="headerlink" title="样例输出 #3"></a>样例输出 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>对于 $30%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100$。</p>
-<p>对于 $80%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤1000$。</p>
-<p>对于 $100%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100000$。</p>
-<h2 id="参考代码-他人博客"><a href="#参考代码-他人博客" class="headerlink" title="参考代码(他人博客)"></a>参考代码(他人博客)</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">stack &lt;<span class="type">int</span>&gt; x;<span class="comment">//一个存数字并在最后把它们相加的栈</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a,b;</span><br><span class="line">	<span class="type">char</span> c;</span><br><span class="line">	cin&gt;&gt;a;<span class="comment">//先输入一个数，以后符号+数字输入</span></span><br><span class="line">	<span class="type">int</span> m=<span class="number">10000</span>;</span><br><span class="line">	a=a%m;<span class="comment">//必须的操作</span></span><br><span class="line">	x.<span class="built_in">push</span>(a);<span class="comment">//压入栈中</span></span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;c&gt;&gt;b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>)<span class="comment">//将*之前的数字与*之后的数字积存入</span></span><br><span class="line">		&#123;</span><br><span class="line">			a=x.<span class="built_in">top</span>();</span><br><span class="line">			x.<span class="built_in">pop</span>();</span><br><span class="line">			x.<span class="built_in">push</span>(a*b%m);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//将b存入</span></span><br><span class="line">			x.<span class="built_in">push</span>(b);</span><br><span class="line">	&#125;</span><br><span class="line">	a=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		a+=x.<span class="built_in">top</span>();</span><br><span class="line">		a%=m;<span class="comment">//取模是万恶之源</span></span><br><span class="line">		x.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;a&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>另外说一句，Python2提交这个代码直接AC!</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">input</span>()%<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="取牌游戏"><a href="#取牌游戏" class="headerlink" title="取牌游戏"></a>取牌游戏</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>小明正在使用一堆共K张纸牌与N-1个朋友玩取牌游戏。其中，N&lt;&#x3D;K&lt;&#x3D;100000,2&lt;&#x3D;N&lt;&#x3D;100,K是N的倍数。纸牌中包含M&#x3D;K&#x2F;N张“good”和K-M张“bad”牌。小明负责发牌，他当然想自己获得所有的“good”牌。<br>他的朋友怀疑他会欺骗，所以他们给出以下一些限制，以防小明耍诈：<br>（1）	游戏开始时，将最上面的牌发给小明右手边的人。<br>（2）	每发完一张牌，他必须将接下来的p张牌（1&lt;&#x3D;p&lt;&#x3D;10）一张一张地依次移到最后，放在牌堆的底部。<br>（3）	以逆时针方向，连续给每位玩家发牌。<br>小明迫切想赢，请你帮助他算出所有“good”牌放置的位置，以便他得到所有的“good”牌。牌从上往下依次标注为1，2，3，…</p>
-<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行，3个用一个空格间隔的正整数N,K,P。</p>
-<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>M行，从顶部按升序依次输出“good”牌的位置。</p>
-<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 9 2</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>DP背包问题学习笔记</title>
-    <url>//post/56rh.html</url>
-    <content><![CDATA[<h1 id="动态规划DP"><a href="#动态规划DP" class="headerlink" title="动态规划DP"></a>动态规划DP</h1><p>动态规划是一种通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。</p>
-<p>由于动态规划并不是某种具体的算法，而是一种解决特定问题的方法，因此它会出现在各式各样的数据结构中，与之相关的题目种类也更为繁杂。</p>
-<p>在 OI 中，计数等非最优化问题的递推解法也常被不规范地称作 DP，因此本章将它们一并列出。事实上，动态规划与其它类型的递推的确有很多相似之处，学习时可以注意它们之间的异同。</p>
-<h2 id="背包DP"><a href="#背包DP" class="headerlink" title="背包DP"></a>背包DP</h2><h3 id="01背包"><a href="#01背包" class="headerlink" title="01背包"></a>01背包</h3><p>例题：01背包</p>
-<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入输出</button></li><li class="tab"><button type="button" data-href="#liti-2">数据范围</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">示例代码</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>有 N 件物品和一个容量是 V 的背包。每件物品只能使用一次。</p>
-<p>第 i 件物品的体积是 vi ，价值是 wi 。</p>
-<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。 输出最大价值。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><p>输入格式 </p>
-<p>第一行两个整数，N，V ，用空格隔开，分别表示物品数量和背包容积。</p>
-<p>接下来有 N 行，每行两个整数 vi,wi ，用空格隔开，分别表示第 i 件物品的体积和价值。</p>
-<p>输出格式 </p>
-<p>输出一个整数，表示最大价值。</p>
-<p>输入样例</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4 5</span><br><span class="line">1 2</span><br><span class="line">2 4</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br></pre></td></tr></table></figure>
-<p>输出样例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>0&lt;N,V≤1000</p>
-<p>0&lt;vi,wi≤1000</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>解法：贪心（不可取），DFS，DP</p>
-<ol>
-<li>贪心</li>
-</ol>
-<p>使用贪心法完全取决于输入的数据，不可能完全正确。</p>
-<ol start="2">
-<li>DFS</li>
-</ol>
-<p>DFS搜索每种取物方案。代价O(n^2)</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> now,<span class="type">int</span> sumv)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> res;</span><br><span class="line">	<span class="keyword">if</span>(now==n+<span class="number">1</span>) <span class="keyword">return</span> res=<span class="number">0</span>;<span class="comment">//没有了</span></span><br><span class="line">	<span class="keyword">if</span>(sumv&lt;v[now]) res=<span class="built_in">def</span>(now+<span class="number">1</span>,sumv);<span class="comment">//无法选第i个</span></span><br><span class="line">	<span class="keyword">else</span> res=<span class="built_in">max</span>(<span class="built_in">dfs</span>(now+<span class="number">1</span>,sumv),<span class="built_in">dfs</span>(now+<span class="number">1</span>,sumv-v[now])+w[now]);</span><br><span class="line">	<span class="keyword">return</span> res; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>DP</li>
-</ol>
-<p>只有<strong>放</strong>和<strong>不放</strong>两种选择。</p>
-<p>不放：<code>f[i][j]=f[i-1][j]</code></p>
-<p>放：<code>f[i][j]=f[i-1][j-w[i]]+v[i]</code></p>
-<p>所以转移方程为<code>f[i][j]=max(f[i-1][j],f[i-1][j-w[i]]+v[i])</code></p>
-<div class="note  info simple"><p>示例代码是模版！！！</p>
-</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std; </span><br><span class="line">ll n,m;</span><br><span class="line">ll w[<span class="number">10001</span>],v[<span class="number">10001</span>];</span><br><span class="line">ll f[<span class="number">1001</span>][<span class="number">1001</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	cin&gt;&gt;n&gt;&gt;m;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		cin&gt;&gt;w[i]&gt;&gt;v[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=m;j&gt;=<span class="number">0</span>;j--)&#123;</span><br><span class="line">			<span class="keyword">if</span>(j&lt;w[i]) f[i][j]=f[i<span class="number">-1</span>][j];</span><br><span class="line">			<span class="keyword">else</span> f[i][j]=<span class="built_in">max</span>(f[i<span class="number">-1</span>][j],f[i<span class="number">-1</span>][j-w[i]]+v[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;f[n][m];</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
-
-<p>01空间复杂度优化</p>
-<p>实际上，由状态转移方程和dp二维数组的值很容易发现：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  |1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20</span><br><span class="line">——|————————————————————————————————————————————————————————————</span><br><span class="line">1 |0  0  0  0  0  0  0  5  5  5  5  5  5  5  5  5  5  5  5  5</span><br><span class="line">2 |0  0  0  0  0  0  0  5  6  6  6  6  6  6  6  6  11 11 11 11</span><br><span class="line">3 |0  0  0  0  7  7  7  7  7  7  7  7  12 13 13 13 13 13 13 13</span><br><span class="line">4 |0  3  3  3  7  7  10 10 10 10 10 10 12 13 15 16 16 16 16 16</span><br></pre></td></tr></table></figure>
-
-<p>第i行的数据只依赖于第i-1行的值，因此我们只需保存第i-1行和第i行这两行的值即可，即两个一维数组dp1[]和dp2[]</p>
-<p>dp1[ j ] 等价于 dp[i-1] [ j ]</p>
-<p>dp2[ j ] 等价于 dp[ i ] [ j ]</p>
-<p>所以新的转移方程：<code>dp2[j] = max(dp1[j-c[i]]+w[i],dp2[j])</code></p>
-<details ><summary>更多习题</summary><div class="content"><p>洛谷P1060，P1048，P1164</p>
-</div></details>
-
-<h3 id="完全背包"><a href="#完全背包" class="headerlink" title="完全背包"></a>完全背包</h3><p>例题：完全背包</p>
-<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入输出</button></li><li class="tab"><button type="button" data-href="#liti-2">数据范围</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">示例代码</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>有 N 种物品和一个容量是 V 的背包，每种物品都有无限件可用。</p>
-<p>第 i 种物品的体积是 vi ，价值是 wi 。</p>
-<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。 输出最大价值。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><p>输入格式 </p>
-<p>第一行两个整数，N，V ，用空格隔开，分别表示物品种数和背包容积。</p>
-<p>接下来有 N 行，每行两个整数 vi,wi ，用空格隔开，分别表示第 i 种物品的体积和价值。</p>
-<p>输出格式 </p>
-<p>输出一个整数，表示最大价值。</p>
-<p>输入样例</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4 5</span><br><span class="line">1 2</span><br><span class="line">2 4</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br></pre></td></tr></table></figure>
-<p>输出样例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>0&lt;N,V≤1000</p>
-<p>0&lt;vi,wi≤1000</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>使用和01背包一样的方式</p>
-<p><code> dp[j] = max(dp[j], dp[j - v] + w)</code></p>
-<div class="note  info simple"><p>示例代码是模版！！！</p>
-</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1010</span>;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"><span class="type">int</span> dp[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )&#123;</span><br><span class="line">        <span class="type">int</span> v, w;</span><br><span class="line">        cin &gt;&gt; v &gt;&gt; w;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = v; j &lt;= m; j ++ )&#123;</span><br><span class="line">                dp[j] = <span class="built_in">max</span>(dp[j], dp[j - v] + w);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; dp[m] &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
-
-<p>完全背包优化</p>
-<ul>
-<li>参考：https_blog.csdn.net&#x2F;?url&#x3D;https%3A%2F%2Fblog.csdn.net%2Fm0_51507437%2Farticle%2Fdetails%2F122782623</li>
-</ul>
-<ol>
-<li>优化</li>
-</ol>
-<p>将原始算法的DP思想转变一下：</p>
-<p>对于第i种物品的出现，我们对第i种物品放不放入背包进行决策。如果不放那么V(i,j)&#x3D;V(i-1,j)；<br>如果确定放，背包中应该出现至少一件第i种物品，所以V(i,j)中至少应该出现一件第i种物品，即V(i,j)&#x3D;V(i,j-wi)+vi。为什么会是V(i,j-wi)？因为V(i,j-wi)里面可能有第i种物品，也可能没有第i种物品。我们要确保V(i,j)至少有一件第i件物品，所以要预留wi的空间来存放一件第i种物品。<br>那么完全背包和 01 背包的不同点在哪里呢？</p>
-<p>从二维数组上区别 01 背包和完全背包，也就是状态转移方程就差别在放第 i 种物品时，完全背包在选择放这个物品时，最优解是 V(i, j)&#x3D;max｛V(i, j-k<em>w(i))+k</em>v(i)｝即同行的那一个，而 01 背包比较的是V(i,j)&#x3D;max｛V(i-1,j)，V(i-1,j-w(i))+v(i)｝，上一行的那一个。</p>
-<p>所以状态转移方程近似于01：</p>
-<p><code>f[i][j]=max(f[i-1][j],f[i][j-c[i]]+w[i])</code></p>
-<ol start="2">
-<li>降维</li>
-</ol>
-<p>同01背包。</p>
-<details ><summary>更多习题</summary><div class="content"><p>洛谷P1616</p>
-</div></details>
-
-<h3 id="多重背包"><a href="#多重背包" class="headerlink" title="多重背包"></a>多重背包</h3><p><img src="/img/article/4/bf635f044e389db77ae051e5b6683f86692cee6be31eb2151517bdf71f99d8eb.png"></p>
-<p><img src="/img/article/4/4c620a52d04519fdc4d7562eb6fa0c9fab1b5f234c8eacda1ae7f04d6f8d543f.png"></p>
-<h3 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h3><p>参考资料同文中内容。</p>
-<p>版权所有©Minecraft-Sep</p>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>竞赛</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>利用Cloudflare Workers搭建镜像网站</title>
-    <url>//post/437r.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
-<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li>准备你的Cloudflare账号</li>
-<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
-<ol start="3">
-<li>选择<strong>创建Workers</strong></li>
-<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
-<ol start="5">
-<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
-</ol>
-<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
-<ol start="6">
-<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
-</ol>
-<p><img src="/img/article/9/66ab1781dad21.png"></p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
-
-<div class="note  warning modern"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
-</div>
-
-<div class="note  danger modern"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
-<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
-</div>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Cloudflare</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【Hexo】Hexo+Github搭建个人博客</title>
     <url>//post/4nd3.html</url>
     <content><![CDATA[<div class="note  info flat"><ul>
@@ -376,7 +198,7 @@
 <li><p>下载<strong>Node.js</strong>（<button class="btn-sco " onclick="window.open('https://nodejs.cn/')" 
   title="点击下载"><i class="solitude st-lightbulb-line"></i><span>点击下载</span></button>）</p>
 </li>
-<li><p>下载后的文件会是：<img no-lazy class="inline" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" style="height:1.5em"/> ，打开后一路<code>Next</code>。</p>
+<li><p>下载后的文件会是：<img class="inline-img" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" /> ，打开后一路<code>Next</code>。</p>
 </li>
 </ol>
 <div class="note  warning simple"><p>不建议修改安装路径，否则可能会无法调用<code>系统变量</code>！</p>
@@ -601,8 +423,87 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>竞赛</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++之数据结构--栈</title>
+    <url>//post/54ds.html</url>
+    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
+<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
+</div>
+
+
+
+<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>栈是 OI 中常用的一种线性数据结构。请注意，本文主要讲的是栈这种数据结构，而非程序运行时的系统栈&#x2F;栈空间。</p>
+<p>栈的修改与访问是按照后进先出的原则进行的，因此栈通常被称为是后进先出（last in first out）表，简称 LIFO 表。</p>
+<h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><p>LIFO 表达的是 当前在容器 内最后进来的最先出去。</p>
+<p>我们考虑这样一个栈</p>
+<ul>
+<li>push(1)</li>
+<li>pop(1)</li>
+<li>push(2)</li>
+<li>pop(2)<br>如果从整体考虑，1 最先入栈，最先出栈，2 最后入栈，最后出栈，这样就成了一个先进先出表，显然是错误的。</li>
+</ul>
+<p>所以，在考虑数据结构是 LIFO 还是 FIFO 的时候，应当考虑在当前容器内的情况。</p>
+<h2 id="使用数组模拟栈"><a href="#使用数组模拟栈" class="headerlink" title="使用数组模拟栈"></a>使用数组模拟栈</h2><p>我们可以方便的使用数组来模拟一个栈，如下：</p>
+<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> st[N];</span><br><span class="line"><span class="comment">// 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 压栈 ：</span></span><br><span class="line">st[++*st] = var1;</span><br><span class="line"><span class="comment">// 取栈顶 ：</span></span><br><span class="line"><span class="type">int</span> u = st[*st];</span><br><span class="line"><span class="comment">// 弹栈 ：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> (*st) --*st;</span><br><span class="line"><span class="comment">// 清空栈</span></span><br><span class="line">*st = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">0</span>] * N</span><br><span class="line"><span class="comment"># 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压栈 ：</span></span><br><span class="line">st[st[<span class="number">0</span>] + <span class="number">1</span>] = var1</span><br><span class="line">st[<span class="number">0</span>] = st[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line"><span class="comment"># 取栈顶：</span></span><br><span class="line">u = st[st[<span class="number">0</span>]]</span><br><span class="line"><span class="comment"># 弹栈：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> st[<span class="number">0</span>]:</span><br><span class="line">    st[<span class="number">0</span>] = st[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line"><span class="comment"># 清空栈</span></span><br><span class="line">st[<span class="number">0</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="C-STL-中的栈"><a href="#C-STL-中的栈" class="headerlink" title="C++ STL 中的栈"></a>C++ STL 中的栈</h2><p>C++ 中的 STL 也提供了一个容器 std::stack，使用前需要引入 stack 头文件。</p>
+<p>STL 中的 stack 容器提供了一众成员函数以供调用，其中较为常用的有：</p>
+<ul>
+<li>元素访问<br>st.top() 返回栈顶</li>
+<li>修改<br>st.push() 插入传入的参数到栈顶<br>st.pop() 弹出栈顶</li>
+<li>容量<br>st.empty() 返回是否为空<br>st.size() 返回元素数量<br>此外，std::stack 还提供了一些运算符。较为常用的是使用赋值运算符 &#x3D; 为 stack 赋值，示例：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新建两个栈 st1 和 st2</span></span><br><span class="line">std::stack&lt;<span class="type">int</span>&gt; st1, st2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 st1 装入 1</span></span><br><span class="line">st1.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 st1 赋值给 st2</span></span><br><span class="line">st2 = st1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 st2 的栈顶元素</span></span><br><span class="line">cout &lt;&lt; st2.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出: 1</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="使用-Python-中的-list-模拟栈"><a href="#使用-Python-中的-list-模拟栈" class="headerlink" title="使用 Python 中的 list 模拟栈"></a>使用 Python 中的 list 模拟栈</h2><p>在 Python 中，你可以使用列表来模拟一个栈：</p>
+<p>实现</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">5</span>, <span class="number">1</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 向栈顶添加元素</span></span><br><span class="line">st.append(<span class="number">2</span>)</span><br><span class="line">st.append(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pop 取出栈顶元素</span></span><br><span class="line">st.pop()</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 clear 清空栈</span></span><br><span class="line">st.clear()</span><br></pre></td></tr></table></figure>
+
+<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="NOIP2013-普及组-表达式求值"><a href="#NOIP2013-普及组-表达式求值" class="headerlink" title="[NOIP2013 普及组] 表达式求值"></a>[NOIP2013 普及组] 表达式求值</h1><h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>NOIP2013 普及组 T2</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包含加法和乘法的算术表达式，请你编程计算表达式的值。</p>
+<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>一行，为需要你计算的表达式，表达式中只包含数字、加法运算符 <code>+</code> 和乘法运算符 <code>*</code>，且没有括号，所有参与运算的数字均为 $0$ 到   $2^{31}-1$ 之间的整数。  </p>
+<p>输入数据保证这一行只有 <code>0123456789+*</code> 这 $12$ 种字符。</p>
+<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个整数，表示这个表达式的值。  </p>
+<p>注意：当答案长度多于 $4$ 位时，请只输出最后 $ 4$ 位，前导 $ 0$ 不输出。</p>
+<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1*3+4</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例-2"><a href="#样例-2" class="headerlink" title="样例 #2"></a>样例 #2</h2><h3 id="样例输入-2"><a href="#样例输入-2" class="headerlink" title="样例输入 #2"></a>样例输入 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1234567890*1</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-2"><a href="#样例输出-2" class="headerlink" title="样例输出 #2"></a>样例输出 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7891</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例-3"><a href="#样例-3" class="headerlink" title="样例 #3"></a>样例 #3</h2><h3 id="样例输入-3"><a href="#样例输入-3" class="headerlink" title="样例输入 #3"></a>样例输入 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1000000003*1</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-3"><a href="#样例输出-3" class="headerlink" title="样例输出 #3"></a>样例输出 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>对于 $30%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100$。</p>
+<p>对于 $80%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤1000$。</p>
+<p>对于 $100%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100000$。</p>
+<h2 id="参考代码-他人博客"><a href="#参考代码-他人博客" class="headerlink" title="参考代码(他人博客)"></a>参考代码(他人博客)</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">stack &lt;<span class="type">int</span>&gt; x;<span class="comment">//一个存数字并在最后把它们相加的栈</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a,b;</span><br><span class="line">	<span class="type">char</span> c;</span><br><span class="line">	cin&gt;&gt;a;<span class="comment">//先输入一个数，以后符号+数字输入</span></span><br><span class="line">	<span class="type">int</span> m=<span class="number">10000</span>;</span><br><span class="line">	a=a%m;<span class="comment">//必须的操作</span></span><br><span class="line">	x.<span class="built_in">push</span>(a);<span class="comment">//压入栈中</span></span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;c&gt;&gt;b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>)<span class="comment">//将*之前的数字与*之后的数字积存入</span></span><br><span class="line">		&#123;</span><br><span class="line">			a=x.<span class="built_in">top</span>();</span><br><span class="line">			x.<span class="built_in">pop</span>();</span><br><span class="line">			x.<span class="built_in">push</span>(a*b%m);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//将b存入</span></span><br><span class="line">			x.<span class="built_in">push</span>(b);</span><br><span class="line">	&#125;</span><br><span class="line">	a=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		a+=x.<span class="built_in">top</span>();</span><br><span class="line">		a%=m;<span class="comment">//取模是万恶之源</span></span><br><span class="line">		x.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;a&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>另外说一句，Python2提交这个代码直接AC!</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">input</span>()%<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="取牌游戏"><a href="#取牌游戏" class="headerlink" title="取牌游戏"></a>取牌游戏</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>小明正在使用一堆共K张纸牌与N-1个朋友玩取牌游戏。其中，N&lt;&#x3D;K&lt;&#x3D;100000,2&lt;&#x3D;N&lt;&#x3D;100,K是N的倍数。纸牌中包含M&#x3D;K&#x2F;N张“good”和K-M张“bad”牌。小明负责发牌，他当然想自己获得所有的“good”牌。<br>他的朋友怀疑他会欺骗，所以他们给出以下一些限制，以防小明耍诈：<br>（1）	游戏开始时，将最上面的牌发给小明右手边的人。<br>（2）	每发完一张牌，他必须将接下来的p张牌（1&lt;&#x3D;p&lt;&#x3D;10）一张一张地依次移到最后，放在牌堆的底部。<br>（3）	以逆时针方向，连续给每位玩家发牌。<br>小明迫切想赢，请你帮助他算出所有“good”牌放置的位置，以便他得到所有的“good”牌。牌从上往下依次标注为1，2，3，…</p>
+<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行，3个用一个空格间隔的正整数N,K,P。</p>
+<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>M行，从顶部按升序依次输出“good”牌的位置。</p>
+<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 9 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -656,6 +557,105 @@
       <tags>
         <tag>C++</tag>
         <tag>搜索</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DP背包问题学习笔记</title>
+    <url>//post/56rh.html</url>
+    <content><![CDATA[<h1 id="动态规划DP"><a href="#动态规划DP" class="headerlink" title="动态规划DP"></a>动态规划DP</h1><p>动态规划是一种通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。</p>
+<p>由于动态规划并不是某种具体的算法，而是一种解决特定问题的方法，因此它会出现在各式各样的数据结构中，与之相关的题目种类也更为繁杂。</p>
+<p>在 OI 中，计数等非最优化问题的递推解法也常被不规范地称作 DP，因此本章将它们一并列出。事实上，动态规划与其它类型的递推的确有很多相似之处，学习时可以注意它们之间的异同。</p>
+<h2 id="背包DP"><a href="#背包DP" class="headerlink" title="背包DP"></a>背包DP</h2><h3 id="01背包"><a href="#01背包" class="headerlink" title="01背包"></a>01背包</h3><p>例题：01背包</p>
+<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入输出</button></li><li class="tab"><button type="button" data-href="#liti-2">数据范围</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">示例代码</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>有 N 件物品和一个容量是 V 的背包。每件物品只能使用一次。</p>
+<p>第 i 件物品的体积是 vi ，价值是 wi 。</p>
+<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。 输出最大价值。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><p>输入格式 </p>
+<p>第一行两个整数，N，V ，用空格隔开，分别表示物品数量和背包容积。</p>
+<p>接下来有 N 行，每行两个整数 vi,wi ，用空格隔开，分别表示第 i 件物品的体积和价值。</p>
+<p>输出格式 </p>
+<p>输出一个整数，表示最大价值。</p>
+<p>输入样例</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4 5</span><br><span class="line">1 2</span><br><span class="line">2 4</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br></pre></td></tr></table></figure>
+<p>输出样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>0&lt;N,V≤1000</p>
+<p>0&lt;vi,wi≤1000</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>解法：贪心（不可取），DFS，DP</p>
+<ol>
+<li>贪心</li>
+</ol>
+<p>使用贪心法完全取决于输入的数据，不可能完全正确。</p>
+<ol start="2">
+<li>DFS</li>
+</ol>
+<p>DFS搜索每种取物方案。代价O(n^2)</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> now,<span class="type">int</span> sumv)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> res;</span><br><span class="line">	<span class="keyword">if</span>(now==n+<span class="number">1</span>) <span class="keyword">return</span> res=<span class="number">0</span>;<span class="comment">//没有了</span></span><br><span class="line">	<span class="keyword">if</span>(sumv&lt;v[now]) res=<span class="built_in">def</span>(now+<span class="number">1</span>,sumv);<span class="comment">//无法选第i个</span></span><br><span class="line">	<span class="keyword">else</span> res=<span class="built_in">max</span>(<span class="built_in">dfs</span>(now+<span class="number">1</span>,sumv),<span class="built_in">dfs</span>(now+<span class="number">1</span>,sumv-v[now])+w[now]);</span><br><span class="line">	<span class="keyword">return</span> res; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>DP</li>
+</ol>
+<p>只有<strong>放</strong>和<strong>不放</strong>两种选择。</p>
+<p>不放：<code>f[i][j]=f[i-1][j]</code></p>
+<p>放：<code>f[i][j]=f[i-1][j-w[i]]+v[i]</code></p>
+<p>所以转移方程为<code>f[i][j]=max(f[i-1][j],f[i-1][j-w[i]]+v[i])</code></p>
+<div class="note  info simple"><p>示例代码是模版！！！</p>
+</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std; </span><br><span class="line">ll n,m;</span><br><span class="line">ll w[<span class="number">10001</span>],v[<span class="number">10001</span>];</span><br><span class="line">ll f[<span class="number">1001</span>][<span class="number">1001</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	cin&gt;&gt;n&gt;&gt;m;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		cin&gt;&gt;w[i]&gt;&gt;v[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=m;j&gt;=<span class="number">0</span>;j--)&#123;</span><br><span class="line">			<span class="keyword">if</span>(j&lt;w[i]) f[i][j]=f[i<span class="number">-1</span>][j];</span><br><span class="line">			<span class="keyword">else</span> f[i][j]=<span class="built_in">max</span>(f[i<span class="number">-1</span>][j],f[i<span class="number">-1</span>][j-w[i]]+v[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;f[n][m];</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
+
+<p>01空间复杂度优化</p>
+<p>实际上，由状态转移方程和dp二维数组的值很容易发现：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  |1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20</span><br><span class="line">——|————————————————————————————————————————————————————————————</span><br><span class="line">1 |0  0  0  0  0  0  0  5  5  5  5  5  5  5  5  5  5  5  5  5</span><br><span class="line">2 |0  0  0  0  0  0  0  5  6  6  6  6  6  6  6  6  11 11 11 11</span><br><span class="line">3 |0  0  0  0  7  7  7  7  7  7  7  7  12 13 13 13 13 13 13 13</span><br><span class="line">4 |0  3  3  3  7  7  10 10 10 10 10 10 12 13 15 16 16 16 16 16</span><br></pre></td></tr></table></figure>
+
+<p>第i行的数据只依赖于第i-1行的值，因此我们只需保存第i-1行和第i行这两行的值即可，即两个一维数组dp1[]和dp2[]</p>
+<p>dp1[ j ] 等价于 dp[i-1] [ j ]</p>
+<p>dp2[ j ] 等价于 dp[ i ] [ j ]</p>
+<p>所以新的转移方程：<code>dp2[j] = max(dp1[j-c[i]]+w[i],dp2[j])</code></p>
+<details ><summary>更多习题</summary><div class="content"><p>洛谷P1060，P1048，P1164</p>
+</div></details>
+
+<h3 id="完全背包"><a href="#完全背包" class="headerlink" title="完全背包"></a>完全背包</h3><p>例题：完全背包</p>
+<div class="tabs" id="liti"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#liti-0">题意描述</button></li><li class="tab"><button type="button" data-href="#liti-1">输入输出</button></li><li class="tab"><button type="button" data-href="#liti-2">数据范围</button></li><li class="tab"><button type="button" data-href="#liti-3">解法提示</button></li><li class="tab"><button type="button" data-href="#liti-4">示例代码</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="liti-0"><p>有 N 种物品和一个容量是 V 的背包，每种物品都有无限件可用。</p>
+<p>第 i 种物品的体积是 vi ，价值是 wi 。</p>
+<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。 输出最大价值。</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-1"><p>输入格式 </p>
+<p>第一行两个整数，N，V ，用空格隔开，分别表示物品种数和背包容积。</p>
+<p>接下来有 N 行，每行两个整数 vi,wi ，用空格隔开，分别表示第 i 种物品的体积和价值。</p>
+<p>输出格式 </p>
+<p>输出一个整数，表示最大价值。</p>
+<p>输入样例</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4 5</span><br><span class="line">1 2</span><br><span class="line">2 4</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br></pre></td></tr></table></figure>
+<p>输出样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-2"><p>0&lt;N,V≤1000</p>
+<p>0&lt;vi,wi≤1000</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-3"><p>使用和01背包一样的方式</p>
+<p><code> dp[j] = max(dp[j], dp[j - v] + w)</code></p>
+<div class="note  info simple"><p>示例代码是模版！！！</p>
+</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="liti-4"><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1010</span>;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"><span class="type">int</span> dp[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )&#123;</span><br><span class="line">        <span class="type">int</span> v, w;</span><br><span class="line">        cin &gt;&gt; v &gt;&gt; w;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = v; j &lt;= m; j ++ )&#123;</span><br><span class="line">                dp[j] = <span class="built_in">max</span>(dp[j], dp[j - v] + w);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; dp[m] &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="solitude fas fa-arrow-up"></i></button></div></div></div>
+
+<p>完全背包优化</p>
+<ul>
+<li>参考：https_blog.csdn.net&#x2F;?url&#x3D;https%3A%2F%2Fblog.csdn.net%2Fm0_51507437%2Farticle%2Fdetails%2F122782623</li>
+</ul>
+<ol>
+<li>优化</li>
+</ol>
+<p>将原始算法的DP思想转变一下：</p>
+<p>对于第i种物品的出现，我们对第i种物品放不放入背包进行决策。如果不放那么V(i,j)&#x3D;V(i-1,j)；<br>如果确定放，背包中应该出现至少一件第i种物品，所以V(i,j)中至少应该出现一件第i种物品，即V(i,j)&#x3D;V(i,j-wi)+vi。为什么会是V(i,j-wi)？因为V(i,j-wi)里面可能有第i种物品，也可能没有第i种物品。我们要确保V(i,j)至少有一件第i件物品，所以要预留wi的空间来存放一件第i种物品。<br>那么完全背包和 01 背包的不同点在哪里呢？</p>
+<p>从二维数组上区别 01 背包和完全背包，也就是状态转移方程就差别在放第 i 种物品时，完全背包在选择放这个物品时，最优解是 V(i, j)&#x3D;max｛V(i, j-k<em>w(i))+k</em>v(i)｝即同行的那一个，而 01 背包比较的是V(i,j)&#x3D;max｛V(i-1,j)，V(i-1,j-w(i))+v(i)｝，上一行的那一个。</p>
+<p>所以状态转移方程近似于01：</p>
+<p><code>f[i][j]=max(f[i-1][j],f[i][j-c[i]]+w[i])</code></p>
+<ol start="2">
+<li>降维</li>
+</ol>
+<p>同01背包。</p>
+<details ><summary>更多习题</summary><div class="content"><p>洛谷P1616</p>
+</div></details>
+
+<h3 id="多重背包"><a href="#多重背包" class="headerlink" title="多重背包"></a>多重背包</h3><p><img src="/img/article/4/bf635f044e389db77ae051e5b6683f86692cee6be31eb2151517bdf71f99d8eb.png"></p>
+<p><img src="/img/article/4/4c620a52d04519fdc4d7562eb6fa0c9fab1b5f234c8eacda1ae7f04d6f8d543f.png"></p>
+<h3 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h3><p>参考资料同文中内容。</p>
+<p>版权所有©Minecraft-Sep</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>竞赛</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -863,6 +863,25 @@
       </tags>
   </entry>
   <entry>
+    <title>关于博客评论更换的通知</title>
+    <url>//post/73dh.html</url>
+    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
+<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
+<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+
+<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+]]></content>
+      <categories>
+        <category>公告</category>
+      </categories>
+      <tags>
+        <tag>Waline</tag>
+        <tag>Twikoo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【HTML】利用localstrange临时存储数据</title>
     <url>//post/8g66.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>参考资料：</p>
@@ -968,22 +987,76 @@
       </tags>
   </entry>
   <entry>
-    <title>关于博客评论更换的通知</title>
-    <url>//post/73dh.html</url>
-    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
-<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
-<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+    <title>API构建①——Bing每日一图接口</title>
+    <url>//post/r5fd.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解bing每日一图链接规律"><a href="#Part1-了解bing每日一图链接规律" class="headerlink" title="Part1. 了解bing每日一图链接规律"></a>Part1. 了解bing每日一图链接规律</h3><p>就拿今天的做例子：<a href="https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg">https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg</a></p>
+<p>获取到的json内容如下所示：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240730&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fullstartdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;202407301600&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;enddate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240731&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;urlbase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyright&quot;</span><span class="punctuation">:</span> <span class="string">&quot;石林，日落点，布莱斯峡谷国家公园，犹他州，美国 (© Tim Fitzharris/Minden Pictures)&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyrightlink&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.bing.com/search?q=%E5%B8%83%E8%8E%B1%E6%96%AF%E5%B3%A1%E8%B0%B7%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD&amp;form=hpcapt&amp;mkt=zh-cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里有“胡图”吗？&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;quiz&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20240730_HoodoosBryce%22&amp;FORM=HPQUIZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wp&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hsh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1cabac064d004edabc8b0d2e375052ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;drk&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;top&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bot&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tooltips&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span> <span class="string">&quot;正在加载...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;previous&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;next&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;此图片不能下载用作壁纸。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walls&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下载今日美图。仅限用作桌面壁纸。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+<p>我们就可以猜出其中的规律了：</p>
+<p><a href="https://cn.bing.com/">https://cn.bing.com</a> + 上面的”url”，构成了该链接。</p>
+<h3 id="Part2-构建API"><a href="#Part2-构建API" class="headerlink" title="Part2. 构建API"></a>Part2. 构建API</h3><p>我们使用<strong>GET</strong>方法构建我们的API，名称为<code>bing.php</code>，也可以从 <a href="https://mc-sep.js.cool/api/bing.php">https://mc-sep.js.cool/api/bing.php</a> 下载！</p>
+<div class="note  warning disabled"><p>注意：实操里要养成打注释的习惯！</p>
+</div>
+
+<ol>
+<li><p>判断是否是随机调用（我们的API可以指定日期）</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果不是，则指定日期</p>
+</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>获取Bing Json详细信息，转换为PHP数组，再提取基础URL</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>判断是否制定了图片大小，否则默认1920 * 1080</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>建立完整URL</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>获取其他信息并判断是否需要</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>不是则直接返回</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>完整代码</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgsizebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>没啥好总结的。可以去参考一下API接口：</p>
+<ul>
+<li><a href="https://api.kdcc.cn/">https://api.kdcc.cn</a></li>
+<li><a href="https://api.isoyu.com/bing_images.php">https://api.isoyu.com/bing_images.php</a></li>
+<li><a href="http://api.muvip.cn//api/bing/index.php?rand=false&day=0&size=1920x1080&info=false">http://api.muvip.cn//api/bing/index.php?rand=false&amp;day=0&amp;size=1920x1080&amp;info=false</a></li>
+<li><a href="http://img.xjh.me/random_img.php">http://img.xjh.me/random_img.php</a></li>
+<li><a href="https://source.unsplash.com/random">https://source.unsplash.com/random</a></li>
+<li><a href="https://api.dujin.org/bing/1366.php">https://api.dujin.org/bing/1366.php</a></li>
+<li><a href="https://picsum.photos/">https://picsum.photos/</a></li>
+</ul>
+<p>版权所有©MC-Sep 2024.</p>
 ]]></content>
       <categories>
-        <category>公告</category>
+        <category>PHP</category>
       </categories>
       <tags>
-        <tag>Waline</tag>
-        <tag>Twikoo</tag>
+        <tag>API</tag>
+        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -1055,79 +1128,6 @@
       <tags>
         <tag>Hexo</tag>
         <tag>Pages</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>API构建①——Bing每日一图接口</title>
-    <url>//post/r5fd.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解bing每日一图链接规律"><a href="#Part1-了解bing每日一图链接规律" class="headerlink" title="Part1. 了解bing每日一图链接规律"></a>Part1. 了解bing每日一图链接规律</h3><p>就拿今天的做例子：<a href="https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg">https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg</a></p>
-<p>获取到的json内容如下所示：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240730&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fullstartdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;202407301600&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;enddate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240731&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;urlbase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyright&quot;</span><span class="punctuation">:</span> <span class="string">&quot;石林，日落点，布莱斯峡谷国家公园，犹他州，美国 (© Tim Fitzharris/Minden Pictures)&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyrightlink&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.bing.com/search?q=%E5%B8%83%E8%8E%B1%E6%96%AF%E5%B3%A1%E8%B0%B7%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD&amp;form=hpcapt&amp;mkt=zh-cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里有“胡图”吗？&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;quiz&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20240730_HoodoosBryce%22&amp;FORM=HPQUIZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wp&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hsh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1cabac064d004edabc8b0d2e375052ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;drk&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;top&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bot&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tooltips&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span> <span class="string">&quot;正在加载...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;previous&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;next&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;此图片不能下载用作壁纸。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walls&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下载今日美图。仅限用作桌面壁纸。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>我们就可以猜出其中的规律了：</p>
-<p><a href="https://cn.bing.com/">https://cn.bing.com</a> + 上面的”url”，构成了该链接。</p>
-<h3 id="Part2-构建API"><a href="#Part2-构建API" class="headerlink" title="Part2. 构建API"></a>Part2. 构建API</h3><p>我们使用<strong>GET</strong>方法构建我们的API，名称为<code>bing.php</code>，也可以从 <a href="https://mc-sep.js.cool/api/bing.php">https://mc-sep.js.cool/api/bing.php</a> 下载！</p>
-<div class="note  warning disabled"><p>注意：实操里要养成打注释的习惯！</p>
-</div>
-
-<ol>
-<li><p>判断是否是随机调用（我们的API可以指定日期）</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果不是，则指定日期</p>
-</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>获取Bing Json详细信息，转换为PHP数组，再提取基础URL</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>判断是否制定了图片大小，否则默认1920 * 1080</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
-<li>建立完整URL</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<ol start="6">
-<li>获取其他信息并判断是否需要</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>不是则直接返回</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="8">
-<li>完整代码</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgsizebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>没啥好总结的。可以去参考一下API接口：</p>
-<ul>
-<li><a href="https://api.kdcc.cn/">https://api.kdcc.cn</a></li>
-<li><a href="https://api.isoyu.com/bing_images.php">https://api.isoyu.com/bing_images.php</a></li>
-<li><a href="http://api.muvip.cn//api/bing/index.php?rand=false&day=0&size=1920x1080&info=false">http://api.muvip.cn//api/bing/index.php?rand=false&amp;day=0&amp;size=1920x1080&amp;info=false</a></li>
-<li><a href="http://img.xjh.me/random_img.php">http://img.xjh.me/random_img.php</a></li>
-<li><a href="https://source.unsplash.com/random">https://source.unsplash.com/random</a></li>
-<li><a href="https://api.dujin.org/bing/1366.php">https://api.dujin.org/bing/1366.php</a></li>
-<li><a href="https://picsum.photos/">https://picsum.photos/</a></li>
-</ul>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-      <tags>
-        <tag>API</tag>
-        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -1365,47 +1365,6 @@
       </tags>
   </entry>
   <entry>
-    <title>博客一周年记</title>
-    <url>//post/te2r.html</url>
-    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
-<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
-<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
-  title="HEXO THEMES"><span>HEXO THEMES</span></button>找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
-<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
-<p>  我使用了Github Pages，域名仍是有效的：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
-<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
-<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
-<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
-<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
-<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
-<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
-<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
-<p>  直到2024年6月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
-  title="HEXO THEMES"><span>HEXO THEMES</span></button>上面发现了一个新主题：<strong>Solitude</strong></p>
-<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
-<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
-<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
-<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
-<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
-<p>  版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>周年记</category>
-      </categories>
-      <tags>
-        <tag>周年记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>如何让你的博客更丰富？hexo常见插件推荐</title>
     <url>//post/ugr2.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
@@ -1552,6 +1511,47 @@
       <tags>
         <tag>Hexo</tag>
         <tag>Hexo插件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客一周年记</title>
+    <url>//post/te2r.html</url>
+    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
+<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
+<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
+  title="HEXO THEMES"><span>HEXO THEMES</span></button>找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
+<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
+<p>  我使用了Github Pages，域名仍是有效的：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
+<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
+<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
+<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
+<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
+<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
+<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
+<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
+<p>  直到2024年6月，我在<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
+  title="HEXO THEMES"><span>HEXO THEMES</span></button>上面发现了一个新主题：<strong>Solitude</strong></p>
+<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
+<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
+<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
+<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
+<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
+<p>  版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>周年记</category>
+      </categories>
+      <tags>
+        <tag>周年记</tag>
       </tags>
   </entry>
 </search>
