@@ -1775,4 +1775,36 @@
         <tag>Hexo插件</tag>
       </tags>
   </entry>
+  <entry>
+    <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
+    <url>//post/76gl.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
+<p><img src="/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
+<p>由于影响不是很大，为了他人隐私（也不能不给他机会改正吧），就不“公开处刑”了。</p>
+<p>那么，什么是DDos？它会对博客造成什么威胁？今天我就讲讲DDos攻击原理与防护方法。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>DDoS全称Distributed Denial of Service，意思为“分布式拒绝服务”，即利用大量合法的分布式服务器对目标发送请求，从而导致正常合法用户无法获得服务。</p>
+<p>就比如，一个健身房生意十分火爆，那些“壮汉”看不下去了，就召集n个人进到他店，但是就是不健身，又堵住健身器材。这个商家看似很忙很火爆，其实啥也不是，同时，真正想要健身的顾客也没得到接待，因为店里挤得进不去。</p>
+<p>现在的DDoS让服务不仅可以直接阻断，还能够通过影响服务的客户体验实现攻击。他又这些特点：</p>
+<ol>
+<li><strong>造成“供不应求”现象</strong>。通过控制大量攻击主机同时连接网站端口，制造大流量无用数据，造成通往被攻击主机的网络拥塞，使被攻击主机无法正常和外界通信。</li>
+<li><strong>傀儡攻击</strong>。傀儡就是可以被黑客操控的机器，经常被用为DDos攻击，但是傀儡数量十分多，使后端无法准确辨识。</li>
+<li><strong>网络层攻击</strong>。通过发送伪造源IP的TCP数据包发送SYN或ACK包、发送包含错误设置的地址值等攻击方式，耗尽服务器资源，导致服务器拒绝访问。</li>
+<li><strong>CC攻击</strong>。黑客借助代理服务器生成指向受害主机的合法网页请求，实现DDoS和伪装就叫CC（全名Challenge Collapsar）。傀儡CC攻击是黑客使用CC攻击软件，控制大量傀儡发动攻击，模拟正常用户访问网站的请求，伪造成合法数据包。</li>
+</ol>
+<p>DDos攻击原理如下：</p>
+<p><img src="/img/article/16/1.png" alt="原理"></p>
+<h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
+<p><img src="/img/article/16/2.png" alt="1"></p>
+<p>当然你也可以使用其他服务商的，比如Cloudflare、Vercel、腾讯云啥的</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare</tag>
+        <tag>DDos</tag>
+      </tags>
+  </entry>
 </search>
