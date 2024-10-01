@@ -6733,38 +6733,6 @@ i.bber-gotobb {
   margin-top: 0.5rem;
   width: 100%;
 }
-#bber .meta {
-  display: flex;
-  align-items: center;
-  line-height: 1.5;
-  position: relative;
-  width: 100%;
-  margin-bottom: 4px;
-}
-#bber .meta .avatar {
-  margin: 0;
-  width: 50px;
-  height: 50px;
-  border-radius: 10px;
-}
-#bber .meta .info {
-  display: flex;
-  flex-direction: column;
-  margin-left: 10px;
-}
-#bber .meta .info span.bber_nick {
-  color: var(--efu-main);
-  font-size: 0.9rem;
-}
-#bber .meta .info time.bber_date {
-  font-size: 14px;
-  opacity: 0.6;
-}
-#bber .meta .goComment {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
 #bber div.bber-content {
   display: flex;
   flex-direction: initial;
@@ -6772,6 +6740,65 @@ i.bber-gotobb {
   border-radius: 12px;
   width: 100%;
   height: 100%;
+}
+#bber .bber-bottom {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  user-select: none;
+}
+#bber .bber-info {
+  display: flex;
+  align-items: center;
+}
+#bber .bber-info .fa-rectangles-mixed {
+  margin-right: 8px;
+}
+#bber .bber-info .bber-info-time,
+#bber .bber-info .bber-info-location {
+  margin-right: 0.5rem;
+  color: var(--efu-fontcolor);
+  font-size: 0.7rem;
+  background-color: var(--efu-gray-op);
+  padding: 0 8px;
+  border-radius: 20px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+}
+#bber .bber-info .bber-info-time i,
+#bber .bber-info .bber-info-location i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+#bber .bber-info .bber-info-time .datafrom,
+#bber .bber-info .bber-info-location .datafrom {
+  order: 2;
+  color: var(--efu-secondtext);
+  font-size: 0.7rem;
+  margin-left: 8px;
+}
+#bber .bber-info .bber-info-time .datafrom small,
+#bber .bber-info .bber-info-location .datafrom small {
+  font-size: 0.7rem;
+}
+#bber .bber-info .bber-content-link {
+  display: flex;
+  margin-right: 0.5rem;
+  color: var(--efu-secondtext);
+  font-size: 0.7rem;
+  align-items: center;
+  background-color: rgba(245,108,108,0.13);
+  padding: 0 8px;
+  border-radius: 20px;
+}
+#bber .bber-info .bber-content-link:hover {
+  background-color: var(--efu-main);
+  color: var(--efu-white);
+}
+#bber .bber-info .bber-content-link i {
+  margin-right: 3px;
+  font-size: 16px;
 }
 #bber .count {
   color: var(--efu-secondtext);
