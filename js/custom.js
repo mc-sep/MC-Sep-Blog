@@ -1,3 +1,4 @@
+// By MCSEP
 // 进行 fetch 请求
 fetch('https://api.76.al/api/ip/query?key=kl7y1nygTMNJcSivnTCRY5dqHU') //申请key:https://api.76.al
     .then(response => {
