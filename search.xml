@@ -172,211 +172,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【Hexo】Hexo+Github搭建个人博客</title>
-    <url>//post/4nd3.html</url>
-    <content><![CDATA[<div class="note  info flat"><ul>
-<li>2024.9.21，<strong>Cquitra</strong>指出并修改了文章中的<strong>2</strong>处错误，感谢贡献！</li>
-</ul>
-</div>
-
-<div class="note  info simple"><p>预计完成时间90分钟，请放心食用！</p>
-</div>
-
-<div class="note  danger simple"><p>密码不可以外传（除非允许），不然你会被列入<strong>黑名单</strong>！</p>
-</div>
-
-<div class="note  warning simple"><p>鉴于Github的访问慢，可以使用<a href="https://steampp.net/">Watt Toolkit加速器</a>进行访问，可以加速许多游戏和网站！</p>
-</div>
-
-
-<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>最近我收到了亿点点私信：</p>
-<p><img src="/img/article/1/831c75073352d065bee94f80b1f8db2d5bf523bd664d31ca8ac8eec650d7188d.png"></p>
-<p><img src="/img/article/1/4bead4b616ac5f73dedd50bdabcc628a640bb89c34977f9b899514bf139f0107.png"></p>
-<p><img src="/img/article/1/f0740c4deb5f6051d9604821191f48805ce9031ccfaeda767b6e965f36e5a7c2.png"></p>
-<p>所以！今天我就出教程吧！！！</p>
-<h1 id="实践s"><a href="#实践s" class="headerlink" title="实践s"></a>实践s</h1><h3 id="Part1-准备活动"><a href="#Part1-准备活动" class="headerlink" title="Part1.准备活动"></a>Part1.准备活动</h3><ol>
-<li><p>下载<strong>Node.js</strong>（<button class="btn-sco " onclick="window.open('https://nodejs.cn/')" 
-  title="点击下载"><i class="solitude st-lightbulb-line"></i><span>点击下载</span></button>）</p>
-</li>
-<li><p>下载后的文件会是：<img no-lazy class="inline" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" style="height:1.5em"/> ，打开后一路<code>Next</code>。</p>
-</li>
-</ol>
-<div class="note  warning simple"><p>不建议修改安装路径，否则可能会无法调用<code>系统变量</code>！</p>
-</div>
-
-<ol start="3">
-<li>下载完毕后打开<code>cmd</code>，输入</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
-
-<p><img src="/img/article/1/ec9601d45ca8f7d78bb9f8a711be160c05efee79d4a26f3ee5edc75750cec21c.png"></p>
-<p>等待下载，注意期间不要按Ctrl+C，否则会导致进度<label class="hl-label bg-red">取消</label> ！</p>
-<p>下载完毕后：</p>
-<p><img src="/img/article/1/37571ffc50dd2032305e07efae54f6cad9bf503925b6b21fc9b024399ab1e167.png"></p>
-<ol start="4">
-<li>打开任意一个<code>空</code>文件夹，在导航栏打开cmd，分别输入（每输入一行等待）：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>hexo init blog</code>：安装博客到blog文件夹里</li>
-<li><code>npm install</code>：安装依赖</li>
-</ul>
-<ol start="6">
-<li>到这里，你的博客已经初步成型：</li>
-</ol>
-<p><img src="/img/article/1/99586ae7171f8fa78c7b390cd8073b8d815c9cacada82fb3cff1d1c105187a69.png"></p>
-<h2 id="Part2-博客配置文件和主题配置文件的认识"><a href="#Part2-博客配置文件和主题配置文件的认识" class="headerlink" title="Part2: 博客配置文件和主题配置文件的认识"></a>Part2: 博客配置文件和主题配置文件的认识</h2><p>博客配置文件是这个东西：<img src="/img/article/1/f4a84c180811b3ead36d09a908abee0c7d01c18be9afa368bcbf109d7d92959e.png"></p>
-<p>打开后的东西：</p>
-<div class="note  warning simple"><p>注意：各个值的配置之间要和<code>:</code>之间有一个空格！例如：<code>name: value</code></p>
-</div>
-
-<ul>
-<li>title: 你的博客标题</li>
-<li>subtitle: 你的博客副标题</li>
-<li>description: 你的博客介绍</li>
-<li>author: 博客作者名字</li>
-<li>language: 语言，可以选择<code>en</code>，<code>zh-CN</code>和<code>zh-TW</code></li>
-<li>timezone: 时区，建议填<code>Asia/Shanghai</code></li>
-<li>url: 你的博客地址，必须填对！否则站内图片将会加载出问题</li>
-<li>theme: 主题名字，全部是小写</li>
-</ul>
-<p>其余的可以不用配置。</p>
-<p>主题配置文件请见你选择的主题的官方文档。</p>
-<h2 id="Part3-基本命令"><a href="#Part3-基本命令" class="headerlink" title="Part3: 基本命令"></a>Part3: 基本命令</h2><ul>
-<li><code>hexo cl</code>:清理博客缓存</li>
-<li><code>hexo s</code>:启动本地服务器，可以从<code>http://localhost:4000/</code>访问</li>
-<li><code>hexo g</code>:生成博客主文件，保存至public文件夹内，以后上传到Github要用</li>
-<li><code>hexo d</code>:通过git的方式上传到Github</li>
-</ul>
-<h2 id="Part4-安装-使用主题"><a href="#Part4-安装-使用主题" class="headerlink" title="Part4: 安装&amp;使用主题"></a>Part4: 安装&amp;使用主题</h2><p>可以前去<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
-  title="Hexo Themes"><i class="solitude st-lightbulb-line"></i><span>Hexo Themes</span></button>挑选你喜欢的主题！</p>
-<p>不懂得如何安装的可以加入我的QQ群或加我QQ<code>3630179822</code>或下方留言！</p>
-<h2 id="Part5-上传到Github"><a href="#Part5-上传到Github" class="headerlink" title="Part5: 上传到Github"></a>Part5: 上传到Github</h2><ol>
-<li>打开你的博客源文件，打开<code>cmd</code>，输入：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>等待生成博客源文件。</p>
-<ol start="2">
-<li>打开<button class="btn-sco " onclick="window.open('https://github.com')" 
-  title="Github"><i class="solitude st-lightbulb-line"></i><span>Github</span></button>，如下图：</li>
-</ol>
-<p><img src="/img/article/1/6816ace35cb5d27ea0d2c1a765e536c4517cc4c562e4df11a60523d8abf51f4c.png"></p>
-<ol start="3">
-<li>点击<img src="/img/article/1/df217c019f410eab4ca7e7a130ef206565a267bde692d8f146528043b7c36e12.png">，如下图：</li>
-</ol>
-<p><img src="/img/article/1/9fee061f2c82ef8833a6ba17f9bb898951749953919b048c26d74eaccc754b1c.png"></p>
-<ul>
-<li><p><img src="/img/article/1/4922810fd9d9e09ced18c74ea9cf7edbd2f12cd04852da015ee3e17ecb5991da.png">：你的邮箱</p>
-</li>
-<li><p><img src="/img/article/1/3b7e85db21c338eff30c33d588b31814852cf4ae85a3f2f6eacd0ce9e1836ba1.png">：你的密码</p>
-</li>
-<li><p><img src="/img/article/1/a9a751589440a751b4d71f58199310a4d569146cbd94c4046ede1184632a3b23.png">：你的用户名（好好填！以后你的网站要用）</p>
-</li>
-<li><p><img src="/img/article/1/945c106798566807d113d280dc73e6d9e14754680929e89c656b526c87f8122a.png">：你是否接收Github发送的活动通知</p>
-</li>
-</ul>
-<p>然后他们检查你的链接安全性，如下图:<br><img src="/img/article/1/8730fbe6ccace43796bd27dd85ac1fe749be814e646f128fb81e2191070766fa.png"></p>
-<p>情况1：直接通过</p>
-<p>情况2：如下图</p>
-<p><img src="/img/article/1/ad827d799a0ee6bd7bd381728d8879534784be2f3c44ed5c8d7be6eb3f7e0d7c.png"></p>
-<p>按照提示完成即可。</p>
-<ol start="4">
-<li>然后就进入Github主页面了：</li>
-</ol>
-<p><img src="/img/article/1/62cec8d35f912bba3802f23b0c84d4b09b9daa4b2c3386850b099307c5b2bfa6.png"></p>
-<p>点击<img src="/img/article/1/9661467d4657aef14cd39180743ca7ac34eef59dd489c1116e27e782cd245dac.png"></p>
-<p>第一步<br><img src="/img/article/1/885b4cc6de6026b5cb42f0a5f9e43fade4abf890b43a0675bc87907556d5c69b.png"><br>第二步（描述）<br><img src="/img/article/1/d9d067079f4ed210f6d42998aa9f2508b529a30e322f2169538775518da9f393.png"><br>第三步<br><img src="/img/article/1/54bce0caad0455e3817a3174157c978388056f3f5aa1b0876ba18bf06efd459d.png"></p>
-<p>最后点<code>Create repository</code>。</p>
-<ol start="5">
-<li>进入仓库页面：</li>
-</ol>
-<p><img src="/img/article/1/724a3bf6f78ef3e9f93a617949435624c6330525bd2fcd10f8c7d684a6944b78.png"></p>
-<p>点<code>Add file</code>➡<code>Upload files</code>。</p>
-<p>之后的页面：</p>
-<p><img src="/img/article/1/75df6fcc0879c1990ac029d3af262a47434a216f8b5e44b467aae2cd9eae62d6.png"></p>
-<p>将之前讲的<code>public</code>文件夹打开，把全部文件拖进去。</p>
-<div class="note  danger simple"><p>注意：单次上传的文件不能大于100件或100MB!</p>
-</div>
-
-<p>最后点<code>Commit Changes</code>。</p>
-<ol start="6">
-<li>等待几分钟，就可以通过下面的地址访问了！</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://你的用户名.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>Hexo</code>是一个很不错的博客框架，适合绝大部分用户。</p>
-<p>版权所有©Minecraft-Sep。</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Github</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！</title>
-    <url>//post/43vc.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是 Vercel ? Vercel，是一家软件服务企业，掌门人是Guillermo Rauch，2023年4月18日，以170亿人民币的企业估值入选《2023·胡润全球独角兽榜》，排名404。2024年4月9日，Vercel以180亿人民币的企业估值入选《2024·胡润全球独角兽榜》，排名422名。</p>
-<p>那么，今天我就叫你如何使用 Vercel 快速上线你的个人网站！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="Part1-导入博客Repo"><a href="#Part1-导入博客Repo" class="headerlink" title="Part1. 导入博客Repo"></a>Part1. 导入博客Repo</h2><ol>
-<li><p>进入 <strong><a href="vercel.com">Vercel</a></strong> ，先注册账号（建议使用Github注册）。</p>
-</li>
-<li><p>进入Dashboard，点击<code>Add New</code>-&gt;<code>Project</code></p>
-</li>
-</ol>
-<p><img src="/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p>
-<ol start="3">
-<li>进入选择界面，找到你的博客所在的Github仓库，点击一旁的<strong>Import</strong>，例如我的<code>mc-sep.github.io</code></li>
-</ol>
-<p><img src="/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p>
-<ol start="4">
-<li>进入到配置界面，如果你是Hexo博客（只上传public文件夹内文件的），请不要修改<strong>Build and Output Settings</strong>和<strong>Framework Preset</strong>，如果是Hexo（在线部署的），请在<strong>Framework Preset</strong>中选择<strong>Hexo</strong>，其他不用动。其余博客的方法可自行查阅。最后点击<strong>Deploy</strong></li>
-</ol>
-<p><img src="/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p>
-<p><img src="/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p>
-<ol start="5">
-<li>等待部署完成。完成后，点击<strong>Continue to Dashboard</strong></li>
-</ol>
-<p><img src="/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p>
-<p><img src="/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p>
-<h2 id="Part2-绑定域名"><a href="#Part2-绑定域名" class="headerlink" title="Part2. 绑定域名"></a>Part2. 绑定域名</h2><p>请在你的域名托管商内添加一个<strong>CNAME</strong>记录：<strong>cname-china.vercel-dns.com</strong>或者<strong>A</strong>记录：<strong>76.76.21.21</strong>或<strong>76.76.21.98</strong>，如图：</p>
-<p><img src="/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p>
-<p>接着去到你创建好的Project，点击<strong>Settings</strong>-&gt;<strong>Domains</strong>，再上面输入你的域名！</p>
-<p><img src="/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p>
-<p>如果你配置错了，可能就会：</p>
-<p><img src="/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p>
-<p><img src="/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p>
-<p>你也可以使用Vercel的自带域名（被ban了）：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">你喜欢的名字.vercel.app</span><br></pre></td></tr></table></figure>
-
-<h2 id="Part3-安全系统"><a href="#Part3-安全系统" class="headerlink" title="Part3. 安全系统"></a>Part3. 安全系统</h2><ol>
-<li><p>进入<strong>Settings</strong>-&gt;<strong>Security</strong></p>
-</li>
-<li><p>可以将<strong>Attack Challenge Mode</strong>打开（通过向每位访客显示验证质询来防止恶意流量），效果就不展示了。</p>
-</li>
-<li><p>下面的都可以打开。</p>
-</li>
-</ol>
-<h2 id="Part4-优化"><a href="#Part4-优化" class="headerlink" title="Part4. 优化"></a>Part4. 优化</h2><p>可以提出建议！我可能会采纳！</p>
-<ul>
-<li>进入<strong>Settings</strong>-&gt;<strong>Functions</strong>，可将服务器改为香港的（好像小日子的更快），如：</li>
-</ul>
-<p><img src="/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel挺好用的。</p>
-<p>版权所有©MC-Sep 2023~2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Vercel</tag>
-        <tag>Github</tag>
-        <tag>Pages</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>202409博客月报 | 第一期</title>
     <url>//post/45vy.html</url>
     <content><![CDATA[<div class="note  info flat"><p>统计截止于 <strong>2024.9.30 15:00:00</strong></p>
@@ -598,6 +393,67 @@
       </tags>
   </entry>
   <entry>
+    <title>【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！</title>
+    <url>//post/43vc.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是 Vercel ? Vercel，是一家软件服务企业，掌门人是Guillermo Rauch，2023年4月18日，以170亿人民币的企业估值入选《2023·胡润全球独角兽榜》，排名404。2024年4月9日，Vercel以180亿人民币的企业估值入选《2024·胡润全球独角兽榜》，排名422名。</p>
+<p>那么，今天我就叫你如何使用 Vercel 快速上线你的个人网站！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="Part1-导入博客Repo"><a href="#Part1-导入博客Repo" class="headerlink" title="Part1. 导入博客Repo"></a>Part1. 导入博客Repo</h2><ol>
+<li><p>进入 <strong><a href="vercel.com">Vercel</a></strong> ，先注册账号（建议使用Github注册）。</p>
+</li>
+<li><p>进入Dashboard，点击<code>Add New</code>-&gt;<code>Project</code></p>
+</li>
+</ol>
+<p><img src="/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p>
+<ol start="3">
+<li>进入选择界面，找到你的博客所在的Github仓库，点击一旁的<strong>Import</strong>，例如我的<code>mc-sep.github.io</code></li>
+</ol>
+<p><img src="/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p>
+<ol start="4">
+<li>进入到配置界面，如果你是Hexo博客（只上传public文件夹内文件的），请不要修改<strong>Build and Output Settings</strong>和<strong>Framework Preset</strong>，如果是Hexo（在线部署的），请在<strong>Framework Preset</strong>中选择<strong>Hexo</strong>，其他不用动。其余博客的方法可自行查阅。最后点击<strong>Deploy</strong></li>
+</ol>
+<p><img src="/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p>
+<p><img src="/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p>
+<ol start="5">
+<li>等待部署完成。完成后，点击<strong>Continue to Dashboard</strong></li>
+</ol>
+<p><img src="/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p>
+<p><img src="/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p>
+<h2 id="Part2-绑定域名"><a href="#Part2-绑定域名" class="headerlink" title="Part2. 绑定域名"></a>Part2. 绑定域名</h2><p>请在你的域名托管商内添加一个<strong>CNAME</strong>记录：<strong>cname-china.vercel-dns.com</strong>或者<strong>A</strong>记录：<strong>76.76.21.21</strong>或<strong>76.76.21.98</strong>，如图：</p>
+<p><img src="/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p>
+<p>接着去到你创建好的Project，点击<strong>Settings</strong>-&gt;<strong>Domains</strong>，再上面输入你的域名！</p>
+<p><img src="/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p>
+<p>如果你配置错了，可能就会：</p>
+<p><img src="/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p>
+<p><img src="/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p>
+<p>你也可以使用Vercel的自带域名（被ban了）：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">你喜欢的名字.vercel.app</span><br></pre></td></tr></table></figure>
+
+<h2 id="Part3-安全系统"><a href="#Part3-安全系统" class="headerlink" title="Part3. 安全系统"></a>Part3. 安全系统</h2><ol>
+<li><p>进入<strong>Settings</strong>-&gt;<strong>Security</strong></p>
+</li>
+<li><p>可以将<strong>Attack Challenge Mode</strong>打开（通过向每位访客显示验证质询来防止恶意流量），效果就不展示了。</p>
+</li>
+<li><p>下面的都可以打开。</p>
+</li>
+</ol>
+<h2 id="Part4-优化"><a href="#Part4-优化" class="headerlink" title="Part4. 优化"></a>Part4. 优化</h2><p>可以提出建议！我可能会采纳！</p>
+<ul>
+<li>进入<strong>Settings</strong>-&gt;<strong>Functions</strong>，可将服务器改为香港的（好像小日子的更快），如：</li>
+</ul>
+<p><img src="/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel挺好用的。</p>
+<p>版权所有©MC-Sep 2023~2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>Github</tag>
+        <tag>Pages</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>线性DP学习笔记</title>
     <url>//post/4plk.html</url>
     <content><![CDATA[<h1 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h1><p>最长上升子序列（longest  increasing subsequence），也可以叫最长非降序子序列，简称LIS，不是太难。即一个数的序列bi，当b1 &lt; b2 &lt; … &lt; bS的时候，我们称这个序列是上升的。对于给定的一个序列(a1, a2, …, aN)，我们可以得到一些上升的子序列(ai1, ai2, …, aiK)，这里1 &lt;&#x3D; i1 &lt; i2 &lt; … &lt; iK &lt;&#x3D; N，但必须按照一定。比如，对于序列(1, 7, 3, 5, 9, 4, 8)，有它的一些上升子序列，如(1, 7), (3, 4, 8)等等。这些子序列中最长的长度是4，比如子序列(1, 3, 5, 8)。</p>
@@ -710,56 +566,226 @@
       </tags>
   </entry>
   <entry>
-    <title>C++之BFS深度优先搜索</title>
-    <url>//post/6hsw.html</url>
+    <title>【Hexo】Hexo+Github搭建个人博客</title>
+    <url>//post/4nd3.html</url>
+    <content><![CDATA[<div class="note  info flat"><ul>
+<li>2024.9.21，<strong>Cquitra</strong>指出并修改了文章中的<strong>2</strong>处错误，感谢贡献！</li>
+</ul>
+</div>
+
+<div class="note  info simple"><p>预计完成时间90分钟，请放心食用！</p>
+</div>
+
+<div class="note  danger simple"><p>密码不可以外传（除非允许），不然你会被列入<strong>黑名单</strong>！</p>
+</div>
+
+<div class="note  warning simple"><p>鉴于Github的访问慢，可以使用<a href="https://steampp.net/">Watt Toolkit加速器</a>进行访问，可以加速许多游戏和网站！</p>
+</div>
+
+
+<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>最近我收到了亿点点私信：</p>
+<p><img src="/img/article/1/831c75073352d065bee94f80b1f8db2d5bf523bd664d31ca8ac8eec650d7188d.png"></p>
+<p><img src="/img/article/1/4bead4b616ac5f73dedd50bdabcc628a640bb89c34977f9b899514bf139f0107.png"></p>
+<p><img src="/img/article/1/f0740c4deb5f6051d9604821191f48805ce9031ccfaeda767b6e965f36e5a7c2.png"></p>
+<p>所以！今天我就出教程吧！！！</p>
+<h1 id="实践s"><a href="#实践s" class="headerlink" title="实践s"></a>实践s</h1><h3 id="Part1-准备活动"><a href="#Part1-准备活动" class="headerlink" title="Part1.准备活动"></a>Part1.准备活动</h3><ol>
+<li><p>下载<strong>Node.js</strong>（<button class="btn-sco " onclick="window.open('https://nodejs.cn/')" 
+  title="点击下载"><i class="solitude st-lightbulb-line"></i><span>点击下载</span></button>）</p>
+</li>
+<li><p>下载后的文件会是：<img class="inline-img" src="/img/article/1/d0d34066b3d1349ca5a31c7b03a47f8f7fefb51a38e5c520717d4899b2f74952.png" /> ，打开后一路<code>Next</code>。</p>
+</li>
+</ol>
+<div class="note  warning simple"><p>不建议修改安装路径，否则可能会无法调用<code>系统变量</code>！</p>
+</div>
+
+<ol start="3">
+<li>下载完毕后打开<code>cmd</code>，输入</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/article/1/ec9601d45ca8f7d78bb9f8a711be160c05efee79d4a26f3ee5edc75750cec21c.png"></p>
+<p>等待下载，注意期间不要按Ctrl+C，否则会导致进度<label class="hl-label bg-red">取消</label> ！</p>
+<p>下载完毕后：</p>
+<p><img src="/img/article/1/37571ffc50dd2032305e07efae54f6cad9bf503925b6b21fc9b024399ab1e167.png"></p>
+<ol start="4">
+<li>打开任意一个<code>空</code>文件夹，在导航栏打开cmd，分别输入（每输入一行等待）：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>hexo init blog</code>：安装博客到blog文件夹里</li>
+<li><code>npm install</code>：安装依赖</li>
+</ul>
+<ol start="6">
+<li>到这里，你的博客已经初步成型：</li>
+</ol>
+<p><img src="/img/article/1/99586ae7171f8fa78c7b390cd8073b8d815c9cacada82fb3cff1d1c105187a69.png"></p>
+<h2 id="Part2-博客配置文件和主题配置文件的认识"><a href="#Part2-博客配置文件和主题配置文件的认识" class="headerlink" title="Part2: 博客配置文件和主题配置文件的认识"></a>Part2: 博客配置文件和主题配置文件的认识</h2><p>博客配置文件是这个东西：<img src="/img/article/1/f4a84c180811b3ead36d09a908abee0c7d01c18be9afa368bcbf109d7d92959e.png"></p>
+<p>打开后的东西：</p>
+<div class="note  warning simple"><p>注意：各个值的配置之间要和<code>:</code>之间有一个空格！例如：<code>name: value</code></p>
+</div>
+
+<ul>
+<li>title: 你的博客标题</li>
+<li>subtitle: 你的博客副标题</li>
+<li>description: 你的博客介绍</li>
+<li>author: 博客作者名字</li>
+<li>language: 语言，可以选择<code>en</code>，<code>zh-CN</code>和<code>zh-TW</code></li>
+<li>timezone: 时区，建议填<code>Asia/Shanghai</code></li>
+<li>url: 你的博客地址，必须填对！否则站内图片将会加载出问题</li>
+<li>theme: 主题名字，全部是小写</li>
+</ul>
+<p>其余的可以不用配置。</p>
+<p>主题配置文件请见你选择的主题的官方文档。</p>
+<h2 id="Part3-基本命令"><a href="#Part3-基本命令" class="headerlink" title="Part3: 基本命令"></a>Part3: 基本命令</h2><ul>
+<li><code>hexo cl</code>:清理博客缓存</li>
+<li><code>hexo s</code>:启动本地服务器，可以从<code>http://localhost:4000/</code>访问</li>
+<li><code>hexo g</code>:生成博客主文件，保存至public文件夹内，以后上传到Github要用</li>
+<li><code>hexo d</code>:通过git的方式上传到Github</li>
+</ul>
+<h2 id="Part4-安装-使用主题"><a href="#Part4-安装-使用主题" class="headerlink" title="Part4: 安装&amp;使用主题"></a>Part4: 安装&amp;使用主题</h2><p>可以前去<button class="btn-sco " onclick="window.open('https://hexo.io/themes')" 
+  title="Hexo Themes"><i class="solitude st-lightbulb-line"></i><span>Hexo Themes</span></button>挑选你喜欢的主题！</p>
+<p>不懂得如何安装的可以加入我的QQ群或加我QQ<code>3630179822</code>或下方留言！</p>
+<h2 id="Part5-上传到Github"><a href="#Part5-上传到Github" class="headerlink" title="Part5: 上传到Github"></a>Part5: 上传到Github</h2><ol>
+<li>打开你的博客源文件，打开<code>cmd</code>，输入：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>等待生成博客源文件。</p>
+<ol start="2">
+<li>打开<button class="btn-sco " onclick="window.open('https://github.com')" 
+  title="Github"><i class="solitude st-lightbulb-line"></i><span>Github</span></button>，如下图：</li>
+</ol>
+<p><img src="/img/article/1/6816ace35cb5d27ea0d2c1a765e536c4517cc4c562e4df11a60523d8abf51f4c.png"></p>
+<ol start="3">
+<li>点击<img src="/img/article/1/df217c019f410eab4ca7e7a130ef206565a267bde692d8f146528043b7c36e12.png">，如下图：</li>
+</ol>
+<p><img src="/img/article/1/9fee061f2c82ef8833a6ba17f9bb898951749953919b048c26d74eaccc754b1c.png"></p>
+<ul>
+<li><p><img src="/img/article/1/4922810fd9d9e09ced18c74ea9cf7edbd2f12cd04852da015ee3e17ecb5991da.png">：你的邮箱</p>
+</li>
+<li><p><img src="/img/article/1/3b7e85db21c338eff30c33d588b31814852cf4ae85a3f2f6eacd0ce9e1836ba1.png">：你的密码</p>
+</li>
+<li><p><img src="/img/article/1/a9a751589440a751b4d71f58199310a4d569146cbd94c4046ede1184632a3b23.png">：你的用户名（好好填！以后你的网站要用）</p>
+</li>
+<li><p><img src="/img/article/1/945c106798566807d113d280dc73e6d9e14754680929e89c656b526c87f8122a.png">：你是否接收Github发送的活动通知</p>
+</li>
+</ul>
+<p>然后他们检查你的链接安全性，如下图:<br><img src="/img/article/1/8730fbe6ccace43796bd27dd85ac1fe749be814e646f128fb81e2191070766fa.png"></p>
+<p>情况1：直接通过</p>
+<p>情况2：如下图</p>
+<p><img src="/img/article/1/ad827d799a0ee6bd7bd381728d8879534784be2f3c44ed5c8d7be6eb3f7e0d7c.png"></p>
+<p>按照提示完成即可。</p>
+<ol start="4">
+<li>然后就进入Github主页面了：</li>
+</ol>
+<p><img src="/img/article/1/62cec8d35f912bba3802f23b0c84d4b09b9daa4b2c3386850b099307c5b2bfa6.png"></p>
+<p>点击<img src="/img/article/1/9661467d4657aef14cd39180743ca7ac34eef59dd489c1116e27e782cd245dac.png"></p>
+<p>第一步<br><img src="/img/article/1/885b4cc6de6026b5cb42f0a5f9e43fade4abf890b43a0675bc87907556d5c69b.png"><br>第二步（描述）<br><img src="/img/article/1/d9d067079f4ed210f6d42998aa9f2508b529a30e322f2169538775518da9f393.png"><br>第三步<br><img src="/img/article/1/54bce0caad0455e3817a3174157c978388056f3f5aa1b0876ba18bf06efd459d.png"></p>
+<p>最后点<code>Create repository</code>。</p>
+<ol start="5">
+<li>进入仓库页面：</li>
+</ol>
+<p><img src="/img/article/1/724a3bf6f78ef3e9f93a617949435624c6330525bd2fcd10f8c7d684a6944b78.png"></p>
+<p>点<code>Add file</code>➡<code>Upload files</code>。</p>
+<p>之后的页面：</p>
+<p><img src="/img/article/1/75df6fcc0879c1990ac029d3af262a47434a216f8b5e44b467aae2cd9eae62d6.png"></p>
+<p>将之前讲的<code>public</code>文件夹打开，把全部文件拖进去。</p>
+<div class="note  danger simple"><p>注意：单次上传的文件不能大于100件或100MB!</p>
+</div>
+
+<p>最后点<code>Commit Changes</code>。</p>
+<ol start="6">
+<li>等待几分钟，就可以通过下面的地址访问了！</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://你的用户名.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>Hexo</code>是一个很不错的博客框架，适合绝大部分用户。</p>
+<p>版权所有©Minecraft-Sep。</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Github</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++之数据结构--栈</title>
+    <url>//post/54ds.html</url>
     <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
 <p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
 </div>
 
 
 
-<p><strong>提示</strong>：本文大部分是手写的，由于手的问题（不想打），大家就看图片把</p>
-<h1 id="C-搜索02-BFS"><a href="#C-搜索02-BFS" class="headerlink" title="C++搜索02-BFS"></a>C++搜索02-BFS</h1><h2 id="引入-样例1、2讲解"><a href="#引入-样例1、2讲解" class="headerlink" title="引入&amp;样例1、2讲解"></a>引入&amp;样例1、2讲解</h2><p><img src="https://img.zshfoj.com/45ed44773337856930c2bb06f9254cc58227d386e567b6c3c1fa9190ac0b4925.png"></p>
-<p><img src="https://img.zshfoj.com/c153965a49b0eaf5feb77deaa030670be87876ab9d8630044241ea2f88d67961.png"></p>
-<p><img src="https://img.zshfoj.com/75781dd2d170243ab0c67a16b7afcd96cad49d3ca8272e219b31dd226a043261.png"></p>
-<p><img src="https://img.zshfoj.com/376dc19c6f7302d10060fde3285dc16a85a0f674b75eab7e405e47f80d953011.png"></p>
-<p><img src="https://img.zshfoj.com/566c19308b208c54b575b5f35a4981777e0bf6b8526171ec98cad82502a78b6b.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>宽度优先搜索算法（又称广度优先搜索）是最简便的图的搜索算法之一，这一算法也是很多重要的图的算法的原型。Dijkstra单源最短路径算法和Prim最小生成树算法都采用了和宽度优先搜索类似的思想。其别名又叫BFS，属于一种盲目搜寻法，目的是系统地展开并检查图中的所有节点，以找寻结果。换句话说，它并不考虑结果的可能位置，彻底地搜索整张图，直到找到结果为止。</p>
-<p><img src="https://img.zshfoj.com/7e1b66de2f16cd0914b7b022f2e6e3840ea0d7698cb9a4a3fee0df1be3849de6.png"></p>
-<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="1-Luogu-B3625-迷宫寻路"><a href="#1-Luogu-B3625-迷宫寻路" class="headerlink" title="1.Luogu B3625 迷宫寻路"></a>1.Luogu B3625 迷宫寻路</h3><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>机器猫被困在一个矩形迷宫里。</p>
-<p>迷宫可以视为一个 n * m 矩阵，每个位置要么是空地，要么是墙。机器猫只能从一个空地走到其上、下、左、右的空地。</p>
-<p>机器猫初始时位于 (1, 1) 的位置，问能否走到 (n, m) 位置。</p>
-<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><p>第一行，两个正整数 n,m。  </p>
-<p>接下来 n 行，输入这个迷宫。每行输入一个长为 $m$ 的字符串，<code>#</code> 表示墙，<code>.</code> 表示空地。</p>
-<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>仅一行，一个字符串。如果机器猫能走到 (n, m)，则输出 <code>Yes</code>；否则输出 <code>No</code>。</p>
-<p>禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h3><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 5</span><br><span class="line">.##.#</span><br><span class="line">.#...</span><br><span class="line">...#.</span><br></pre></td></tr></table></figure>
+<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>栈是 OI 中常用的一种线性数据结构。请注意，本文主要讲的是栈这种数据结构，而非程序运行时的系统栈&#x2F;栈空间。</p>
+<p>栈的修改与访问是按照后进先出的原则进行的，因此栈通常被称为是后进先出（last in first out）表，简称 LIFO 表。</p>
+<h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><p>LIFO 表达的是 当前在容器 内最后进来的最先出去。</p>
+<p>我们考虑这样一个栈</p>
+<ul>
+<li>push(1)</li>
+<li>pop(1)</li>
+<li>push(2)</li>
+<li>pop(2)<br>如果从整体考虑，1 最先入栈，最先出栈，2 最后入栈，最后出栈，这样就成了一个先进先出表，显然是错误的。</li>
+</ul>
+<p>所以，在考虑数据结构是 LIFO 还是 FIFO 的时候，应当考虑在当前容器内的情况。</p>
+<h2 id="使用数组模拟栈"><a href="#使用数组模拟栈" class="headerlink" title="使用数组模拟栈"></a>使用数组模拟栈</h2><p>我们可以方便的使用数组来模拟一个栈，如下：</p>
+<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> st[N];</span><br><span class="line"><span class="comment">// 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 压栈 ：</span></span><br><span class="line">st[++*st] = var1;</span><br><span class="line"><span class="comment">// 取栈顶 ：</span></span><br><span class="line"><span class="type">int</span> u = st[*st];</span><br><span class="line"><span class="comment">// 弹栈 ：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> (*st) --*st;</span><br><span class="line"><span class="comment">// 清空栈</span></span><br><span class="line">*st = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">0</span>] * N</span><br><span class="line"><span class="comment"># 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压栈 ：</span></span><br><span class="line">st[st[<span class="number">0</span>] + <span class="number">1</span>] = var1</span><br><span class="line">st[<span class="number">0</span>] = st[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line"><span class="comment"># 取栈顶：</span></span><br><span class="line">u = st[st[<span class="number">0</span>]]</span><br><span class="line"><span class="comment"># 弹栈：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> st[<span class="number">0</span>]:</span><br><span class="line">    st[<span class="number">0</span>] = st[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line"><span class="comment"># 清空栈</span></span><br><span class="line">st[<span class="number">0</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Yes</span><br></pre></td></tr></table></figure>
+<h2 id="C-STL-中的栈"><a href="#C-STL-中的栈" class="headerlink" title="C++ STL 中的栈"></a>C++ STL 中的栈</h2><p>C++ 中的 STL 也提供了一个容器 std::stack，使用前需要引入 stack 头文件。</p>
+<p>STL 中的 stack 容器提供了一众成员函数以供调用，其中较为常用的有：</p>
+<ul>
+<li>元素访问<br>st.top() 返回栈顶</li>
+<li>修改<br>st.push() 插入传入的参数到栈顶<br>st.pop() 弹出栈顶</li>
+<li>容量<br>st.empty() 返回是否为空<br>st.size() 返回元素数量<br>此外，std::stack 还提供了一些运算符。较为常用的是使用赋值运算符 &#x3D; 为 stack 赋值，示例：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新建两个栈 st1 和 st2</span></span><br><span class="line">std::stack&lt;<span class="type">int</span>&gt; st1, st2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 st1 装入 1</span></span><br><span class="line">st1.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 st1 赋值给 st2</span></span><br><span class="line">st2 = st1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 st2 的栈顶元素</span></span><br><span class="line">cout &lt;&lt; st2.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出: 1</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="使用-Python-中的-list-模拟栈"><a href="#使用-Python-中的-list-模拟栈" class="headerlink" title="使用 Python 中的 list 模拟栈"></a>使用 Python 中的 list 模拟栈</h2><p>在 Python 中，你可以使用列表来模拟一个栈：</p>
+<p>实现</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">5</span>, <span class="number">1</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 向栈顶添加元素</span></span><br><span class="line">st.append(<span class="number">2</span>)</span><br><span class="line">st.append(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pop 取出栈顶元素</span></span><br><span class="line">st.pop()</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 clear 清空栈</span></span><br><span class="line">st.clear()</span><br></pre></td></tr></table></figure>
 
-<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><h4 id="样例解释"><a href="#样例解释" class="headerlink" title="样例解释"></a>样例解释</h4><p>路线如下：(1,1)to (2,1) to (3,1) to (3,2)to (3,3) to (2, 3) to (2, 4) to (2, 5) to (3, 5)</p>
-<h4 id="数据规模与约定"><a href="#数据规模与约定" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h4><p>对于 $100%$ 的数据，保证 1 &lt;&#x3D; n, m &lt;&#x3D; 100，且 (1,1) 和 (n, m) 均为空地。</p>
-<h2 id="题解（这次真的是我写的了）"><a href="#题解（这次真的是我写的了）" class="headerlink" title="题解（这次真的是我写的了）"></a>题解（这次真的是我写的了）</h2><h2 id="P3625-迷宫寻路题解"><a href="#P3625-迷宫寻路题解" class="headerlink" title="P3625 迷宫寻路题解"></a>P3625 迷宫寻路题解</h2><h3 id="题意："><a href="#题意：" class="headerlink" title="题意："></a>题意：</h3><p>我们根据长和宽输入迷宫，判断能否达到$(n,m)$<br>位置，如果可以输出<code>Yes</code>，否则输出<code>No</code></p>
-<h3 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h3><p>用<strong>BFS</strong>进行搜索，搜索可行路线，找到一条去终点的路线</p>
-<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> x;</span><br><span class="line">	<span class="type">int</span> y;</span><br><span class="line">	<span class="type">int</span> s;<span class="comment">//步数 </span></span><br><span class="line">&#125; que[<span class="number">10001</span>];</span><br><span class="line"><span class="type">int</span> head,tail,r,s,p,q;</span><br><span class="line"><span class="type">char</span> c[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//保存地图</span></span><br><span class="line"><span class="type">bool</span> flag;<span class="comment">//标记是否达到目标点，0未到，1已到</span></span><br><span class="line"><span class="type">int</span> a[<span class="number">4</span>]=&#123;<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;,b[<span class="number">4</span>]=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>&#125;;<span class="comment">//可走的组合</span></span><br><span class="line"><span class="type">bool</span> f[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//记录已走的点</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(head&lt;tail)<span class="comment">//队列不为空时操作</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">3</span>;i++)<span class="comment">//枚举四个方向</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">int</span> xx=que[head].x+a[i];</span><br><span class="line">			<span class="type">int</span> yy=que[head].y+b[i];</span><br><span class="line">			<span class="keyword">if</span>(xx&gt;=<span class="number">1</span>&amp;&amp;xx&lt;=r&amp;&amp;yy&gt;=<span class="number">1</span>&amp;&amp;yy&lt;=s&amp;&amp;c[xx][yy]==<span class="string">&#x27;.&#x27;</span>&amp;&amp;!f[xx][yy])<span class="comment">//判断x,y下一步是否可走且是否走过</span></span><br><span class="line">			&#123;</span><br><span class="line">				f[xx][yy]=<span class="number">1</span>;<span class="comment">//标记已走</span></span><br><span class="line">				que[tail].x=xx;</span><br><span class="line">				que[tail].y=yy; <span class="comment">//更新xx和yy的值</span></span><br><span class="line">				que[tail].s=que[head].s+<span class="number">1</span>;<span class="comment">//步数是父亲的步数+1</span></span><br><span class="line">				tail++; </span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(xx==p&amp;&amp;yy==q)<span class="comment">//如果找到目标点</span></span><br><span class="line">			&#123;</span><br><span class="line">				flag=<span class="number">1</span>;<span class="comment">//标记已完成</span></span><br><span class="line">				<span class="keyword">break</span>;<span class="comment">//退出	</span></span><br><span class="line">			&#125; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">if</span>(flag==<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">		head++;<span class="comment">//head++才能对后面的点进行二次扩展 </span></span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;r&gt;&gt;s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=r;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=s;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin&gt;&gt;c[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	p=r;q=s;<span class="comment">//终点坐标</span></span><br><span class="line">	head=<span class="number">1</span>;tail=<span class="number">2</span>;</span><br><span class="line">	que[tail].x=<span class="number">1</span>; que[tail].y=<span class="number">1</span>; que[tail].s=<span class="number">0</span>+<span class="number">1</span>;</span><br><span class="line">	tail++;</span><br><span class="line">	f[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	flag=<span class="number">0</span>;</span><br><span class="line">	<span class="comment">//初始化</span></span><br><span class="line">	<span class="built_in">bfs</span>();</span><br><span class="line">	<span class="keyword">if</span>(flag==<span class="number">1</span>) cout&lt;&lt;<span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;No&quot;</span>; </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="NOIP2013-普及组-表达式求值"><a href="#NOIP2013-普及组-表达式求值" class="headerlink" title="[NOIP2013 普及组] 表达式求值"></a>[NOIP2013 普及组] 表达式求值</h1><h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>NOIP2013 普及组 T2</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包含加法和乘法的算术表达式，请你编程计算表达式的值。</p>
+<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>一行，为需要你计算的表达式，表达式中只包含数字、加法运算符 <code>+</code> 和乘法运算符 <code>*</code>，且没有括号，所有参与运算的数字均为 $0$ 到   $2^{31}-1$ 之间的整数。  </p>
+<p>输入数据保证这一行只有 <code>0123456789+*</code> 这 $12$ 种字符。</p>
+<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个整数，表示这个表达式的值。  </p>
+<p>注意：当答案长度多于 $4$ 位时，请只输出最后 $ 4$ 位，前导 $ 0$ 不输出。</p>
+<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1*3+4</span><br></pre></td></tr></table></figure>
 
-<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h2 id="P1443-马的遍历"><a href="#P1443-马的遍历" class="headerlink" title="P1443 马的遍历"></a>P1443 马的遍历</h2><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>有一个 n * m 的棋盘，在某个点 (x, y) 上有一个马，要求你计算出马到达棋盘上任意一个点最少要走几步。</p>
-<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>输入只有一行四个整数，分别为 n, m, x, y。</p>
-<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个 n * m 的矩阵，代表马到达某个点最少要走几步（不能到达则输出 -1）。</p>
-<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 3 1 1</span><br></pre></td></tr></table></figure>
+<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
 
-<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0    3    2    </span><br><span class="line">3    -1   1    </span><br><span class="line">2    1    4</span><br></pre></td></tr></table></figure>
+<h2 id="样例-2"><a href="#样例-2" class="headerlink" title="样例 #2"></a>样例 #2</h2><h3 id="样例输入-2"><a href="#样例输入-2" class="headerlink" title="样例输入 #2"></a>样例输入 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1234567890*1</span><br></pre></td></tr></table></figure>
 
-<h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><h3 id="数据规模与约定-1"><a href="#数据规模与约定-1" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h3><p>对于全部的测试点，保证 1 &lt;&#x3D; x &lt;&#x3D; n &lt;&#x3D; 400，1 &lt;&#x3D; y &lt;&#x3D; m &lt;&#x3D; 400。</p>
-<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>更多练习请见: <a href="https://www.luogu.com.cn/training/463808">https://www.luogu.com.cn/training/463808</a></p>
-<p>本文的作者是<strong>Minecraft-Sep</strong>，本文原创，禁止抄袭！</p>
+<h3 id="样例输出-2"><a href="#样例输出-2" class="headerlink" title="样例输出 #2"></a>样例输出 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7891</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例-3"><a href="#样例-3" class="headerlink" title="样例 #3"></a>样例 #3</h2><h3 id="样例输入-3"><a href="#样例输入-3" class="headerlink" title="样例输入 #3"></a>样例输入 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1000000003*1</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-3"><a href="#样例输出-3" class="headerlink" title="样例输出 #3"></a>样例输出 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>对于 $30%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100$。</p>
+<p>对于 $80%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤1000$。</p>
+<p>对于 $100%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100000$。</p>
+<h2 id="参考代码-他人博客"><a href="#参考代码-他人博客" class="headerlink" title="参考代码(他人博客)"></a>参考代码(他人博客)</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">stack &lt;<span class="type">int</span>&gt; x;<span class="comment">//一个存数字并在最后把它们相加的栈</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a,b;</span><br><span class="line">	<span class="type">char</span> c;</span><br><span class="line">	cin&gt;&gt;a;<span class="comment">//先输入一个数，以后符号+数字输入</span></span><br><span class="line">	<span class="type">int</span> m=<span class="number">10000</span>;</span><br><span class="line">	a=a%m;<span class="comment">//必须的操作</span></span><br><span class="line">	x.<span class="built_in">push</span>(a);<span class="comment">//压入栈中</span></span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;c&gt;&gt;b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>)<span class="comment">//将*之前的数字与*之后的数字积存入</span></span><br><span class="line">		&#123;</span><br><span class="line">			a=x.<span class="built_in">top</span>();</span><br><span class="line">			x.<span class="built_in">pop</span>();</span><br><span class="line">			x.<span class="built_in">push</span>(a*b%m);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//将b存入</span></span><br><span class="line">			x.<span class="built_in">push</span>(b);</span><br><span class="line">	&#125;</span><br><span class="line">	a=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		a+=x.<span class="built_in">top</span>();</span><br><span class="line">		a%=m;<span class="comment">//取模是万恶之源</span></span><br><span class="line">		x.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;a&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>另外说一句，Python2提交这个代码直接AC!</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">input</span>()%<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="取牌游戏"><a href="#取牌游戏" class="headerlink" title="取牌游戏"></a>取牌游戏</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>小明正在使用一堆共K张纸牌与N-1个朋友玩取牌游戏。其中，N&lt;&#x3D;K&lt;&#x3D;100000,2&lt;&#x3D;N&lt;&#x3D;100,K是N的倍数。纸牌中包含M&#x3D;K&#x2F;N张“good”和K-M张“bad”牌。小明负责发牌，他当然想自己获得所有的“good”牌。<br>他的朋友怀疑他会欺骗，所以他们给出以下一些限制，以防小明耍诈：<br>（1）	游戏开始时，将最上面的牌发给小明右手边的人。<br>（2）	每发完一张牌，他必须将接下来的p张牌（1&lt;&#x3D;p&lt;&#x3D;10）一张一张地依次移到最后，放在牌堆的底部。<br>（3）	以逆时针方向，连续给每位玩家发牌。<br>小明迫切想赢，请你帮助他算出所有“good”牌放置的位置，以便他得到所有的“good”牌。牌从上往下依次标注为1，2，3，…</p>
+<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行，3个用一个空格间隔的正整数N,K,P。</p>
+<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>M行，从顶部按升序依次输出“good”牌的位置。</p>
+<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 9 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>C++</category>
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>搜索</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -862,133 +888,56 @@
       </tags>
   </entry>
   <entry>
-    <title>C++之数据结构--栈</title>
-    <url>//post/54ds.html</url>
+    <title>C++之BFS深度优先搜索</title>
+    <url>//post/6hsw.html</url>
     <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
 <p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
 </div>
 
 
 
-<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>栈是 OI 中常用的一种线性数据结构。请注意，本文主要讲的是栈这种数据结构，而非程序运行时的系统栈&#x2F;栈空间。</p>
-<p>栈的修改与访问是按照后进先出的原则进行的，因此栈通常被称为是后进先出（last in first out）表，简称 LIFO 表。</p>
-<h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><p>LIFO 表达的是 当前在容器 内最后进来的最先出去。</p>
-<p>我们考虑这样一个栈</p>
-<ul>
-<li>push(1)</li>
-<li>pop(1)</li>
-<li>push(2)</li>
-<li>pop(2)<br>如果从整体考虑，1 最先入栈，最先出栈，2 最后入栈，最后出栈，这样就成了一个先进先出表，显然是错误的。</li>
-</ul>
-<p>所以，在考虑数据结构是 LIFO 还是 FIFO 的时候，应当考虑在当前容器内的情况。</p>
-<h2 id="使用数组模拟栈"><a href="#使用数组模拟栈" class="headerlink" title="使用数组模拟栈"></a>使用数组模拟栈</h2><p>我们可以方便的使用数组来模拟一个栈，如下：</p>
-<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> st[N];</span><br><span class="line"><span class="comment">// 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 压栈 ：</span></span><br><span class="line">st[++*st] = var1;</span><br><span class="line"><span class="comment">// 取栈顶 ：</span></span><br><span class="line"><span class="type">int</span> u = st[*st];</span><br><span class="line"><span class="comment">// 弹栈 ：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> (*st) --*st;</span><br><span class="line"><span class="comment">// 清空栈</span></span><br><span class="line">*st = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">0</span>] * N</span><br><span class="line"><span class="comment"># 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压栈 ：</span></span><br><span class="line">st[st[<span class="number">0</span>] + <span class="number">1</span>] = var1</span><br><span class="line">st[<span class="number">0</span>] = st[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line"><span class="comment"># 取栈顶：</span></span><br><span class="line">u = st[st[<span class="number">0</span>]]</span><br><span class="line"><span class="comment"># 弹栈：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> st[<span class="number">0</span>]:</span><br><span class="line">    st[<span class="number">0</span>] = st[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line"><span class="comment"># 清空栈</span></span><br><span class="line">st[<span class="number">0</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p><strong>提示</strong>：本文大部分是手写的，由于手的问题（不想打），大家就看图片把</p>
+<h1 id="C-搜索02-BFS"><a href="#C-搜索02-BFS" class="headerlink" title="C++搜索02-BFS"></a>C++搜索02-BFS</h1><h2 id="引入-样例1、2讲解"><a href="#引入-样例1、2讲解" class="headerlink" title="引入&amp;样例1、2讲解"></a>引入&amp;样例1、2讲解</h2><p><img src="https://img.zshfoj.com/45ed44773337856930c2bb06f9254cc58227d386e567b6c3c1fa9190ac0b4925.png"></p>
+<p><img src="https://img.zshfoj.com/c153965a49b0eaf5feb77deaa030670be87876ab9d8630044241ea2f88d67961.png"></p>
+<p><img src="https://img.zshfoj.com/75781dd2d170243ab0c67a16b7afcd96cad49d3ca8272e219b31dd226a043261.png"></p>
+<p><img src="https://img.zshfoj.com/376dc19c6f7302d10060fde3285dc16a85a0f674b75eab7e405e47f80d953011.png"></p>
+<p><img src="https://img.zshfoj.com/566c19308b208c54b575b5f35a4981777e0bf6b8526171ec98cad82502a78b6b.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>宽度优先搜索算法（又称广度优先搜索）是最简便的图的搜索算法之一，这一算法也是很多重要的图的算法的原型。Dijkstra单源最短路径算法和Prim最小生成树算法都采用了和宽度优先搜索类似的思想。其别名又叫BFS，属于一种盲目搜寻法，目的是系统地展开并检查图中的所有节点，以找寻结果。换句话说，它并不考虑结果的可能位置，彻底地搜索整张图，直到找到结果为止。</p>
+<p><img src="https://img.zshfoj.com/7e1b66de2f16cd0914b7b022f2e6e3840ea0d7698cb9a4a3fee0df1be3849de6.png"></p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="1-Luogu-B3625-迷宫寻路"><a href="#1-Luogu-B3625-迷宫寻路" class="headerlink" title="1.Luogu B3625 迷宫寻路"></a>1.Luogu B3625 迷宫寻路</h3><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>机器猫被困在一个矩形迷宫里。</p>
+<p>迷宫可以视为一个 n * m 矩阵，每个位置要么是空地，要么是墙。机器猫只能从一个空地走到其上、下、左、右的空地。</p>
+<p>机器猫初始时位于 (1, 1) 的位置，问能否走到 (n, m) 位置。</p>
+<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><p>第一行，两个正整数 n,m。  </p>
+<p>接下来 n 行，输入这个迷宫。每行输入一个长为 $m$ 的字符串，<code>#</code> 表示墙，<code>.</code> 表示空地。</p>
+<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>仅一行，一个字符串。如果机器猫能走到 (n, m)，则输出 <code>Yes</code>；否则输出 <code>No</code>。</p>
+<p>禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！禁止只输出<code>Yes</code>或<code>No</code>骗分！</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h3><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 5</span><br><span class="line">.##.#</span><br><span class="line">.#...</span><br><span class="line">...#.</span><br></pre></td></tr></table></figure>
 
-<h2 id="C-STL-中的栈"><a href="#C-STL-中的栈" class="headerlink" title="C++ STL 中的栈"></a>C++ STL 中的栈</h2><p>C++ 中的 STL 也提供了一个容器 std::stack，使用前需要引入 stack 头文件。</p>
-<p>STL 中的 stack 容器提供了一众成员函数以供调用，其中较为常用的有：</p>
-<ul>
-<li>元素访问<br>st.top() 返回栈顶</li>
-<li>修改<br>st.push() 插入传入的参数到栈顶<br>st.pop() 弹出栈顶</li>
-<li>容量<br>st.empty() 返回是否为空<br>st.size() 返回元素数量<br>此外，std::stack 还提供了一些运算符。较为常用的是使用赋值运算符 &#x3D; 为 stack 赋值，示例：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新建两个栈 st1 和 st2</span></span><br><span class="line">std::stack&lt;<span class="type">int</span>&gt; st1, st2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 st1 装入 1</span></span><br><span class="line">st1.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 st1 赋值给 st2</span></span><br><span class="line">st2 = st1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 st2 的栈顶元素</span></span><br><span class="line">cout &lt;&lt; st2.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出: 1</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="使用-Python-中的-list-模拟栈"><a href="#使用-Python-中的-list-模拟栈" class="headerlink" title="使用 Python 中的 list 模拟栈"></a>使用 Python 中的 list 模拟栈</h2><p>在 Python 中，你可以使用列表来模拟一个栈：</p>
-<p>实现</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">5</span>, <span class="number">1</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 向栈顶添加元素</span></span><br><span class="line">st.append(<span class="number">2</span>)</span><br><span class="line">st.append(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pop 取出栈顶元素</span></span><br><span class="line">st.pop()</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 clear 清空栈</span></span><br><span class="line">st.clear()</span><br></pre></td></tr></table></figure>
+<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Yes</span><br></pre></td></tr></table></figure>
 
-<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="NOIP2013-普及组-表达式求值"><a href="#NOIP2013-普及组-表达式求值" class="headerlink" title="[NOIP2013 普及组] 表达式求值"></a>[NOIP2013 普及组] 表达式求值</h1><h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>NOIP2013 普及组 T2</p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包含加法和乘法的算术表达式，请你编程计算表达式的值。</p>
-<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>一行，为需要你计算的表达式，表达式中只包含数字、加法运算符 <code>+</code> 和乘法运算符 <code>*</code>，且没有括号，所有参与运算的数字均为 $0$ 到   $2^{31}-1$ 之间的整数。  </p>
-<p>输入数据保证这一行只有 <code>0123456789+*</code> 这 $12$ 种字符。</p>
-<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个整数，表示这个表达式的值。  </p>
-<p>注意：当答案长度多于 $4$ 位时，请只输出最后 $ 4$ 位，前导 $ 0$ 不输出。</p>
-<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1*3+4</span><br></pre></td></tr></table></figure>
+<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><h4 id="样例解释"><a href="#样例解释" class="headerlink" title="样例解释"></a>样例解释</h4><p>路线如下：(1,1)to (2,1) to (3,1) to (3,2)to (3,3) to (2, 3) to (2, 4) to (2, 5) to (3, 5)</p>
+<h4 id="数据规模与约定"><a href="#数据规模与约定" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h4><p>对于 $100%$ 的数据，保证 1 &lt;&#x3D; n, m &lt;&#x3D; 100，且 (1,1) 和 (n, m) 均为空地。</p>
+<h2 id="题解（这次真的是我写的了）"><a href="#题解（这次真的是我写的了）" class="headerlink" title="题解（这次真的是我写的了）"></a>题解（这次真的是我写的了）</h2><h2 id="P3625-迷宫寻路题解"><a href="#P3625-迷宫寻路题解" class="headerlink" title="P3625 迷宫寻路题解"></a>P3625 迷宫寻路题解</h2><h3 id="题意："><a href="#题意：" class="headerlink" title="题意："></a>题意：</h3><p>我们根据长和宽输入迷宫，判断能否达到$(n,m)$<br>位置，如果可以输出<code>Yes</code>，否则输出<code>No</code></p>
+<h3 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h3><p>用<strong>BFS</strong>进行搜索，搜索可行路线，找到一条去终点的路线</p>
+<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> x;</span><br><span class="line">	<span class="type">int</span> y;</span><br><span class="line">	<span class="type">int</span> s;<span class="comment">//步数 </span></span><br><span class="line">&#125; que[<span class="number">10001</span>];</span><br><span class="line"><span class="type">int</span> head,tail,r,s,p,q;</span><br><span class="line"><span class="type">char</span> c[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//保存地图</span></span><br><span class="line"><span class="type">bool</span> flag;<span class="comment">//标记是否达到目标点，0未到，1已到</span></span><br><span class="line"><span class="type">int</span> a[<span class="number">4</span>]=&#123;<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;,b[<span class="number">4</span>]=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>&#125;;<span class="comment">//可走的组合</span></span><br><span class="line"><span class="type">bool</span> f[<span class="number">1001</span>][<span class="number">1001</span>];<span class="comment">//记录已走的点</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(head&lt;tail)<span class="comment">//队列不为空时操作</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">3</span>;i++)<span class="comment">//枚举四个方向</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">int</span> xx=que[head].x+a[i];</span><br><span class="line">			<span class="type">int</span> yy=que[head].y+b[i];</span><br><span class="line">			<span class="keyword">if</span>(xx&gt;=<span class="number">1</span>&amp;&amp;xx&lt;=r&amp;&amp;yy&gt;=<span class="number">1</span>&amp;&amp;yy&lt;=s&amp;&amp;c[xx][yy]==<span class="string">&#x27;.&#x27;</span>&amp;&amp;!f[xx][yy])<span class="comment">//判断x,y下一步是否可走且是否走过</span></span><br><span class="line">			&#123;</span><br><span class="line">				f[xx][yy]=<span class="number">1</span>;<span class="comment">//标记已走</span></span><br><span class="line">				que[tail].x=xx;</span><br><span class="line">				que[tail].y=yy; <span class="comment">//更新xx和yy的值</span></span><br><span class="line">				que[tail].s=que[head].s+<span class="number">1</span>;<span class="comment">//步数是父亲的步数+1</span></span><br><span class="line">				tail++; </span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(xx==p&amp;&amp;yy==q)<span class="comment">//如果找到目标点</span></span><br><span class="line">			&#123;</span><br><span class="line">				flag=<span class="number">1</span>;<span class="comment">//标记已完成</span></span><br><span class="line">				<span class="keyword">break</span>;<span class="comment">//退出	</span></span><br><span class="line">			&#125; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">if</span>(flag==<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">		head++;<span class="comment">//head++才能对后面的点进行二次扩展 </span></span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cin&gt;&gt;r&gt;&gt;s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=r;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=s;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin&gt;&gt;c[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	p=r;q=s;<span class="comment">//终点坐标</span></span><br><span class="line">	head=<span class="number">1</span>;tail=<span class="number">2</span>;</span><br><span class="line">	que[tail].x=<span class="number">1</span>; que[tail].y=<span class="number">1</span>; que[tail].s=<span class="number">0</span>+<span class="number">1</span>;</span><br><span class="line">	tail++;</span><br><span class="line">	f[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">	flag=<span class="number">0</span>;</span><br><span class="line">	<span class="comment">//初始化</span></span><br><span class="line">	<span class="built_in">bfs</span>();</span><br><span class="line">	<span class="keyword">if</span>(flag==<span class="number">1</span>) cout&lt;&lt;<span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;No&quot;</span>; </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h2 id="P1443-马的遍历"><a href="#P1443-马的遍历" class="headerlink" title="P1443 马的遍历"></a>P1443 马的遍历</h2><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>有一个 n * m 的棋盘，在某个点 (x, y) 上有一个马，要求你计算出马到达棋盘上任意一个点最少要走几步。</p>
+<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>输入只有一行四个整数，分别为 n, m, x, y。</p>
+<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个 n * m 的矩阵，代表马到达某个点最少要走几步（不能到达则输出 -1）。</p>
+<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 3 1 1</span><br></pre></td></tr></table></figure>
 
-<h2 id="样例-2"><a href="#样例-2" class="headerlink" title="样例 #2"></a>样例 #2</h2><h3 id="样例输入-2"><a href="#样例输入-2" class="headerlink" title="样例输入 #2"></a>样例输入 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1234567890*1</span><br></pre></td></tr></table></figure>
+<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0    3    2    </span><br><span class="line">3    -1   1    </span><br><span class="line">2    1    4</span><br></pre></td></tr></table></figure>
 
-<h3 id="样例输出-2"><a href="#样例输出-2" class="headerlink" title="样例输出 #2"></a>样例输出 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7891</span><br></pre></td></tr></table></figure>
-
-<h2 id="样例-3"><a href="#样例-3" class="headerlink" title="样例 #3"></a>样例 #3</h2><h3 id="样例输入-3"><a href="#样例输入-3" class="headerlink" title="样例输入 #3"></a>样例输入 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1000000003*1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-3"><a href="#样例输出-3" class="headerlink" title="样例输出 #3"></a>样例输出 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>对于 $30%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100$。</p>
-<p>对于 $80%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤1000$。</p>
-<p>对于 $100%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100000$。</p>
-<h2 id="参考代码-他人博客"><a href="#参考代码-他人博客" class="headerlink" title="参考代码(他人博客)"></a>参考代码(他人博客)</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">stack &lt;<span class="type">int</span>&gt; x;<span class="comment">//一个存数字并在最后把它们相加的栈</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a,b;</span><br><span class="line">	<span class="type">char</span> c;</span><br><span class="line">	cin&gt;&gt;a;<span class="comment">//先输入一个数，以后符号+数字输入</span></span><br><span class="line">	<span class="type">int</span> m=<span class="number">10000</span>;</span><br><span class="line">	a=a%m;<span class="comment">//必须的操作</span></span><br><span class="line">	x.<span class="built_in">push</span>(a);<span class="comment">//压入栈中</span></span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;c&gt;&gt;b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>)<span class="comment">//将*之前的数字与*之后的数字积存入</span></span><br><span class="line">		&#123;</span><br><span class="line">			a=x.<span class="built_in">top</span>();</span><br><span class="line">			x.<span class="built_in">pop</span>();</span><br><span class="line">			x.<span class="built_in">push</span>(a*b%m);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//将b存入</span></span><br><span class="line">			x.<span class="built_in">push</span>(b);</span><br><span class="line">	&#125;</span><br><span class="line">	a=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		a+=x.<span class="built_in">top</span>();</span><br><span class="line">		a%=m;<span class="comment">//取模是万恶之源</span></span><br><span class="line">		x.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;a&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>另外说一句，Python2提交这个代码直接AC!</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">input</span>()%<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="取牌游戏"><a href="#取牌游戏" class="headerlink" title="取牌游戏"></a>取牌游戏</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>小明正在使用一堆共K张纸牌与N-1个朋友玩取牌游戏。其中，N&lt;&#x3D;K&lt;&#x3D;100000,2&lt;&#x3D;N&lt;&#x3D;100,K是N的倍数。纸牌中包含M&#x3D;K&#x2F;N张“good”和K-M张“bad”牌。小明负责发牌，他当然想自己获得所有的“good”牌。<br>他的朋友怀疑他会欺骗，所以他们给出以下一些限制，以防小明耍诈：<br>（1）	游戏开始时，将最上面的牌发给小明右手边的人。<br>（2）	每发完一张牌，他必须将接下来的p张牌（1&lt;&#x3D;p&lt;&#x3D;10）一张一张地依次移到最后，放在牌堆的底部。<br>（3）	以逆时针方向，连续给每位玩家发牌。<br>小明迫切想赢，请你帮助他算出所有“good”牌放置的位置，以便他得到所有的“good”牌。牌从上往下依次标注为1，2，3，…</p>
-<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行，3个用一个空格间隔的正整数N,K,P。</p>
-<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>M行，从顶部按升序依次输出“good”牌的位置。</p>
-<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 9 2</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
-
+<h2 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h2><h3 id="数据规模与约定-1"><a href="#数据规模与约定-1" class="headerlink" title="数据规模与约定"></a>数据规模与约定</h3><p>对于全部的测试点，保证 1 &lt;&#x3D; x &lt;&#x3D; n &lt;&#x3D; 400，1 &lt;&#x3D; y &lt;&#x3D; m &lt;&#x3D; 400。</p>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>更多练习请见: <a href="https://www.luogu.com.cn/training/463808">https://www.luogu.com.cn/training/463808</a></p>
+<p>本文的作者是<strong>Minecraft-Sep</strong>，本文原创，禁止抄袭！</p>
 ]]></content>
       <categories>
         <category>C++</category>
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于博客评论更换的通知</title>
-    <url>//post/73dh.html</url>
-    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
-<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
-<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
-
-<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
-]]></content>
-      <categories>
-        <category>公告</category>
-      </categories>
-      <tags>
-        <tag>Waline</tag>
-        <tag>Twikoo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
-    <url>//post/76gl.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
-<p><img src="/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
-<p>由于影响不是很大，为了他人隐私（也不能不给他机会改正吧），就不“公开处刑”了。</p>
-<p>那么，什么是DDos？它会对博客造成什么威胁？今天我就讲讲DDos攻击原理与防护方法。</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>DDoS全称Distributed Denial of Service，意思为“分布式拒绝服务”，即利用大量合法的分布式服务器对目标发送请求，从而导致正常合法用户无法获得服务。</p>
-<p>就比如，一个健身房生意十分火爆，那些“壮汉”看不下去了，就召集n个人进到他店，但是就是不健身，又堵住健身器材。这个商家看似很忙很火爆，其实啥也不是，同时，真正想要健身的顾客也没得到接待，因为店里挤得进不去。</p>
-<p>现在的DDoS让服务不仅可以直接阻断，还能够通过影响服务的客户体验实现攻击。他又这些特点：</p>
-<ol>
-<li><strong>造成“供不应求”现象</strong>。通过控制大量攻击主机同时连接网站端口，制造大流量无用数据，造成通往被攻击主机的网络拥塞，使被攻击主机无法正常和外界通信。</li>
-<li><strong>傀儡攻击</strong>。傀儡就是可以被黑客操控的机器，经常被用为DDos攻击，但是傀儡数量十分多，使后端无法准确辨识。</li>
-<li><strong>网络层攻击</strong>。通过发送伪造源IP的TCP数据包发送SYN或ACK包、发送包含错误设置的地址值等攻击方式，耗尽服务器资源，导致服务器拒绝访问。</li>
-<li><strong>CC攻击</strong>。黑客借助代理服务器生成指向受害主机的合法网页请求，实现DDoS和伪装就叫CC（全名Challenge Collapsar）。傀儡CC攻击是黑客使用CC攻击软件，控制大量傀儡发动攻击，模拟正常用户访问网站的请求，伪造成合法数据包。</li>
-</ol>
-<p>DDos攻击原理如下：</p>
-<p><img src="/img/article/16/1.png" alt="原理"></p>
-<h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
-<p><img src="/img/article/16/2.png" alt="1"></p>
-<p>当然你也可以使用其他服务商的，比如Cloudflare、Vercel、腾讯云啥的</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>实用教程</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare</tag>
-        <tag>DDos</tag>
+        <tag>搜索</tag>
       </tags>
   </entry>
   <entry>
@@ -1301,6 +1250,57 @@
       </tags>
   </entry>
   <entry>
+    <title>关于博客评论更换的通知</title>
+    <url>//post/73dh.html</url>
+    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
+<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
+<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+
+<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+]]></content>
+      <categories>
+        <category>公告</category>
+      </categories>
+      <tags>
+        <tag>Waline</tag>
+        <tag>Twikoo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
+    <url>//post/76gl.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
+<p><img src="/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
+<p>由于影响不是很大，为了他人隐私（也不能不给他机会改正吧），就不“公开处刑”了。</p>
+<p>那么，什么是DDos？它会对博客造成什么威胁？今天我就讲讲DDos攻击原理与防护方法。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>DDoS全称Distributed Denial of Service，意思为“分布式拒绝服务”，即利用大量合法的分布式服务器对目标发送请求，从而导致正常合法用户无法获得服务。</p>
+<p>就比如，一个健身房生意十分火爆，那些“壮汉”看不下去了，就召集n个人进到他店，但是就是不健身，又堵住健身器材。这个商家看似很忙很火爆，其实啥也不是，同时，真正想要健身的顾客也没得到接待，因为店里挤得进不去。</p>
+<p>现在的DDoS让服务不仅可以直接阻断，还能够通过影响服务的客户体验实现攻击。他又这些特点：</p>
+<ol>
+<li><strong>造成“供不应求”现象</strong>。通过控制大量攻击主机同时连接网站端口，制造大流量无用数据，造成通往被攻击主机的网络拥塞，使被攻击主机无法正常和外界通信。</li>
+<li><strong>傀儡攻击</strong>。傀儡就是可以被黑客操控的机器，经常被用为DDos攻击，但是傀儡数量十分多，使后端无法准确辨识。</li>
+<li><strong>网络层攻击</strong>。通过发送伪造源IP的TCP数据包发送SYN或ACK包、发送包含错误设置的地址值等攻击方式，耗尽服务器资源，导致服务器拒绝访问。</li>
+<li><strong>CC攻击</strong>。黑客借助代理服务器生成指向受害主机的合法网页请求，实现DDoS和伪装就叫CC（全名Challenge Collapsar）。傀儡CC攻击是黑客使用CC攻击软件，控制大量傀儡发动攻击，模拟正常用户访问网站的请求，伪造成合法数据包。</li>
+</ol>
+<p>DDos攻击原理如下：</p>
+<p><img src="/img/article/16/1.png" alt="原理"></p>
+<h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
+<p><img src="/img/article/16/2.png" alt="1"></p>
+<p>当然你也可以使用其他服务商的，比如Cloudflare、Vercel、腾讯云啥的</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare</tag>
+        <tag>DDos</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>API构建①——Bing每日一图接口</title>
     <url>//post/r5fd.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
@@ -1440,8 +1440,157 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>Pages</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何让你的博客更丰富？hexo常见插件推荐</title>
+    <url>//post/ugr2.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
+<h1 id="hexo插件集"><a href="#hexo插件集" class="headerlink" title="hexo插件集"></a>hexo插件集</h1><h3 id="hexo-abbrlink"><a href="#hexo-abbrlink" class="headerlink" title="hexo-abbrlink"></a>hexo-abbrlink</h3><ol>
+<li>安装：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-abbrlink --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>当你hexo g时，这个插件会对未生成abbrlink的文章中的front matter里添加这个东西（据说此种格式有利于SEO优化）：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink: *****（随机数字）</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>也可以自定义，尽量使用字母和数字，空格用<code>-</code>替代，提升链接可读性。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink: 我的文章-my-post-*****</span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-encrypt"><a href="#hexo-encrypt" class="headerlink" title="hexo-encrypt"></a>hexo-encrypt</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-blog-encrypt</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在front matter里输入<code>password: 你的密码</code>，如：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">password: hello</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>那么在hexo中就是这样的画面：</li>
+</ol>
+<p><img src="/img/article/12/d068699b430414e617c92223c6e4ffc049da653fc65e572010c96bb320746b6f.png" alt="加密后"></p>
+<ol start="4">
+<li>可以添加更多，如：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2016-03-30 21:12:21</span><br><span class="line">password: 114514</span><br><span class="line">abstract: 有东西被加密了, 请输入密码查看. //系统信息</span><br><span class="line">message: 您好, 这里需要密码. //展示的信息</span><br><span class="line">wrong_pass_message: 抱歉, 这个密码看着不太对, 请再试试. //密码错误</span><br><span class="line">wrong_hash_message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容. //hash解密错误</span><br><span class="line">---</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>或者在<code>_config.yml</code>里添加这些东西：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Security</span></span><br><span class="line"><span class="attr">encrypt:</span> <span class="comment"># hexo-blog-encrypt</span></span><br><span class="line">  <span class="attr">abstract:</span> <span class="string">有东西被加密了,</span> <span class="string">请输入密码查看.</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">您好,</span> <span class="string">这里需要密码.</span></span><br><span class="line">  <span class="attr">theme:</span> <span class="string">xray</span></span><br><span class="line">  <span class="attr">wrong_pass_message:</span> <span class="string">抱歉,</span> <span class="string">这个密码看着不太对,</span> <span class="string">请再试试.</span></span><br><span class="line">  <span class="attr">wrong_hash_message:</span> <span class="string">抱歉,</span> <span class="string">这个文章不能被校验,</span> <span class="string">不过您还是能看看解密后的内容.</span></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-generator"><a href="#hexo-generator" class="headerlink" title="hexo-generator"></a>hexo-generator</h3><ol>
+<li>安装（先第一个后第二个）</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-generator-index --save</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-index-pin-top --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在front matter里添加<code>top: ***</code>数字越大文章越靠前</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">top: 114514</span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-hide-posts"><a href="#hexo-hide-posts" class="headerlink" title="hexo-hide-posts"></a>hexo-hide-posts</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-hide-posts --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>默认 <code>hidden: true</code> 用于隐藏，可以修改成<code>false</code></li>
+</ol>
+<h3 id="hexo-generator-feed"><a href="#hexo-generator-feed" class="headerlink" title="hexo-generator-feed"></a>hexo-generator-feed</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>当你hexo d时会生成用于rss订阅，默认只获取文章摘要或者前140个字符</li>
+</ol>
+<h3 id="hexo-filter-nofollow"><a href="#hexo-filter-nofollow" class="headerlink" title="hexo-filter-nofollow"></a>hexo-filter-nofollow</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-filter-nofollow --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>可排除自定义域名。</li>
+</ol>
+<h3 id="hexo-submit-urls-to-search-engine"><a href="#hexo-submit-urls-to-search-engine" class="headerlink" title="hexo-submit-urls-to-search-engine"></a>hexo-submit-urls-to-search-engine</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-submit-urls-to-search-engine</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>hexo d时自动提交链接到搜索引擎。提交效果不错，但百度放出页面的速度依旧感人，谷歌、必应、雅虎的收录速度很快。</li>
+</ol>
+<h3 id="markdown-it-ruby-与-hexo-pinyin-ruby-marks"><a href="#markdown-it-ruby-与-hexo-pinyin-ruby-marks" class="headerlink" title="markdown-it-ruby 与 hexo-pinyin-ruby-marks"></a>markdown-it-ruby 与 hexo-pinyin-ruby-marks</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install markdown-it-ruby --save</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-pinyin-ruby-marks</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在<code>_config.yml</code>中输入以下内容：</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">markdown:</span></span><br><span class="line">  <span class="attr">plugins:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-ruby</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在文章中输入以下内容：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% pinyin 初音未来|chu1 yin1 wei4 lai2 %&#125; </span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>即可看到文字上的拼音注音效果</li>
+</ol>
+<h3 id="hexo-pangu"><a href="#hexo-pangu" class="headerlink" title="hexo-pangu"></a>hexo-pangu</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-pangu</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>送给所有中英混输必须加空格的强迫症患者。（但愿跟其它插件不存在冲突）</li>
+</ol>
+<h3 id="hexo-broken-links-checker"><a href="#hexo-broken-links-checker" class="headerlink" title="hexo-broken-links-checker"></a>hexo-broken-links-checker</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-broken-links-checker --save-dev</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>检查</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npx hexo check-links</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>等待一会就会出现：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">WARN  The following links are broken:</span><br><span class="line">   - https://</span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-tag-qrcode"><a href="#hexo-tag-qrcode" class="headerlink" title="hexo-tag-qrcode"></a>hexo-tag-qrcode</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-tag-qrcode</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在文章中输入：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% qrcode &quot;自定义内容&quot; %&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>文章中的插件可以评论提示我你喜欢的插件，我可能会采纳！</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Hexo插件</tag>
       </tags>
   </entry>
   <entry>
@@ -1676,155 +1825,6 @@
       <tags>
         <tag>Hexo</tag>
         <tag>Twikoo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何让你的博客更丰富？hexo常见插件推荐</title>
-    <url>//post/ugr2.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
-<h1 id="hexo插件集"><a href="#hexo插件集" class="headerlink" title="hexo插件集"></a>hexo插件集</h1><h3 id="hexo-abbrlink"><a href="#hexo-abbrlink" class="headerlink" title="hexo-abbrlink"></a>hexo-abbrlink</h3><ol>
-<li>安装：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-abbrlink --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>当你hexo g时，这个插件会对未生成abbrlink的文章中的front matter里添加这个东西（据说此种格式有利于SEO优化）：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink: *****（随机数字）</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>也可以自定义，尽量使用字母和数字，空格用<code>-</code>替代，提升链接可读性。</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink: 我的文章-my-post-*****</span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-encrypt"><a href="#hexo-encrypt" class="headerlink" title="hexo-encrypt"></a>hexo-encrypt</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-blog-encrypt</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在front matter里输入<code>password: 你的密码</code>，如：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">password: hello</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>那么在hexo中就是这样的画面：</li>
-</ol>
-<p><img src="/img/article/12/d068699b430414e617c92223c6e4ffc049da653fc65e572010c96bb320746b6f.png" alt="加密后"></p>
-<ol start="4">
-<li>可以添加更多，如：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2016-03-30 21:12:21</span><br><span class="line">password: 114514</span><br><span class="line">abstract: 有东西被加密了, 请输入密码查看. //系统信息</span><br><span class="line">message: 您好, 这里需要密码. //展示的信息</span><br><span class="line">wrong_pass_message: 抱歉, 这个密码看着不太对, 请再试试. //密码错误</span><br><span class="line">wrong_hash_message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容. //hash解密错误</span><br><span class="line">---</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-
-<p>或者在<code>_config.yml</code>里添加这些东西：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Security</span></span><br><span class="line"><span class="attr">encrypt:</span> <span class="comment"># hexo-blog-encrypt</span></span><br><span class="line">  <span class="attr">abstract:</span> <span class="string">有东西被加密了,</span> <span class="string">请输入密码查看.</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">您好,</span> <span class="string">这里需要密码.</span></span><br><span class="line">  <span class="attr">theme:</span> <span class="string">xray</span></span><br><span class="line">  <span class="attr">wrong_pass_message:</span> <span class="string">抱歉,</span> <span class="string">这个密码看着不太对,</span> <span class="string">请再试试.</span></span><br><span class="line">  <span class="attr">wrong_hash_message:</span> <span class="string">抱歉,</span> <span class="string">这个文章不能被校验,</span> <span class="string">不过您还是能看看解密后的内容.</span></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-generator"><a href="#hexo-generator" class="headerlink" title="hexo-generator"></a>hexo-generator</h3><ol>
-<li>安装（先第一个后第二个）</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-generator-index --save</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-index-pin-top --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在front matter里添加<code>top: ***</code>数字越大文章越靠前</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">top: 114514</span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-hide-posts"><a href="#hexo-hide-posts" class="headerlink" title="hexo-hide-posts"></a>hexo-hide-posts</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-hide-posts --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>默认 <code>hidden: true</code> 用于隐藏，可以修改成<code>false</code></li>
-</ol>
-<h3 id="hexo-generator-feed"><a href="#hexo-generator-feed" class="headerlink" title="hexo-generator-feed"></a>hexo-generator-feed</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>当你hexo d时会生成用于rss订阅，默认只获取文章摘要或者前140个字符</li>
-</ol>
-<h3 id="hexo-filter-nofollow"><a href="#hexo-filter-nofollow" class="headerlink" title="hexo-filter-nofollow"></a>hexo-filter-nofollow</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-filter-nofollow --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>可排除自定义域名。</li>
-</ol>
-<h3 id="hexo-submit-urls-to-search-engine"><a href="#hexo-submit-urls-to-search-engine" class="headerlink" title="hexo-submit-urls-to-search-engine"></a>hexo-submit-urls-to-search-engine</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-submit-urls-to-search-engine</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>hexo d时自动提交链接到搜索引擎。提交效果不错，但百度放出页面的速度依旧感人，谷歌、必应、雅虎的收录速度很快。</li>
-</ol>
-<h3 id="markdown-it-ruby-与-hexo-pinyin-ruby-marks"><a href="#markdown-it-ruby-与-hexo-pinyin-ruby-marks" class="headerlink" title="markdown-it-ruby 与 hexo-pinyin-ruby-marks"></a>markdown-it-ruby 与 hexo-pinyin-ruby-marks</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install markdown-it-ruby --save</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-pinyin-ruby-marks</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在<code>_config.yml</code>中输入以下内容：</li>
-</ol>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">markdown:</span></span><br><span class="line">  <span class="attr">plugins:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-ruby</span></span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>在文章中输入以下内容：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% pinyin 初音未来|chu1 yin1 wei4 lai2 %&#125; </span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>即可看到文字上的拼音注音效果</li>
-</ol>
-<h3 id="hexo-pangu"><a href="#hexo-pangu" class="headerlink" title="hexo-pangu"></a>hexo-pangu</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-pangu</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>送给所有中英混输必须加空格的强迫症患者。（但愿跟其它插件不存在冲突）</li>
-</ol>
-<h3 id="hexo-broken-links-checker"><a href="#hexo-broken-links-checker" class="headerlink" title="hexo-broken-links-checker"></a>hexo-broken-links-checker</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-broken-links-checker --save-dev</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>检查</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npx hexo check-links</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>等待一会就会出现：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">WARN  The following links are broken:</span><br><span class="line">   - https://</span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-tag-qrcode"><a href="#hexo-tag-qrcode" class="headerlink" title="hexo-tag-qrcode"></a>hexo-tag-qrcode</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-tag-qrcode</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在文章中输入：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% qrcode &quot;自定义内容&quot; %&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>文章中的插件可以评论提示我你喜欢的插件，我可能会采纳！</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Hexo插件</tag>
       </tags>
   </entry>
   <entry>

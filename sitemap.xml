@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://mc-sep.js.cool/weblink/index.html</loc>
+    
+    <lastmod>2024-10-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://mc-sep.js.cool/links/index.html</loc>
+    
+    <lastmod>2024-10-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://mc-sep.js.cool/post/43vc.html</loc>
     
     <lastmod>2024-10-03</lastmod>
@@ -23,15 +41,6 @@
     <loc>http://mc-sep.js.cool/post/45vy.html</loc>
     
     <lastmod>2024-10-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://mc-sep.js.cool/links/index.html</loc>
-    
-    <lastmod>2024-09-22</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -146,15 +155,6 @@
   </url>
   
   <url>
-    <loc>http://mc-sep.js.cool/weblink/index.html</loc>
-    
-    <lastmod>2024-08-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://mc-sep.js.cool/post/56rh.html</loc>
     
     <lastmod>2024-07-28</lastmod>
@@ -238,7 +238,7 @@
 
   <url>
     <loc>http://mc-sep.js.cool/</loc>
-    <lastmod>2024-10-03</lastmod>
+    <lastmod>2024-10-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
