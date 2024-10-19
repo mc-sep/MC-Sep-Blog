@@ -6,7 +6,7 @@
   <link href="http://mc-sep.js.cool/atom.xml" rel="self"/>
   
   <link href="http://mc-sep.js.cool/"/>
-  <updated>2024-10-03T01:07:20.770Z</updated>
+  <updated>2024-10-19T08:11:52.553Z</updated>
   <id>http://mc-sep.js.cool/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2024博客调查问卷</title>
+    <link href="http://mc-sep.js.cool/post/7bea.html"/>
+    <id>http://mc-sep.js.cool/post/7bea.html</id>
+    <published>2024-10-19T08:19:00.000Z</published>
+    <updated>2024-10-19T08:11:52.553Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="2024年博客调查问卷"><a href="#2024年博客调查问卷" class="headerlink" title="2024年博客调查问卷"></a>2024年博客调查问卷</h1><p>为了得到足够的反馈改进博客，特设调查问卷，欢迎参与！</p><p><strong>时间</strong>：2024.10.19 ~ 2024.12.31</p><p><strong>参与形式</strong>：问卷（在线）</p><p><strong>参与者</strong>：所有人</p><p><strong>注意</strong>：</p><ul><li>请友善提出建议，不要刷屏</li><li>建议好的会被采纳，结果公开展示！</li></ul><h2 id="在线问答"><a href="#在线问答" class="headerlink" title="在线问答"></a>在线问答</h2><p>您也可以扫描本文封面的二维码参与！</p><iframe width="640px" height="480px" src="https://forms.office.com/r/YA2AbJ8fvV?embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe><h2 id="问答结果"><a href="#问答结果" class="headerlink" title="问答结果"></a>问答结果</h2><div class="note  info flat"><p>统计截止于 <strong>2024.12.31</strong>，结束后自动公开！</p></div><p>暂无。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;2024年博客调查问卷&quot;&gt;&lt;a href=&quot;#2024年博客调查问卷&quot; class=&quot;headerlink&quot; title=&quot;2024年博客调查问卷&quot;&gt;&lt;/a&gt;2024年博客调查问卷&lt;/h1&gt;&lt;p&gt;为了得到足够的反馈改进博客，特设调查问卷，欢迎参与！&lt;/p&gt;
+&lt;p&gt;</summary>
+      
+    
+    
+    
+    <category term="调查问卷" scheme="http://mc-sep.js.cool/categories/%E8%B0%83%E6%9F%A5%E9%97%AE%E5%8D%B7/"/>
+    
+    
+    <category term="问卷" scheme="http://mc-sep.js.cool/tags/%E9%97%AE%E5%8D%B7/"/>
+    
+  </entry>
   
   <entry>
     <title>【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！</title>
@@ -416,9 +441,9 @@
     <category term="C++" scheme="http://mc-sep.js.cool/categories/C/"/>
     
     
-    <category term="C++" scheme="http://mc-sep.js.cool/tags/C/"/>
-    
     <category term="竞赛" scheme="http://mc-sep.js.cool/tags/%E7%AB%9E%E8%B5%9B/"/>
+    
+    <category term="C++" scheme="http://mc-sep.js.cool/tags/C/"/>
     
   </entry>
   
@@ -442,9 +467,9 @@
     <category term="C++" scheme="http://mc-sep.js.cool/categories/C/"/>
     
     
-    <category term="C++" scheme="http://mc-sep.js.cool/tags/C/"/>
-    
     <category term="竞赛" scheme="http://mc-sep.js.cool/tags/%E7%AB%9E%E8%B5%9B/"/>
+    
+    <category term="C++" scheme="http://mc-sep.js.cool/tags/C/"/>
     
   </entry>
   

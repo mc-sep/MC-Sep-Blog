@@ -598,85 +598,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++之数据结构--栈</title>
-    <url>//post/54ds.html</url>
-    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
-<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
-</div>
-
-
-
-<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>栈是 OI 中常用的一种线性数据结构。请注意，本文主要讲的是栈这种数据结构，而非程序运行时的系统栈&#x2F;栈空间。</p>
-<p>栈的修改与访问是按照后进先出的原则进行的，因此栈通常被称为是后进先出（last in first out）表，简称 LIFO 表。</p>
-<h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><p>LIFO 表达的是 当前在容器 内最后进来的最先出去。</p>
-<p>我们考虑这样一个栈</p>
-<ul>
-<li>push(1)</li>
-<li>pop(1)</li>
-<li>push(2)</li>
-<li>pop(2)<br>如果从整体考虑，1 最先入栈，最先出栈，2 最后入栈，最后出栈，这样就成了一个先进先出表，显然是错误的。</li>
-</ul>
-<p>所以，在考虑数据结构是 LIFO 还是 FIFO 的时候，应当考虑在当前容器内的情况。</p>
-<h2 id="使用数组模拟栈"><a href="#使用数组模拟栈" class="headerlink" title="使用数组模拟栈"></a>使用数组模拟栈</h2><p>我们可以方便的使用数组来模拟一个栈，如下：</p>
-<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> st[N];</span><br><span class="line"><span class="comment">// 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 压栈 ：</span></span><br><span class="line">st[++*st] = var1;</span><br><span class="line"><span class="comment">// 取栈顶 ：</span></span><br><span class="line"><span class="type">int</span> u = st[*st];</span><br><span class="line"><span class="comment">// 弹栈 ：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> (*st) --*st;</span><br><span class="line"><span class="comment">// 清空栈</span></span><br><span class="line">*st = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">0</span>] * N</span><br><span class="line"><span class="comment"># 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压栈 ：</span></span><br><span class="line">st[st[<span class="number">0</span>] + <span class="number">1</span>] = var1</span><br><span class="line">st[<span class="number">0</span>] = st[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line"><span class="comment"># 取栈顶：</span></span><br><span class="line">u = st[st[<span class="number">0</span>]]</span><br><span class="line"><span class="comment"># 弹栈：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> st[<span class="number">0</span>]:</span><br><span class="line">    st[<span class="number">0</span>] = st[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line"><span class="comment"># 清空栈</span></span><br><span class="line">st[<span class="number">0</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="C-STL-中的栈"><a href="#C-STL-中的栈" class="headerlink" title="C++ STL 中的栈"></a>C++ STL 中的栈</h2><p>C++ 中的 STL 也提供了一个容器 std::stack，使用前需要引入 stack 头文件。</p>
-<p>STL 中的 stack 容器提供了一众成员函数以供调用，其中较为常用的有：</p>
-<ul>
-<li>元素访问<br>st.top() 返回栈顶</li>
-<li>修改<br>st.push() 插入传入的参数到栈顶<br>st.pop() 弹出栈顶</li>
-<li>容量<br>st.empty() 返回是否为空<br>st.size() 返回元素数量<br>此外，std::stack 还提供了一些运算符。较为常用的是使用赋值运算符 &#x3D; 为 stack 赋值，示例：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新建两个栈 st1 和 st2</span></span><br><span class="line">std::stack&lt;<span class="type">int</span>&gt; st1, st2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 st1 装入 1</span></span><br><span class="line">st1.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 st1 赋值给 st2</span></span><br><span class="line">st2 = st1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 st2 的栈顶元素</span></span><br><span class="line">cout &lt;&lt; st2.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出: 1</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="使用-Python-中的-list-模拟栈"><a href="#使用-Python-中的-list-模拟栈" class="headerlink" title="使用 Python 中的 list 模拟栈"></a>使用 Python 中的 list 模拟栈</h2><p>在 Python 中，你可以使用列表来模拟一个栈：</p>
-<p>实现</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">5</span>, <span class="number">1</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 向栈顶添加元素</span></span><br><span class="line">st.append(<span class="number">2</span>)</span><br><span class="line">st.append(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pop 取出栈顶元素</span></span><br><span class="line">st.pop()</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 clear 清空栈</span></span><br><span class="line">st.clear()</span><br></pre></td></tr></table></figure>
-
-<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="NOIP2013-普及组-表达式求值"><a href="#NOIP2013-普及组-表达式求值" class="headerlink" title="[NOIP2013 普及组] 表达式求值"></a>[NOIP2013 普及组] 表达式求值</h1><h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>NOIP2013 普及组 T2</p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包含加法和乘法的算术表达式，请你编程计算表达式的值。</p>
-<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>一行，为需要你计算的表达式，表达式中只包含数字、加法运算符 <code>+</code> 和乘法运算符 <code>*</code>，且没有括号，所有参与运算的数字均为 $0$ 到   $2^{31}-1$ 之间的整数。  </p>
-<p>输入数据保证这一行只有 <code>0123456789+*</code> 这 $12$ 种字符。</p>
-<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个整数，表示这个表达式的值。  </p>
-<p>注意：当答案长度多于 $4$ 位时，请只输出最后 $ 4$ 位，前导 $ 0$ 不输出。</p>
-<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1*3+4</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
-
-<h2 id="样例-2"><a href="#样例-2" class="headerlink" title="样例 #2"></a>样例 #2</h2><h3 id="样例输入-2"><a href="#样例输入-2" class="headerlink" title="样例输入 #2"></a>样例输入 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1234567890*1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-2"><a href="#样例输出-2" class="headerlink" title="样例输出 #2"></a>样例输出 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7891</span><br></pre></td></tr></table></figure>
-
-<h2 id="样例-3"><a href="#样例-3" class="headerlink" title="样例 #3"></a>样例 #3</h2><h3 id="样例输入-3"><a href="#样例输入-3" class="headerlink" title="样例输入 #3"></a>样例输入 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1000000003*1</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-3"><a href="#样例输出-3" class="headerlink" title="样例输出 #3"></a>样例输出 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>对于 $30%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100$。</p>
-<p>对于 $80%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤1000$。</p>
-<p>对于 $100%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100000$。</p>
-<h2 id="参考代码-他人博客"><a href="#参考代码-他人博客" class="headerlink" title="参考代码(他人博客)"></a>参考代码(他人博客)</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">stack &lt;<span class="type">int</span>&gt; x;<span class="comment">//一个存数字并在最后把它们相加的栈</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a,b;</span><br><span class="line">	<span class="type">char</span> c;</span><br><span class="line">	cin&gt;&gt;a;<span class="comment">//先输入一个数，以后符号+数字输入</span></span><br><span class="line">	<span class="type">int</span> m=<span class="number">10000</span>;</span><br><span class="line">	a=a%m;<span class="comment">//必须的操作</span></span><br><span class="line">	x.<span class="built_in">push</span>(a);<span class="comment">//压入栈中</span></span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;c&gt;&gt;b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>)<span class="comment">//将*之前的数字与*之后的数字积存入</span></span><br><span class="line">		&#123;</span><br><span class="line">			a=x.<span class="built_in">top</span>();</span><br><span class="line">			x.<span class="built_in">pop</span>();</span><br><span class="line">			x.<span class="built_in">push</span>(a*b%m);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//将b存入</span></span><br><span class="line">			x.<span class="built_in">push</span>(b);</span><br><span class="line">	&#125;</span><br><span class="line">	a=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		a+=x.<span class="built_in">top</span>();</span><br><span class="line">		a%=m;<span class="comment">//取模是万恶之源</span></span><br><span class="line">		x.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;a&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>另外说一句，Python2提交这个代码直接AC!</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">input</span>()%<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="取牌游戏"><a href="#取牌游戏" class="headerlink" title="取牌游戏"></a>取牌游戏</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>小明正在使用一堆共K张纸牌与N-1个朋友玩取牌游戏。其中，N&lt;&#x3D;K&lt;&#x3D;100000,2&lt;&#x3D;N&lt;&#x3D;100,K是N的倍数。纸牌中包含M&#x3D;K&#x2F;N张“good”和K-M张“bad”牌。小明负责发牌，他当然想自己获得所有的“good”牌。<br>他的朋友怀疑他会欺骗，所以他们给出以下一些限制，以防小明耍诈：<br>（1）	游戏开始时，将最上面的牌发给小明右手边的人。<br>（2）	每发完一张牌，他必须将接下来的p张牌（1&lt;&#x3D;p&lt;&#x3D;10）一张一张地依次移到最后，放在牌堆的底部。<br>（3）	以逆时针方向，连续给每位玩家发牌。<br>小明迫切想赢，请你帮助他算出所有“good”牌放置的位置，以便他得到所有的“good”牌。牌从上往下依次标注为1，2，3，…</p>
-<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行，3个用一个空格间隔的正整数N,K,P。</p>
-<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>M行，从顶部按升序依次输出“good”牌的位置。</p>
-<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 9 2</span><br></pre></td></tr></table></figure>
-
-<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>线性DP学习笔记</title>
     <url>//post/4plk.html</url>
     <content><![CDATA[<h1 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h1><p>最长上升子序列（longest  increasing subsequence），也可以叫最长非降序子序列，简称LIS，不是太难。即一个数的序列bi，当b1 &lt; b2 &lt; … &lt; bS的时候，我们称这个序列是上升的。对于给定的一个序列(a1, a2, …, aN)，我们可以得到一些上升的子序列(ai1, ai2, …, aiK)，这里1 &lt;&#x3D; i1 &lt; i2 &lt; … &lt; iK &lt;&#x3D; N，但必须按照一定。比如，对于序列(1, 7, 3, 5, 9, 4, 8)，有它的一些上升子序列，如(1, 7), (3, 4, 8)等等。这些子序列中最长的长度是4，比如子序列(1, 3, 5, 8)。</p>
@@ -784,8 +705,87 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>竞赛</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++之数据结构--栈</title>
+    <url>//post/54ds.html</url>
+    <content><![CDATA[<div class="note  danger modern"><p>本文由旧站迁移而来，此后将不再更新此文章。</p>
+<p>迁移时间：2024&#x2F;7&#x2F;16 15:19:43</p>
+</div>
+
+
+
+<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>栈是 OI 中常用的一种线性数据结构。请注意，本文主要讲的是栈这种数据结构，而非程序运行时的系统栈&#x2F;栈空间。</p>
+<p>栈的修改与访问是按照后进先出的原则进行的，因此栈通常被称为是后进先出（last in first out）表，简称 LIFO 表。</p>
+<h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><p>LIFO 表达的是 当前在容器 内最后进来的最先出去。</p>
+<p>我们考虑这样一个栈</p>
+<ul>
+<li>push(1)</li>
+<li>pop(1)</li>
+<li>push(2)</li>
+<li>pop(2)<br>如果从整体考虑，1 最先入栈，最先出栈，2 最后入栈，最后出栈，这样就成了一个先进先出表，显然是错误的。</li>
+</ul>
+<p>所以，在考虑数据结构是 LIFO 还是 FIFO 的时候，应当考虑在当前容器内的情况。</p>
+<h2 id="使用数组模拟栈"><a href="#使用数组模拟栈" class="headerlink" title="使用数组模拟栈"></a>使用数组模拟栈</h2><p>我们可以方便的使用数组来模拟一个栈，如下：</p>
+<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> st[N];</span><br><span class="line"><span class="comment">// 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 压栈 ：</span></span><br><span class="line">st[++*st] = var1;</span><br><span class="line"><span class="comment">// 取栈顶 ：</span></span><br><span class="line"><span class="type">int</span> u = st[*st];</span><br><span class="line"><span class="comment">// 弹栈 ：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> (*st) --*st;</span><br><span class="line"><span class="comment">// 清空栈</span></span><br><span class="line">*st = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">0</span>] * N</span><br><span class="line"><span class="comment"># 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压栈 ：</span></span><br><span class="line">st[st[<span class="number">0</span>] + <span class="number">1</span>] = var1</span><br><span class="line">st[<span class="number">0</span>] = st[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line"><span class="comment"># 取栈顶：</span></span><br><span class="line">u = st[st[<span class="number">0</span>]]</span><br><span class="line"><span class="comment"># 弹栈：注意越界问题, *st == 0 时不能继续弹出</span></span><br><span class="line"><span class="keyword">if</span> st[<span class="number">0</span>]:</span><br><span class="line">    st[<span class="number">0</span>] = st[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line"><span class="comment"># 清空栈</span></span><br><span class="line">st[<span class="number">0</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="C-STL-中的栈"><a href="#C-STL-中的栈" class="headerlink" title="C++ STL 中的栈"></a>C++ STL 中的栈</h2><p>C++ 中的 STL 也提供了一个容器 std::stack，使用前需要引入 stack 头文件。</p>
+<p>STL 中的 stack 容器提供了一众成员函数以供调用，其中较为常用的有：</p>
+<ul>
+<li>元素访问<br>st.top() 返回栈顶</li>
+<li>修改<br>st.push() 插入传入的参数到栈顶<br>st.pop() 弹出栈顶</li>
+<li>容量<br>st.empty() 返回是否为空<br>st.size() 返回元素数量<br>此外，std::stack 还提供了一些运算符。较为常用的是使用赋值运算符 &#x3D; 为 stack 赋值，示例：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新建两个栈 st1 和 st2</span></span><br><span class="line">std::stack&lt;<span class="type">int</span>&gt; st1, st2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 st1 装入 1</span></span><br><span class="line">st1.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 st1 赋值给 st2</span></span><br><span class="line">st2 = st1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 st2 的栈顶元素</span></span><br><span class="line">cout &lt;&lt; st2.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出: 1</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="使用-Python-中的-list-模拟栈"><a href="#使用-Python-中的-list-模拟栈" class="headerlink" title="使用 Python 中的 list 模拟栈"></a>使用 Python 中的 list 模拟栈</h2><p>在 Python 中，你可以使用列表来模拟一个栈：</p>
+<p>实现</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = [<span class="number">5</span>, <span class="number">1</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 向栈顶添加元素</span></span><br><span class="line">st.append(<span class="number">2</span>)</span><br><span class="line">st.append(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pop 取出栈顶元素</span></span><br><span class="line">st.pop()</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; st</span></span><br><span class="line"><span class="comment"># [5, 1, 4, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 clear 清空栈</span></span><br><span class="line">st.clear()</span><br></pre></td></tr></table></figure>
+
+<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="NOIP2013-普及组-表达式求值"><a href="#NOIP2013-普及组-表达式求值" class="headerlink" title="[NOIP2013 普及组] 表达式求值"></a>[NOIP2013 普及组] 表达式求值</h1><h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>NOIP2013 普及组 T2</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包含加法和乘法的算术表达式，请你编程计算表达式的值。</p>
+<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>一行，为需要你计算的表达式，表达式中只包含数字、加法运算符 <code>+</code> 和乘法运算符 <code>*</code>，且没有括号，所有参与运算的数字均为 $0$ 到   $2^{31}-1$ 之间的整数。  </p>
+<p>输入数据保证这一行只有 <code>0123456789+*</code> 这 $12$ 种字符。</p>
+<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>一个整数，表示这个表达式的值。  </p>
+<p>注意：当答案长度多于 $4$ 位时，请只输出最后 $ 4$ 位，前导 $ 0$ 不输出。</p>
+<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1"><a href="#样例输入-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1*3+4</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1"><a href="#样例输出-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例-2"><a href="#样例-2" class="headerlink" title="样例 #2"></a>样例 #2</h2><h3 id="样例输入-2"><a href="#样例输入-2" class="headerlink" title="样例输入 #2"></a>样例输入 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1234567890*1</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-2"><a href="#样例输出-2" class="headerlink" title="样例输出 #2"></a>样例输出 #2</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7891</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例-3"><a href="#样例-3" class="headerlink" title="样例 #3"></a>样例 #3</h2><h3 id="样例输入-3"><a href="#样例输入-3" class="headerlink" title="样例输入 #3"></a>样例输入 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+1000000003*1</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-3"><a href="#样例输出-3" class="headerlink" title="样例输出 #3"></a>样例输出 #3</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>对于 $30%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100$。</p>
+<p>对于 $80%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤1000$。</p>
+<p>对于 $100%$ 的数据，$0≤$ 表达式中加法运算符和乘法运算符的总数 $≤100000$。</p>
+<h2 id="参考代码-他人博客"><a href="#参考代码-他人博客" class="headerlink" title="参考代码(他人博客)"></a>参考代码(他人博客)</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">stack &lt;<span class="type">int</span>&gt; x;<span class="comment">//一个存数字并在最后把它们相加的栈</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a,b;</span><br><span class="line">	<span class="type">char</span> c;</span><br><span class="line">	cin&gt;&gt;a;<span class="comment">//先输入一个数，以后符号+数字输入</span></span><br><span class="line">	<span class="type">int</span> m=<span class="number">10000</span>;</span><br><span class="line">	a=a%m;<span class="comment">//必须的操作</span></span><br><span class="line">	x.<span class="built_in">push</span>(a);<span class="comment">//压入栈中</span></span><br><span class="line">	<span class="keyword">while</span>(cin&gt;&gt;c&gt;&gt;b)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>)<span class="comment">//将*之前的数字与*之后的数字积存入</span></span><br><span class="line">		&#123;</span><br><span class="line">			a=x.<span class="built_in">top</span>();</span><br><span class="line">			x.<span class="built_in">pop</span>();</span><br><span class="line">			x.<span class="built_in">push</span>(a*b%m);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//将b存入</span></span><br><span class="line">			x.<span class="built_in">push</span>(b);</span><br><span class="line">	&#125;</span><br><span class="line">	a=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x.<span class="built_in">size</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		a+=x.<span class="built_in">top</span>();</span><br><span class="line">		a%=m;<span class="comment">//取模是万恶之源</span></span><br><span class="line">		x.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	cout&lt;&lt;a&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>另外说一句，Python2提交这个代码直接AC!</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">input</span>()%<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="取牌游戏"><a href="#取牌游戏" class="headerlink" title="取牌游戏"></a>取牌游戏</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>小明正在使用一堆共K张纸牌与N-1个朋友玩取牌游戏。其中，N&lt;&#x3D;K&lt;&#x3D;100000,2&lt;&#x3D;N&lt;&#x3D;100,K是N的倍数。纸牌中包含M&#x3D;K&#x2F;N张“good”和K-M张“bad”牌。小明负责发牌，他当然想自己获得所有的“good”牌。<br>他的朋友怀疑他会欺骗，所以他们给出以下一些限制，以防小明耍诈：<br>（1）	游戏开始时，将最上面的牌发给小明右手边的人。<br>（2）	每发完一张牌，他必须将接下来的p张牌（1&lt;&#x3D;p&lt;&#x3D;10）一张一张地依次移到最后，放在牌堆的底部。<br>（3）	以逆时针方向，连续给每位玩家发牌。<br>小明迫切想赢，请你帮助他算出所有“good”牌放置的位置，以便他得到所有的“good”牌。牌从上往下依次标注为1，2，3，…</p>
+<h2 id="输入格式-1"><a href="#输入格式-1" class="headerlink" title="输入格式"></a>输入格式</h2><p>第一行，3个用一个空格间隔的正整数N,K,P。</p>
+<h2 id="输出格式-1"><a href="#输出格式-1" class="headerlink" title="输出格式"></a>输出格式</h2><p>M行，从顶部按升序依次输出“good”牌的位置。</p>
+<h2 id="样例-1-1"><a href="#样例-1-1" class="headerlink" title="样例 #1"></a>样例 #1</h2><h3 id="样例输入-1-1"><a href="#样例输入-1-1" class="headerlink" title="样例输入 #1"></a>样例输入 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 9 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="样例输出-1-1"><a href="#样例输出-1-1" class="headerlink" title="样例输出 #1"></a>样例输出 #1</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -883,8 +883,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>竞赛</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -989,6 +989,33 @@
       <tags>
         <tag>Cloudflare</tag>
         <tag>DDos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2024博客调查问卷</title>
+    <url>//post/7bea.html</url>
+    <content><![CDATA[<h1 id="2024年博客调查问卷"><a href="#2024年博客调查问卷" class="headerlink" title="2024年博客调查问卷"></a>2024年博客调查问卷</h1><p>为了得到足够的反馈改进博客，特设调查问卷，欢迎参与！</p>
+<p><strong>时间</strong>：2024.10.19 ~ 2024.12.31</p>
+<p><strong>参与形式</strong>：问卷（在线）</p>
+<p><strong>参与者</strong>：所有人</p>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>请友善提出建议，不要刷屏</li>
+<li>建议好的会被采纳，结果公开展示！</li>
+</ul>
+<h2 id="在线问答"><a href="#在线问答" class="headerlink" title="在线问答"></a>在线问答</h2><p>您也可以扫描本文封面的二维码参与！</p>
+<iframe width="640px" height="480px" src="https://forms.office.com/r/YA2AbJ8fvV?embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+
+<h2 id="问答结果"><a href="#问答结果" class="headerlink" title="问答结果"></a>问答结果</h2><div class="note  info flat"><p>统计截止于 <strong>2024.12.31</strong>，结束后自动公开！</p>
+</div>
+
+<p>暂无。</p>
+]]></content>
+      <categories>
+        <category>调查问卷</category>
+      </categories>
+      <tags>
+        <tag>问卷</tag>
       </tags>
   </entry>
   <entry>
@@ -1301,77 +1328,6 @@
       </tags>
   </entry>
   <entry>
-    <title>免费域名怎么弄？常见免费域名指南</title>
-    <url>//post/re8u.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
-<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
-<p>今天我就整理了常见的免费域名，分享给大家。</p>
-<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
-<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
-<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
-
-<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
-<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
-<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
-<p>方法：</p>
-<ol>
-<li>打开链接，点击右上角用户图标</li>
-<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
-<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
-<li>返回控制台刷新后会发现可以创建了</li>
-<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
-<li>等待审核，通过后会有这个画面：</li>
-</ol>
-<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
-<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
-
-<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
-<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
-<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
-
-<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
-<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
-<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：No</p>
-<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
-<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：审核时间长</p>
-<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
-<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
-<p>地址：<a href="https://js.org/">https://js.org</a></p>
-<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：顶级域名<br>缺点：要买主机后才有</p>
-<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Pages</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>API构建①——Bing每日一图接口</title>
     <url>//post/r5fd.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
@@ -1442,6 +1398,77 @@
       <tags>
         <tag>API</tag>
         <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>免费域名怎么弄？常见免费域名指南</title>
+    <url>//post/re8u.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
+<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
+<p>今天我就整理了常见的免费域名，分享给大家。</p>
+<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
+<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
+<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
+
+<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
+<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
+<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
+<p>方法：</p>
+<ol>
+<li>打开链接，点击右上角用户图标</li>
+<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
+<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
+<li>返回控制台刷新后会发现可以创建了</li>
+<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
+<li>等待审核，通过后会有这个画面：</li>
+</ol>
+<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
+<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
+
+<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
+<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
+<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
+
+<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
+<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
+<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：No</p>
+<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
+<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：审核时间长</p>
+<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
+<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
+<p>地址：<a href="https://js.org/">https://js.org</a></p>
+<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：顶级域名<br>缺点：要买主机后才有</p>
+<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Pages</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
