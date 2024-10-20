@@ -26,9 +26,11 @@ const sidebarFn = () => {
     sco.refreshWaterFall();
   });
 }
+
 const scrollFn = () => {
   let initTop = 0;
   const $header = document.getElementById('page-header');
+  const $rightside = document.getElementById('rightside') || null;
   const throttledScroll = utils.throttle(() => {
     initThemeColor();
     const currentTop = window.scrollY || document.documentElement.scrollTop;
@@ -40,14 +42,17 @@ const scrollFn = () => {
         if (!$header.classList.contains('nav-visible')) $header.classList.add('nav-visible');
       }
       $header.classList.add('nav-fixed');
+      $rightside && ($rightside.style.cssText = 'opacity: 0.8; transform: translateX(-58px);');
     } else {
       $header.classList.remove('nav-fixed', 'nav-visible');
+      $rightside && ($rightside.style.cssText = "opacity: ''; transform: ''");
     }
   }, 200);
   window.addEventListener('scroll', (e) => {
     throttledScroll(e);
     if (window.scrollY === 0) {
       $header.classList.remove('nav-fixed', 'nav-visible');
+      $rightside && ($rightside.style.cssText = "opacity: ''; transform: ''");
     }
   });
 
@@ -63,11 +68,13 @@ const percent = () => {
   const scrollPos = window.pageYOffset || docEl.scrollTop;
   const totalScrollableHeight = Math.max(body.scrollHeight, docEl.scrollHeight, body.offsetHeight, docEl.offsetHeight, body.clientHeight, docEl.clientHeight) - docEl.clientHeight;
   const scrolledPercent = Math.round((scrollPos / totalScrollableHeight) * 100);
-  const navToTop = document.querySelector("#nav-totop");
+  const navToTop = document.querySelector("#nav-totop") || null;
+  const rsToTop = document.querySelector(".rs_show .top i") || null;
   const percentDisplay = document.querySelector("#percent");
   const isNearEnd = (window.scrollY + docEl.clientHeight) >= (document.getElementById("post-comment") || document.getElementById("footer")).offsetTop;
-  navToTop.classList.toggle("long", isNearEnd || scrolledPercent > 90);
-  percentDisplay.textContent = isNearEnd || scrolledPercent > 90 ? GLOBAL_CONFIG.lang.backtop : scrolledPercent;
+  navToTop && navToTop.classList.toggle("long", isNearEnd || scrolledPercent > 90);
+  rsToTop && rsToTop.classList.toggle("show", isNearEnd || scrolledPercent > 90);
+  percentDisplay.textContent = isNearEnd || scrolledPercent > 90 ? navToTop ? GLOBAL_CONFIG.lang.backtop : '' : scrolledPercent;
   document.querySelectorAll(".needEndHide").forEach(item => item.classList.toggle("hide", totalScrollableHeight - scrollPos < 100));
 }
 const showTodayCard = () => {
@@ -143,29 +150,59 @@ const sco = {
       });
     }
   },
-  musicToggle() {
+  musicToggle(isMeting = true) {
+    if (!this.isMusicBind) {
+      this.musicBind();
+    }
     const $music = document.querySelector('#nav-music');
     const $meting = document.querySelector('meting-js');
     const $console = document.getElementById('consoleMusic');
-    const $rm_text = document.querySelector('#menu-music-toggle span');
-    const $rm_icon = document.querySelector('#menu-music-toggle i');
+    const $rmText = document.querySelector('#menu-music-toggle span');
+    const $rmIcon = document.querySelector('#menu-music-toggle i');
+    
     this.musicPlaying = !this.musicPlaying;
     $music.classList.toggle("playing", this.musicPlaying);
-    $console.classList.toggle("on", this.musicPlaying);
+    $music.classList.toggle("stretch", this.musicPlaying);
+    $console?.classList.toggle("on", this.musicPlaying);
+    
     if (this.musicPlaying) {
-      $meting.aplayer.play();
-      (typeof rm !== 'undefined') && rm?.menuItems.music[0] && ($rm_text.textContent = GLOBAL_CONFIG.right_menu.music.stop) && ($rm_icon.className = 'solitude fas fa-pause')
+      if (typeof rm !== 'undefined' && rm?.menuItems.music[0]) {
+        $rmText.textContent = GLOBAL_CONFIG.right_menu.music.stop;
+        $rmIcon.className = 'solitude fas fa-pause';
+      }
     } else {
-      $meting.aplayer.pause();
-      (typeof rm !== 'undefined') && rm?.menuItems.music[0] && ($rm_text.textContent = GLOBAL_CONFIG.right_menu.music.start) && ($rm_icon.className = 'solitude fas fa-play')
+      if (typeof rm !== 'undefined' && rm?.menuItems.music[0]) {
+        $rmText.textContent = GLOBAL_CONFIG.right_menu.music.start;
+        $rmIcon.className = 'solitude fas fa-play';
+      }
     }
+
+    if(isMeting){
+      this.musicPlaying ? $meting.aplayer.play() : $meting.aplayer.pause();
+    }
+  },
+  musicBind() {
+    const $music = document.querySelector('#nav-music');
+    const $name = document.querySelector('#nav-music .aplayer-music');
+    const $button = document.querySelector('#nav-music .aplayer-button');
+    
+    $name?.addEventListener('click', () => {
+      $music.classList.toggle("stretch");
+    });
+
+    $button?.addEventListener('click', () => {
+      this.musicToggle(false);
+    });
+    
+    this.isMusicBind = true;
   },
   switchCommentBarrage() {
     let commentBarrageElement = document.querySelector(".comment-barrage");
+    let consoleCommentBarrage = document.querySelector("#consoleCommentBarrage");
     if (!commentBarrageElement) return;
     const isDisplayed = window.getComputedStyle(commentBarrageElement).display === "flex";
     commentBarrageElement.style.display = isDisplayed ? "none" : "flex";
-    document.querySelector("#consoleCommentBarrage").classList.toggle("on", !isDisplayed);
+    consoleCommentBarrage && consoleCommentBarrage.classList.toggle("on", !isDisplayed);
     utils.saveToLocal.set("commentBarrageSwitch", !isDisplayed, .2);
     rm?.menuItems.barrage && rm.barrage(isDisplayed)
   },
@@ -181,7 +218,7 @@ const sco = {
     this.sco_keyboards = !this.sco_keyboards;
     const consoleKeyboard = document.querySelector("#consoleKeyboard");
     const keyboardFunction = this.sco_keyboards ? openKeyboard : closeKeyboard;
-    consoleKeyboard.classList.toggle("on", this.sco_keyboards);
+    consoleKeyboard?.classList.toggle("on", this.sco_keyboards);
     keyboardFunction();
     localStorage.setItem("keyboard", this.sco_keyboards);
     document.getElementById('keyboard-tips')?.classList.remove('show');
@@ -219,7 +256,9 @@ const sco = {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           setTimeout(() => {
-            waterfall(entry.target) || entry.target.classList.add('show');
+            waterfall(entry.target).then(() => {
+              entry.target.classList.add('show');
+            });
           }, 300);
         }
       });
@@ -656,6 +695,35 @@ class tabs {
   }
 }
 
+const scrollFnToDo = () => {
+  const { toc } = PAGE_CONFIG;
+
+  if (toc) {
+    const $cardTocLayout = document.getElementById('card-toc')
+      $cardToc = $cardTocLayout.querySelector('.toc-content')
+      $tocLink = $cardToc.querySelectorAll('.toc-link')
+      $tocPercentage = $cardTocLayout.querySelector('.toc-percentage')
+      isExpand = $cardToc.classList.contains('is-expand')
+
+      // toc percentage
+      const tocItemClickFn = e => {
+        const target = e.target.closest('.toc-link')
+        if (!target) return
+
+        e.preventDefault()
+        utils.scrollToDest(utils.getEleTop(document.getElementById(decodeURI(target.getAttribute('href')).replace('#', ''))), 300)
+        if (window.innerWidth < 900) {
+          $cardTocLayout.classList.remove('open')
+        }
+      }
+      utils.addEventListenerPjax($cardToc, 'click', tocItemClickFn)
+  }
+}
+
+const forPostFn = () => {
+  scrollFnToDo()
+}
+
 window.refreshFn = () => {
   const {is_home, is_page, page, is_post} = PAGE_CONFIG;
   const {runtime, lazyload, lightbox, randomlink, covercolor, post_ai, lure, expire} = GLOBAL_CONFIG;
@@ -684,6 +752,8 @@ window.refreshFn = () => {
   if (covercolor.enable) coverColor();
   if (PAGE_CONFIG.toc) toc.init();
   if (lure) tabs.lureAddListener();
+
+  forPostFn();
 }
 document.addEventListener('DOMContentLoaded', () => {
   [addCopyright, window.refreshFn, asideStatus, () => window.onscroll = percent, sco.initConsoleState].forEach(fn => fn());
