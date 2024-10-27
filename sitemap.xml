@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.mc-sep.top/post/5trr.html</loc>
+    
+    <lastmod>2024-10-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.mc-sep.top/post/43vc.html</loc>
+    
+    <lastmod>2024-10-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.mc-sep.top/post/rh35.html</loc>
     
     <lastmod>2024-10-26</lastmod>
@@ -146,15 +164,6 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/43vc.html</loc>
-    
-    <lastmod>2024-10-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://blog.mc-sep.top/post/76gl.html</loc>
     
     <lastmod>2024-10-01</lastmod>
@@ -211,7 +220,7 @@
 
   <url>
     <loc>http://blog.mc-sep.top/</loc>
-    <lastmod>2024-10-26</lastmod>
+    <lastmod>2024-10-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>

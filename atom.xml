@@ -6,7 +6,7 @@
   <link href="http://blog.mc-sep.top/atom.xml" rel="self"/>
   
   <link href="http://blog.mc-sep.top/"/>
-  <updated>2024-10-26T09:58:18.745Z</updated>
+  <updated>2024-10-27T01:32:45.265Z</updated>
   <id>http://blog.mc-sep.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
+    <link href="http://blog.mc-sep.top/post/5trr.html"/>
+    <id>http://blog.mc-sep.top/post/5trr.html</id>
+    <published>2024-10-26T19:24:00.000Z</published>
+    <updated>2024-10-27T01:32:45.265Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p><p>总今天开始，本站的所有照片都会被托管到我的图床！</p><div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p></div><h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol><li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p><p><img src="https://img.mc-sep.top/file/bc413c22258677e219c99-b2f7837bf341532377.png"></p></li><li><p>进入 <a href="https://github.com/cf-pages/Telegraph-Image/fork">Fork cf-pages&#x2F;Telegraph-Image (github.com)</a> fork这个仓库</p></li><li><p>进入 CF 的 Workers和 pages页面，点击创建</p><p><img src="https://img.mc-sep.top/file/ab2ec27d47535b25aec09-7d04eef6d8f8edf7e4.png" alt="创建"></p><ol start="4"><li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p></li><li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p><table><thead><tr><th align="center">BASIC_USER</th><th align="center">后台管理员的用户名</th></tr></thead><tbody><tr><td align="center">BASIC_PASS</td><td align="center">后台的登陆密码</td></tr></tbody></table><p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p><div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p></div></li><li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p><p><img src="https://img.mc-sep.top/file/4d154702fc632ff2fc65a-a0be3aa9122d2ad8b1.png" alt="KV"></p></li><li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p><p><img src="https://img.mc-sep.top/file/5a551e13bac76a0cdb453-672a08f08efd51289d.png" alt="em"></p></li><li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p></li><li><p>（可选）自定义域名的绑定：</p><p><img src="https://img.mc-sep.top/file/653d0c7a7e7a8f920b0fb-53c546c2750f2fc7c2.png"></p></li></ol></li></ol><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>还可以吧！</p><p>版权所有©MC-Sep.</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！&lt;/p&gt;
+&lt;</summary>
+      
+    
+    
+    
+    <category term="实用教程" scheme="http://blog.mc-sep.top/categories/%E5%AE%9E%E7%94%A8%E6%95%99%E7%A8%8B/"/>
+    
+    
+    <category term="Cloudflare Pages" scheme="http://blog.mc-sep.top/tags/Cloudflare-Pages/"/>
+    
+  </entry>
   
   <entry>
     <title>2024博客调查问卷</title>
@@ -46,7 +71,7 @@
     <link href="http://blog.mc-sep.top/post/43vc.html"/>
     <id>http://blog.mc-sep.top/post/43vc.html</id>
     <published>2024-10-03T00:15:00.000Z</published>
-    <updated>2024-10-03T01:07:20.770Z</updated>
+    <updated>2024-10-27T00:54:20.391Z</updated>
     
     <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是 Vercel ? Vercel，是一家软件服务企业，掌门人是Guillermo Rauch，2023年4月18日，以170亿人民币的企业估值入选《2023·胡润全球独角兽榜》，排名404。2024年4月9日，Vercel以180亿人民币的企业估值入选《2024·胡润全球独角兽榜》，排名422名。</p><p>那么，今天我就叫你如何使用 Vercel 快速上线你的个人网站！</p><h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="Part1-导入博客Repo"><a href="#Part1-导入博客Repo" class="headerlink" title="Part1. 导入博客Repo"></a>Part1. 导入博客Repo</h2><ol><li><p>进入 <strong><a href="vercel.com">Vercel</a></strong> ，先注册账号（建议使用Github注册）。</p></li><li><p>进入Dashboard，点击<code>Add New</code>-&gt;<code>Project</code></p></li></ol><p><img src="/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p><ol start="3"><li>进入选择界面，找到你的博客所在的Github仓库，点击一旁的<strong>Import</strong>，例如我的<code>mc-sep.github.io</code></li></ol><p><img src="/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p><ol start="4"><li>进入到配置界面，如果你是Hexo博客（只上传public文件夹内文件的），请不要修改<strong>Build and Output Settings</strong>和<strong>Framework Preset</strong>，如果是Hexo（在线部署的），请在<strong>Framework Preset</strong>中选择<strong>Hexo</strong>，其他不用动。其余博客的方法可自行查阅。最后点击<strong>Deploy</strong></li></ol><p><img src="/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p><p><img src="/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p><ol start="5"><li>等待部署完成。完成后，点击<strong>Continue to Dashboard</strong></li></ol><p><img src="/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p><p><img src="/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p><h2 id="Part2-绑定域名"><a href="#Part2-绑定域名" class="headerlink" title="Part2. 绑定域名"></a>Part2. 绑定域名</h2><p>请在你的域名托管商内添加一个<strong>CNAME</strong>记录：<strong>cname-china.vercel-dns.com</strong>或者<strong>A</strong>记录：<strong>76.76.21.21</strong>或<strong>76.76.21.98</strong>，如图：</p><p><img src="/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p><p>接着去到你创建好的Project，点击<strong>Settings</strong>-&gt;<strong>Domains</strong>，再上面输入你的域名！</p><p><img src="/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p><p>如果你配置错了，可能就会：</p><p><img src="/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p><p><img src="/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p><p>你也可以使用Vercel的自带域名（被ban了）：</p><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你喜欢的名字.vercel.app</span><br></pre></td></tr></table></figure><h2 id="Part3-安全系统"><a href="#Part3-安全系统" class="headerlink" title="Part3. 安全系统"></a>Part3. 安全系统</h2><ol><li><p>进入<strong>Settings</strong>-&gt;<strong>Security</strong></p></li><li><p>可以将<strong>Attack Challenge Mode</strong>打开（通过向每位访客显示验证质询来防止恶意流量），效果就不展示了。</p></li><li><p>下面的都可以打开。</p></li></ol><h2 id="Part4-优化"><a href="#Part4-优化" class="headerlink" title="Part4. 优化"></a>Part4. 优化</h2><p>可以提出建议！我可能会采纳！</p><ul><li>进入<strong>Settings</strong>-&gt;<strong>Functions</strong>，可将服务器改为香港的（好像小日子的更快），如：</li></ul><p><img src="/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel挺好用的。</p><p>版权所有©MC-Sep 2023~2024.</p>]]></content>
     
