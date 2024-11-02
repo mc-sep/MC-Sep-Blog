@@ -6,7 +6,7 @@
   <link href="http://blog.mc-sep.top/atom.xml" rel="self"/>
   
   <link href="http://blog.mc-sep.top/"/>
-  <updated>2024-10-27T01:32:45.265Z</updated>
+  <updated>2024-10-27T02:03:34.812Z</updated>
   <id>http://blog.mc-sep.top/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://blog.mc-sep.top/post/5trr.html"/>
     <id>http://blog.mc-sep.top/post/5trr.html</id>
     <published>2024-10-26T19:24:00.000Z</published>
-    <updated>2024-10-27T01:32:45.265Z</updated>
+    <updated>2024-10-27T02:03:34.812Z</updated>
     
     <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p><p>总今天开始，本站的所有照片都会被托管到我的图床！</p><div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p></div><h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol><li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p><p><img src="https://img.mc-sep.top/file/bc413c22258677e219c99-b2f7837bf341532377.png"></p></li><li><p>进入 <a href="https://github.com/cf-pages/Telegraph-Image/fork">Fork cf-pages&#x2F;Telegraph-Image (github.com)</a> fork这个仓库</p></li><li><p>进入 CF 的 Workers和 pages页面，点击创建</p><p><img src="https://img.mc-sep.top/file/ab2ec27d47535b25aec09-7d04eef6d8f8edf7e4.png" alt="创建"></p><ol start="4"><li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p></li><li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p><table><thead><tr><th align="center">BASIC_USER</th><th align="center">后台管理员的用户名</th></tr></thead><tbody><tr><td align="center">BASIC_PASS</td><td align="center">后台的登陆密码</td></tr></tbody></table><p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p><div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p></div></li><li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p><p><img src="https://img.mc-sep.top/file/4d154702fc632ff2fc65a-a0be3aa9122d2ad8b1.png" alt="KV"></p></li><li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p><p><img src="https://img.mc-sep.top/file/5a551e13bac76a0cdb453-672a08f08efd51289d.png" alt="em"></p></li><li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p></li><li><p>（可选）自定义域名的绑定：</p><p><img src="https://img.mc-sep.top/file/653d0c7a7e7a8f920b0fb-53c546c2750f2fc7c2.png"></p></li></ol></li></ol><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>还可以吧！</p><p>版权所有©MC-Sep.</p>]]></content>
     
@@ -278,9 +278,9 @@
     <category term="Hexo" scheme="http://blog.mc-sep.top/categories/Hexo/"/>
     
     
-    <category term="Hexo" scheme="http://blog.mc-sep.top/tags/Hexo/"/>
-    
     <category term="Pages" scheme="http://blog.mc-sep.top/tags/Pages/"/>
+    
+    <category term="Hexo" scheme="http://blog.mc-sep.top/tags/Hexo/"/>
     
   </entry>
   
@@ -414,9 +414,9 @@
     <category term="Hexo" scheme="http://blog.mc-sep.top/categories/Hexo/"/>
     
     
-    <category term="Hexo" scheme="http://blog.mc-sep.top/tags/Hexo/"/>
-    
     <category term="Github" scheme="http://blog.mc-sep.top/tags/Github/"/>
+    
+    <category term="Hexo" scheme="http://blog.mc-sep.top/tags/Hexo/"/>
     
   </entry>
   
