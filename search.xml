@@ -466,18 +466,19 @@
     <title>Cloudflare Pages+Telegraph搭建简易图床</title>
     <url>//post/5trr.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
-<p>总今天开始，本站的所有照片都会被托管到我的图床！</p>
+<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
+<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
 <div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
 </div>
 
 <h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
 <li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
-<p><img src="https://img.mc-sep.top/file/bc413c22258677e219c99-b2f7837bf341532377.png"></p>
+<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
 </li>
 <li><p>进入 <a href="https://github.com/cf-pages/Telegraph-Image/fork">Fork cf-pages&#x2F;Telegraph-Image (github.com)</a> fork这个仓库</p>
 </li>
 <li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
-<p><img src="https://img.mc-sep.top/file/ab2ec27d47535b25aec09-7d04eef6d8f8edf7e4.png" alt="创建"></p>
+<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
 <ol start="4">
 <li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
 </li>
@@ -499,21 +500,19 @@
 </div>
 </li>
 <li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
-<p><img src="https://img.mc-sep.top/file/4d154702fc632ff2fc65a-a0be3aa9122d2ad8b1.png" alt="KV"></p>
+<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
 </li>
 <li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
-<p><img src="https://img.mc-sep.top/file/5a551e13bac76a0cdb453-672a08f08efd51289d.png" alt="em"></p>
+<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
 </li>
 <li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
 </li>
 <li><p>（可选）自定义域名的绑定：</p>
-<p><img src="https://img.mc-sep.top/file/653d0c7a7e7a8f920b0fb-53c546c2750f2fc7c2.png"></p>
+<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
 </li>
 </ol>
 </li>
 </ol>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>还可以吧！</p>
-<p>版权所有©MC-Sep.</p>
 ]]></content>
       <categories>
         <category>实用教程</category>
@@ -542,7 +541,7 @@
 <p><img src="/img/article/16/1.png" alt="原理"></p>
 <h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
 <p><img src="/img/article/16/2.png" alt="1"></p>
-<p>当然你也可以使用其他服务商的，比如Cloudflare、Vercel、腾讯云啥的</p>
+<p>Cloudflare里可以设置。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
 <p>版权所有©MC-Sep 2024.</p>
 ]]></content>
