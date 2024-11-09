@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>利用Cloudflare Workers搭建镜像网站</title>
+    <url>//post/437r.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
+<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li>准备你的Cloudflare账号</li>
+<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
+</ol>
+<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
+<ol start="3">
+<li>选择<strong>创建Workers</strong></li>
+<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
+</ol>
+<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
+<ol start="5">
+<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
+</ol>
+<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
+<ol start="6">
+<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
+</ol>
+<p><img src="/img/article/9/66ab1781dad21.png"></p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
+
+<div class="note  warning flat fas fa-triangle-exclamation"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
+</div>
+
+<div class="note  danger flat fas fa-circle-xmark"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
+<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Cloudflare</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>免费小型数据库——Vercel Blob初体验</title>
     <url>//post/239d.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
@@ -105,53 +152,6 @@
       <tags>
         <tag>Vercel</tag>
         <tag>图床</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>利用Cloudflare Workers搭建镜像网站</title>
-    <url>//post/437r.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
-<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li>准备你的Cloudflare账号</li>
-<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
-<ol start="3">
-<li>选择<strong>创建Workers</strong></li>
-<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
-<ol start="5">
-<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
-</ol>
-<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
-<ol start="6">
-<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
-</ol>
-<p><img src="/img/article/9/66ab1781dad21.png"></p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
-
-<div class="note  warning flat fas fa-triangle-exclamation"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
-</div>
-
-<div class="note  danger flat fas fa-circle-xmark"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
-<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
-</div>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Cloudflare</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare</tag>
       </tags>
   </entry>
   <entry>
@@ -437,97 +437,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
-    <url>//post/5trr.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
-<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
-<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
-</div>
-
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
-<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
-</li>
-<li><p>进入 <a href="https://github.com/cf-pages/Telegraph-Image/fork">Fork cf-pages&#x2F;Telegraph-Image (github.com)</a> fork这个仓库</p>
-</li>
-<li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
-<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
-<ol start="4">
-<li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
-</li>
-<li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p>
-<table>
-<thead>
-<tr>
-<th align="center">BASIC_USER</th>
-<th align="center">后台管理员的用户名</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">BASIC_PASS</td>
-<td align="center">后台的登陆密码</td>
-</tr>
-</tbody></table>
-<p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p>
-</div>
-</li>
-<li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
-<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
-</li>
-<li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
-<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
-</li>
-<li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
-</li>
-<li><p>（可选）自定义域名的绑定：</p>
-<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
-</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>实用教程</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare Pages</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
-    <url>//post/76gl.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
-<p><img src="/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
-<p>由于影响不是很大，为了他人隐私（也不能不给他机会改正吧），就不“公开处刑”了。</p>
-<p>那么，什么是DDos？它会对博客造成什么威胁？今天我就讲讲DDos攻击原理与防护方法。</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>DDoS全称Distributed Denial of Service，意思为“分布式拒绝服务”，即利用大量合法的分布式服务器对目标发送请求，从而导致正常合法用户无法获得服务。</p>
-<p>就比如，一个健身房生意十分火爆，那些“壮汉”看不下去了，就召集n个人进到他店，但是就是不健身，又堵住健身器材。这个商家看似很忙很火爆，其实啥也不是，同时，真正想要健身的顾客也没得到接待，因为店里挤得进不去。</p>
-<p>现在的DDoS让服务不仅可以直接阻断，还能够通过影响服务的客户体验实现攻击。他又这些特点：</p>
-<ol>
-<li><strong>造成“供不应求”现象</strong>。通过控制大量攻击主机同时连接网站端口，制造大流量无用数据，造成通往被攻击主机的网络拥塞，使被攻击主机无法正常和外界通信。</li>
-<li><strong>傀儡攻击</strong>。傀儡就是可以被黑客操控的机器，经常被用为DDos攻击，但是傀儡数量十分多，使后端无法准确辨识。</li>
-<li><strong>网络层攻击</strong>。通过发送伪造源IP的TCP数据包发送SYN或ACK包、发送包含错误设置的地址值等攻击方式，耗尽服务器资源，导致服务器拒绝访问。</li>
-<li><strong>CC攻击</strong>。黑客借助代理服务器生成指向受害主机的合法网页请求，实现DDoS和伪装就叫CC（全名Challenge Collapsar）。傀儡CC攻击是黑客使用CC攻击软件，控制大量傀儡发动攻击，模拟正常用户访问网站的请求，伪造成合法数据包。</li>
-</ol>
-<p>DDos攻击原理如下：</p>
-<p><img src="/img/article/16/1.png" alt="原理"></p>
-<h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
-<p><img src="/img/article/16/2.png" alt="1"></p>
-<p>Cloudflare里可以设置。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>实用教程</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare</tag>
-        <tag>DDos</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【Hexo】Hexo+Github搭建个人博客</title>
     <url>//post/4nd3.html</url>
     <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间90分钟，请放心食用！</p>
@@ -661,6 +570,65 @@
       </tags>
   </entry>
   <entry>
+    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
+    <url>//post/5trr.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
+<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
+<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
+</div>
+
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
+<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
+</li>
+<li><p>进入 <a href="https://github.com/cf-pages/Telegraph-Image/fork">Fork cf-pages&#x2F;Telegraph-Image (github.com)</a> fork这个仓库</p>
+</li>
+<li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
+<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
+<ol start="4">
+<li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
+</li>
+<li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p>
+<table>
+<thead>
+<tr>
+<th align="center">BASIC_USER</th>
+<th align="center">后台管理员的用户名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">BASIC_PASS</td>
+<td align="center">后台的登陆密码</td>
+</tr>
+</tbody></table>
+<p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p>
+</div>
+</li>
+<li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
+<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
+</li>
+<li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
+<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
+</li>
+<li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
+</li>
+<li><p>（可选）自定义域名的绑定：</p>
+<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
+</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare Pages</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>关于博客评论更换的通知</title>
     <url>//post/73dh.html</url>
     <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
@@ -681,75 +649,62 @@
       </tags>
   </entry>
   <entry>
-    <title>【HTML】利用localstrange临时存储数据</title>
-    <url>//post/8g66.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通过本地存储（Local Storage），web 应用程序能够在用户浏览器中对数据进行本地的存储。</p>
-<p>在 HTML5 之前，应用程序数据只能存储在 cookie 中，包括每个服务器请求。本地存储则更安全，并且可在不影响网站性能的前提下将大量数据存储于本地。</p>
-<p>与 cookie 不同，存储限制要大得多（至少5MB），并且信息不会被传输到服务器。</p>
-<p>本地存储经由起源地（origin）（经由域和协议）。所有页面，从起源地，能够存储和访问相同的数据。</p>
-<div class="note  danger simple"><p>注意：localstrange里的数据不是永久保存的，它可能会在浏览器自动清理或手动删除后消失。</p>
-</div>
-
-<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><h2 id="Example：登录界面"><a href="#Example：登录界面" class="headerlink" title="Example：登录界面"></a>Example：登录界面</h2><h3 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h3><p>利用<strong>localstrange</strong>做一个登录、注册页面，可以立即注册和登录。</p>
-<h3 id="项目图片"><a href="#项目图片" class="headerlink" title="项目图片"></a>项目图片</h3><p><img src="/img/article/3/d49fb2dab8c35cf50fcb8b7e8f77b0fe21f25a13ecb5a9005632d2044893a975.png"></p>
-<p><img src="/img/article/3/3ed214b0ee29b297605e3108ed5a276f0cf4ba4f5f8ad0aa55df2b80bae4ca62.png"></p>
-<p>如果你有服务器，将数据存储在服务器上是不二之选。但是没有服务器，我们也可以通过一下方法完成此操作。</p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
-<li><p>确定临时变量：登录、注册的账号密码，状态</p>
-</li>
-<li><p>明确如何调用。</p>
-</li>
-</ol>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>由于存储变量的单一，重复注册会覆盖之前的数据。</p>
-</div>
-
-
-<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>登录：</p>
+    <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
+    <url>//post/76gl.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
+<p><img src="/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
+<p>由于影响不是很大，为了他人隐私（也不能不给他机会改正吧），就不“公开处刑”了。</p>
+<p>那么，什么是DDos？它会对博客造成什么威胁？今天我就讲讲DDos攻击原理与防护方法。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>DDoS全称Distributed Denial of Service，意思为“分布式拒绝服务”，即利用大量合法的分布式服务器对目标发送请求，从而导致正常合法用户无法获得服务。</p>
+<p>就比如，一个健身房生意十分火爆，那些“壮汉”看不下去了，就召集n个人进到他店，但是就是不健身，又堵住健身器材。这个商家看似很忙很火爆，其实啥也不是，同时，真正想要健身的顾客也没得到接待，因为店里挤得进不去。</p>
+<p>现在的DDoS让服务不仅可以直接阻断，还能够通过影响服务的客户体验实现攻击。他又这些特点：</p>
 <ol>
-<li>HTML样式</li>
+<li><strong>造成“供不应求”现象</strong>。通过控制大量攻击主机同时连接网站端口，制造大流量无用数据，造成通往被攻击主机的网络拥塞，使被攻击主机无法正常和外界通信。</li>
+<li><strong>傀儡攻击</strong>。傀儡就是可以被黑客操控的机器，经常被用为DDos攻击，但是傀儡数量十分多，使后端无法准确辨识。</li>
+<li><strong>网络层攻击</strong>。通过发送伪造源IP的TCP数据包发送SYN或ACK包、发送包含错误设置的地址值等攻击方式，耗尽服务器资源，导致服务器拒绝访问。</li>
+<li><strong>CC攻击</strong>。黑客借助代理服务器生成指向受害主机的合法网页请求，实现DDoS和伪装就叫CC（全名Challenge Collapsar）。傀儡CC攻击是黑客使用CC攻击软件，控制大量傀儡发动攻击，模拟正常用户访问网站的请求，伪造成合法数据包。</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>定义</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>调用</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>注册：</p>
-<ol>
-<li>HTML样式：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<p>2.定义+调用</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="完整代码-–"><a href="#完整代码-–" class="headerlink" title="完整代码 –&gt;"></a>完整代码 –&gt;</h3><ul>
-<li>登录</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注册</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="Exercise-图片中转站"><a href="#Exercise-图片中转站" class="headerlink" title="Exercise: 图片中转站"></a>Exercise: 图片中转站</h2><h3 id="项目图片-–"><a href="#项目图片-–" class="headerlink" title="项目图片 –&gt;"></a>项目图片 –&gt;</h3><p><img src="/img/article/3/fc4caee593e7510f5e9b7923700b567a9caa39c4251ddfb820eb6235a24d6b50.png"></p>
-<p>源代码请见<code>评论区</code>。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>localstrange可以临时存放数据，但不建议长久存放。</p>
-<p>版权所有©Minecraft-Sep。</p>
+<p>DDos攻击原理如下：</p>
+<p><img src="/img/article/16/1.png" alt="原理"></p>
+<h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
+<p><img src="/img/article/16/2.png" alt="1"></p>
+<p>Cloudflare里可以设置。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
+<p>版权所有©MC-Sep 2024.</p>
 ]]></content>
       <categories>
-        <category>HTML</category>
+        <category>实用教程</category>
       </categories>
       <tags>
-        <tag>Javascript</tag>
-        <tag>HTML</tag>
+        <tag>Cloudflare</tag>
+        <tag>DDos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2024博客调查问卷</title>
+    <url>//post/7bea.html</url>
+    <content><![CDATA[<h1 id="2024年博客调查问卷"><a href="#2024年博客调查问卷" class="headerlink" title="2024年博客调查问卷"></a>2024年博客调查问卷</h1><p>为了得到足够的反馈改进博客，特设调查问卷，欢迎参与！</p>
+<p><strong>时间</strong>：2024.10.19 ~ 2024.12.31</p>
+<p><strong>参与形式</strong>：问卷（在线）</p>
+<p><strong>参与者</strong>：所有人</p>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>请友善提出建议，不要刷屏</li>
+<li>建议好的会被采纳，结果公开展示！</li>
+</ul>
+<h2 id="在线问答"><a href="#在线问答" class="headerlink" title="在线问答"></a>在线问答</h2><p>您也可以扫描本文封面的二维码参与！</p>
+<iframe width="1000px" height="480px" src="https://forms.office.com/r/YA2AbJ8fvV?embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+
+<h2 id="问答结果"><a href="#问答结果" class="headerlink" title="问答结果"></a>问答结果</h2><div class="note  info flat fas fa-circle-info"><p>统计截止于 <strong>2024.12.31</strong>，结束后自动公开！</p>
+</div>
+
+<p>暂无。</p>
+]]></content>
+      <categories>
+        <category>调查问卷</category>
+      </categories>
+      <tags>
+        <tag>问卷</tag>
       </tags>
   </entry>
   <entry>
@@ -928,6 +883,78 @@
       </tags>
   </entry>
   <entry>
+    <title>【HTML】利用localstrange临时存储数据</title>
+    <url>//post/8g66.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通过本地存储（Local Storage），web 应用程序能够在用户浏览器中对数据进行本地的存储。</p>
+<p>在 HTML5 之前，应用程序数据只能存储在 cookie 中，包括每个服务器请求。本地存储则更安全，并且可在不影响网站性能的前提下将大量数据存储于本地。</p>
+<p>与 cookie 不同，存储限制要大得多（至少5MB），并且信息不会被传输到服务器。</p>
+<p>本地存储经由起源地（origin）（经由域和协议）。所有页面，从起源地，能够存储和访问相同的数据。</p>
+<div class="note  danger simple"><p>注意：localstrange里的数据不是永久保存的，它可能会在浏览器自动清理或手动删除后消失。</p>
+</div>
+
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><h2 id="Example：登录界面"><a href="#Example：登录界面" class="headerlink" title="Example：登录界面"></a>Example：登录界面</h2><h3 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h3><p>利用<strong>localstrange</strong>做一个登录、注册页面，可以立即注册和登录。</p>
+<h3 id="项目图片"><a href="#项目图片" class="headerlink" title="项目图片"></a>项目图片</h3><p><img src="/img/article/3/d49fb2dab8c35cf50fcb8b7e8f77b0fe21f25a13ecb5a9005632d2044893a975.png"></p>
+<p><img src="/img/article/3/3ed214b0ee29b297605e3108ed5a276f0cf4ba4f5f8ad0aa55df2b80bae4ca62.png"></p>
+<p>如果你有服务器，将数据存储在服务器上是不二之选。但是没有服务器，我们也可以通过一下方法完成此操作。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
+<li><p>确定临时变量：登录、注册的账号密码，状态</p>
+</li>
+<li><p>明确如何调用。</p>
+</li>
+</ol>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>由于存储变量的单一，重复注册会覆盖之前的数据。</p>
+</div>
+
+
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>登录：</p>
+<ol>
+<li>HTML样式</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>定义</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>调用</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注册：</p>
+<ol>
+<li>HTML样式：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>2.定义+调用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="完整代码-–"><a href="#完整代码-–" class="headerlink" title="完整代码 –&gt;"></a>完整代码 –&gt;</h3><ul>
+<li>登录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注册</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Exercise-图片中转站"><a href="#Exercise-图片中转站" class="headerlink" title="Exercise: 图片中转站"></a>Exercise: 图片中转站</h2><h3 id="项目图片-–"><a href="#项目图片-–" class="headerlink" title="项目图片 –&gt;"></a>项目图片 –&gt;</h3><p><img src="/img/article/3/fc4caee593e7510f5e9b7923700b567a9caa39c4251ddfb820eb6235a24d6b50.png"></p>
+<p>源代码请见<code>评论区</code>。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>localstrange可以临时存放数据，但不建议长久存放。</p>
+<p>版权所有©Minecraft-Sep。</p>
+]]></content>
+      <categories>
+        <category>HTML</category>
+      </categories>
+      <tags>
+        <tag>Javascript</tag>
+        <tag>HTML</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>API构建①——Bing每日一图接口</title>
     <url>//post/r5fd.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
@@ -997,30 +1024,74 @@
       </tags>
   </entry>
   <entry>
-    <title>2024博客调查问卷</title>
-    <url>//post/7bea.html</url>
-    <content><![CDATA[<h1 id="2024年博客调查问卷"><a href="#2024年博客调查问卷" class="headerlink" title="2024年博客调查问卷"></a>2024年博客调查问卷</h1><p>为了得到足够的反馈改进博客，特设调查问卷，欢迎参与！</p>
-<p><strong>时间</strong>：2024.10.19 ~ 2024.12.31</p>
-<p><strong>参与形式</strong>：问卷（在线）</p>
-<p><strong>参与者</strong>：所有人</p>
-<p><strong>注意</strong>：</p>
-<ul>
-<li>请友善提出建议，不要刷屏</li>
-<li>建议好的会被采纳，结果公开展示！</li>
-</ul>
-<h2 id="在线问答"><a href="#在线问答" class="headerlink" title="在线问答"></a>在线问答</h2><p>您也可以扫描本文封面的二维码参与！</p>
-<iframe width="1000px" height="480px" src="https://forms.office.com/r/YA2AbJ8fvV?embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+    <title>免费域名怎么弄？常见免费域名指南</title>
+    <url>//post/re8u.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
+<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
+<p>今天我就整理了常见的免费域名，分享给大家。</p>
+<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
+<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
+<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
 
-<h2 id="问答结果"><a href="#问答结果" class="headerlink" title="问答结果"></a>问答结果</h2><div class="note  info flat fas fa-circle-info"><p>统计截止于 <strong>2024.12.31</strong>，结束后自动公开！</p>
-</div>
+<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
+<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
+<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
+<p>方法：</p>
+<ol>
+<li>打开链接，点击右上角用户图标</li>
+<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
+<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
+<li>返回控制台刷新后会发现可以创建了</li>
+<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
+<li>等待审核，通过后会有这个画面：</li>
+</ol>
+<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
+<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
 
-<p>暂无。</p>
+<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
+<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
+<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
+
+<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
+<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
+<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：No</p>
+<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
+<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：审核时间长</p>
+<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
+<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
+<p>地址：<a href="https://js.org/">https://js.org</a></p>
+<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.one</span><br></pre></td></tr></table></figure>
+
+<p>优点：顶级域名<br>缺点：要买主机后才有</p>
+<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
+<p>版权所有©MC-Sep 2024.</p>
 ]]></content>
       <categories>
-        <category>调查问卷</category>
+        <category>Hexo</category>
       </categories>
       <tags>
-        <tag>问卷</tag>
+        <tag>Pages</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1222,77 +1293,6 @@
       </categories>
       <tags>
         <tag>周年记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>免费域名怎么弄？常见免费域名指南</title>
-    <url>//post/re8u.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
-<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
-<p>今天我就整理了常见的免费域名，分享给大家。</p>
-<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
-<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
-<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
-
-<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
-<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
-<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
-<p>方法：</p>
-<ol>
-<li>打开链接，点击右上角用户图标</li>
-<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
-<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
-<li>返回控制台刷新后会发现可以创建了</li>
-<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
-<li>等待审核，通过后会有这个画面：</li>
-</ol>
-<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
-<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
-
-<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
-<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
-<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
-
-<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
-<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
-<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：No</p>
-<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
-<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：审核时间长</p>
-<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
-<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
-<p>地址：<a href="https://js.org/">https://js.org</a></p>
-<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.one</span><br></pre></td></tr></table></figure>
-
-<p>优点：顶级域名<br>缺点：要买主机后才有</p>
-<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Pages</tag>
-        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
