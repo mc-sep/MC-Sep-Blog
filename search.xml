@@ -1,6 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>免费小型数据库——Vercel Blob初体验</title>
+    <url>//post/239d.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
+<p>他的配置还不错的：</p>
+<table>
+<thead>
+<tr>
+<th align="center">计划</th>
+<th align="center">数据库大小</th>
+<th align="center">读</th>
+<th align="center">写</th>
+<th align="center">请求数</th>
+<th align="center">请求时长</th>
+<th align="center">是否要Projects</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Hobby</td>
+<td align="center">250MB&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">1 hour&#x2F;Month</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="center">Pro</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="center">Team</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">✅</td>
+</tr>
+</tbody></table>
+<p>今天就teach你怎么搞！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li><p>准备一个Vercel账号，可以直接用Github登录</p>
+</li>
+<li><p>创建存储库（点击快速创建）：<a href="https://vercel.com/new/mc-sep-vercel-team/clone?demo-description=Simple%20Next.js%20template%20that%20uses%20Vercel%20Blob%20for%20image%20uploads&demo-image=//images.ctfassets.net/e5382hct74si/W7szxXAHpF3eZ4RFT33Cb/4d8a64904b67980e449b487089dd7b2b/opengraph-image.png&demo-title=Vercel%20Blob%20Next.js%20Starter&demo-url=https://blob-starter.vercel.app/&project-name=blob-starter&repository-name=blob-starter&repository-url=https://github.com/vercel/examples/tree/main/storage/blob-starter&stores=%5B%7B%22type%22:%22blob%22%7D%5D">Create</a></p>
+</li>
+<li><p>在接下来的页面中，名字自己填，然后 Add 一个 Blob Store，确定即可</p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/13/db6a8c47c47a8e6a1a8612261ed977e7c6081bf45a699d8b675c2e2a7837a32c.png" alt="add vercel blob storage"></p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>注意，每个用户只允许创建一个Vercel Blob Storage!</p>
+</div>
+
+<ol start="4">
+<li><p>直到满屏烟花，点击 <strong>Continue to Dashboard</strong>。</p>
+</li>
+<li><p>点击 <strong>Settings</strong> -&gt; <strong>Environment Variables</strong>，最下面找到名为 <code>BLOB_READ_WRITE_TOKEN</code> 的环境变量，点击复制，格式是这样的：</p>
+</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">vercel_blob_rw_*************************************</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/13/055fc988aad255241065ea6737692f16aee76e52558272107f3633d3a171d77a.png" alt="copy the envirnment variables"></p>
+<ol start="6">
+<li>回到 <strong>Settings</strong> -&gt; <strong>Functions</strong>，将区域改为 <strong>Hong Kong (East) – hkg1</strong> 或 <strong>Tokyo, Japan (Northeast) – hnd1</strong></li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/13/9c1fdfb473e882beb42399ea02144f61e24fe5dfb0f49cc3e377db3d4007b6c8.png" alt="set functions"></p>
+<ol start="7">
+<li>回到 Dashboard 主页面，点击这个进入创建的Github Repo:</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/13/aefa06c390feaa84978126eafd0247ebf1e6eaa33fd90308ff7e46241f9b5321.png"></p>
+<ol start="8">
+<li>打开文件 <strong>.env.example</strong>，将复制的内容粘贴在末尾，格式如下：</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">BLOB_READ_WRITE_TOKEN=vercel_blob_rw_*******************************</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>打开 [Main Blob Storage] &#x2F; app &#x2F; page.tsx，修改里面的内容为中文（建议保留原站链接），可参照我的配置</li>
+</ol>
+<figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Image</span> <span class="keyword">from</span> <span class="string">&#x27;next/image&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Link</span> <span class="keyword">from</span> <span class="string">&#x27;next/link&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ExpandingArrow</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/expanding-arrow&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Uploader</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/uploader&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Toaster</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/components/toaster&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">Home</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">main</span> <span class="attr">className</span>=<span class="string">&quot;relative flex min-h-screen flex-col items-center justify-center&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Toaster</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/templates/next.js/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">className</span>=<span class="string">&quot;group mt-20 sm:mt-0 rounded-full flex space-x-1 bg-white/30 shadow-sm ring-1 ring-gray-900/5 text-gray-600 text-sm font-medium px-10 py-2 hover:shadow-lg active:shadow-sm transition-all&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>🎉使用Vercel免费搭建🎉<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">ExpandingArrow</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">&quot;pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        MC-Sep 免费网盘</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Uploader</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light text-gray-600 w-full max-w-lg text-center mt-6&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/blob&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Vercel Blob</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span>&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        Web. Built with&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://nextjs.org/docs&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Next.js App Router</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        .</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;sm:absolute sm:bottom-0 w-full px-20 py-10 flex justify-between&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span> <span class="attr">href</span>=<span class="string">&quot;https://vercel.com&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/vercel.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;Vercel Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;100&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://github.com/vercel/examples/tree/main/storage/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;flex items-center space-x-2&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/github.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;GitHub Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light&quot;</span>&gt;</span>Github<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>保存后，系统会重新部署一次，回到 <strong>Settings</strong> -&gt; <strong>Domains</strong>，添加你的域名（确保你的域名托管商已经添加记录为<code>A</code>:<strong>76.76.21.98</strong> 的记录，Add 即可。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/13/902e66cfb6bd99a53d7402fc6d61eb9d57b7995dac607c36b5190af4d7ba6771.png" alt="add domain"></p>
+<ol start="11">
+<li>完工！</li>
+</ol>
+<div class="note  info flat fas fa-circle-info"><p>提示：可以在 <strong>Storage</strong> 页面查看存储库，状态，如大小、读写次数统计等。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/13/790eebd56379643ae8fcb33c5994ddb0845a0720020a20fb9891829e4b49e42b.png" alt="View the Storage"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/13/e20224e68a0c4f90f5d488748b8ddd1d0f01ea03d275ec8d10f6c05d948b940c.png" alt="See the storage message"></p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel Blob是一个不错的存储系统，对Hobby计划用户很友好。</p>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>图床</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>利用Cloudflare Workers搭建镜像网站</title>
     <url>//post/437r.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
@@ -9,16 +116,16 @@
 <li>准备你的Cloudflare账号</li>
 <li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
 </ol>
-<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
 <ol start="3">
 <li>选择<strong>创建Workers</strong></li>
 <li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
 </ol>
-<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
 <ol start="5">
 <li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
 </ol>
-<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
 <ol start="6">
 <li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
 </ol>
@@ -27,7 +134,7 @@
 <ol start="7">
 <li>点击右上角部署，等待几分钟即可出现反代网站：</li>
 </ol>
-<p><img src="/img/article/9/66ab1781dad21.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/9/66ab1781dad21.png"></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
 
 <div class="note  warning flat fas fa-triangle-exclamation"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
@@ -58,28 +165,28 @@
 <li><p>进入Dashboard，点击<code>Add New</code>-&gt;<code>Project</code></p>
 </li>
 </ol>
-<p><img src="/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p>
 <ol start="3">
 <li>进入选择界面，找到你的博客所在的Github仓库，点击一旁的<strong>Import</strong>，例如我的<code>mc-sep.github.io</code></li>
 </ol>
-<p><img src="/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p>
 <ol start="4">
 <li>进入到配置界面，如果你是Hexo博客（只上传public文件夹内文件的），请不要修改<strong>Build and Output Settings</strong>和<strong>Framework Preset</strong>，如果是Hexo（在线部署的），请在<strong>Framework Preset</strong>中选择<strong>Hexo</strong>，其他不用动。其余博客的方法可自行查阅。最后点击<strong>Deploy</strong></li>
 </ol>
-<p><img src="/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p>
-<p><img src="/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p>
 <ol start="5">
 <li>等待部署完成。完成后，点击<strong>Continue to Dashboard</strong></li>
 </ol>
-<p><img src="/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p>
-<p><img src="/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p>
 <h2 id="Part2-绑定域名"><a href="#Part2-绑定域名" class="headerlink" title="Part2. 绑定域名"></a>Part2. 绑定域名</h2><p>请在你的域名托管商内添加一个<strong>CNAME</strong>记录：<strong>cname-china.vercel-dns.com</strong>或者<strong>A</strong>记录：<strong>76.76.21.21</strong>或<strong>76.76.21.98</strong>，如图：</p>
-<p><img src="/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p>
 <p>接着去到你创建好的Project，点击<strong>Settings</strong>-&gt;<strong>Domains</strong>，再上面输入你的域名！</p>
-<p><img src="/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p>
 <p>如果你配置错了，可能就会：</p>
-<p><img src="/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p>
-<p><img src="/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p>
 <p>你也可以使用Vercel的自带域名（被ban了）：</p>
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">你喜欢的名字.vercel.app</span><br></pre></td></tr></table></figure>
 
@@ -95,7 +202,7 @@
 <ul>
 <li>进入<strong>Settings</strong>-&gt;<strong>Functions</strong>，可将服务器改为香港的（好像小日子的更快），如：</li>
 </ul>
-<p><img src="/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel挺好用的。</p>
 <p>版权所有©MC-Sep 2023~2024.</p>
 ]]></content>
@@ -103,9 +210,142 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Github</tag>
         <tag>Vercel</tag>
+        <tag>Github</tag>
         <tag>Pages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Hexo】Hexo+Github搭建个人博客</title>
+    <url>//post/4nd3.html</url>
+    <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间90分钟，请放心食用！</p>
+</div>
+
+<div class="note  danger flat fas fa-circle-xmark"><p>密码不可以外传（除非允许），不然你会被列入<strong>黑名单</strong>！</p>
+</div>
+
+<div class="note  warning flat fas fa-triangle-exclamation"><p>鉴于Github的访问慢，可以使用<a href="https://steampp.net/">Watt Toolkit加速器</a>进行访问，可以加速许多游戏和网站！</p>
+</div>
+
+
+<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>最近我收到了亿点点私信：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/831c75073352d065bee94f80b1f8db2d5bf523bd664d31ca8ac8eec650d7188d.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/4bead4b616ac5f73dedd50bdabcc628a640bb89c34977f9b899514bf139f0107.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/f0740c4deb5f6051d9604821191f48805ce9031ccfaeda767b6e965f36e5a7c2.png"></p>
+<p>所以！今天我就出教程吧！！！</p>
+<h1 id="实践s"><a href="#实践s" class="headerlink" title="实践s"></a>实践s</h1><h3 id="Part1-准备活动"><a href="#Part1-准备活动" class="headerlink" title="Part1.准备活动"></a>Part1.准备活动</h3><ol>
+<li>下载<strong>Node.js</strong></li>
+</ol>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>不建议修改安装路径，否则可能会无法调用<code>系统变量</code>！</p>
+</div>
+
+<ol start="3">
+<li>下载完毕后打开<code>cmd</code>，输入</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/ec9601d45ca8f7d78bb9f8a711be160c05efee79d4a26f3ee5edc75750cec21c.png"></p>
+<p>等待下载，注意期间不要按Ctrl+C，否则会导致进度取消！</p>
+<p>下载完毕后：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/37571ffc50dd2032305e07efae54f6cad9bf503925b6b21fc9b024399ab1e167.png"></p>
+<ol start="4">
+<li>打开任意一个<code>空</code>文件夹的cmd，分别输入（每输入一行等待）：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>hexo init blog</code>：安装博客到blog文件夹里</li>
+<li><code>npm install</code>：安装依赖</li>
+</ul>
+<ol start="6">
+<li>到这里，你的博客已经初步成型：</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/99586ae7171f8fa78c7b390cd8073b8d815c9cacada82fb3cff1d1c105187a69.png"></p>
+<h2 id="Part2-博客配置文件和主题配置文件的认识"><a href="#Part2-博客配置文件和主题配置文件的认识" class="headerlink" title="Part2: 博客配置文件和主题配置文件的认识"></a>Part2: 博客配置文件和主题配置文件的认识</h2><p>博客配置文件是这个东西：<img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/f4a84c180811b3ead36d09a908abee0c7d01c18be9afa368bcbf109d7d92959e.png"></p>
+<p>打开后的东西：</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>注意：各个值的配置之间要和<code>:</code>之间有一个空格！例如：<code>name: value</code></p>
+</div>
+
+<ul>
+<li>title: 你的博客标题</li>
+<li>subtitle: 你的博客副标题</li>
+<li>description: 你的博客介绍</li>
+<li>author: 博客作者名字</li>
+<li>language: 语言，可以选择<code>en</code>，<code>zh-CN</code>和<code>zh-TW</code></li>
+<li>timezone: 时区，建议填<code>Asia/Shanghai</code></li>
+<li>url: 你的博客地址，必须填对！否则站内图片将会加载出问题</li>
+<li>theme: 主题名字，全部是小写</li>
+</ul>
+<p>其余的可以不用配置。</p>
+<p>主题配置文件请见你选择的主题的官方文档。</p>
+<h2 id="Part3-基本命令"><a href="#Part3-基本命令" class="headerlink" title="Part3: 基本命令"></a>Part3: 基本命令</h2><ul>
+<li><code>hexo c</code>:清理博客缓存</li>
+<li><code>hexo s</code>:启动本地服务器，可以从<code>http://localhost:4000/</code>访问</li>
+<li><code>hexo g</code>:生成博客主文件，保存至public文件夹内，以后上传到Github要用</li>
+<li><code>hexo d</code>:通过git的方式上传到Github</li>
+</ul>
+<h2 id="Part4-安装-使用主题"><a href="#Part4-安装-使用主题" class="headerlink" title="Part4: 安装&amp;使用主题"></a>Part4: 安装&amp;使用主题</h2><p>可以前去<a href="https://hexo.io/themes">Hexo Themes</a>挑选你喜欢的主题！</p>
+<p>不懂得如何安装的可以加入我的QQ群或加我QQ<code>3630179822</code>或下方留言！</p>
+<h2 id="Part5-上传到Github"><a href="#Part5-上传到Github" class="headerlink" title="Part5: 上传到Github"></a>Part5: 上传到Github</h2><ol>
+<li>打开你的博客源文件，打开<code>cmd</code>，输入：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>等待生成博客源文件。</p>
+<ol start="2">
+<li>打开<a href="https://github.com/">github</a>，如下图：</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/6816ace35cb5d27ea0d2c1a765e536c4517cc4c562e4df11a60523d8abf51f4c.png"></p>
+<ol start="3">
+<li>点击<img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/df217c019f410eab4ca7e7a130ef206565a267bde692d8f146528043b7c36e12.png">，如下图：</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/9fee061f2c82ef8833a6ba17f9bb898951749953919b048c26d74eaccc754b1c.png"></p>
+<ul>
+<li><p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/4922810fd9d9e09ced18c74ea9cf7edbd2f12cd04852da015ee3e17ecb5991da.png">：你的邮箱</p>
+</li>
+<li><p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/3b7e85db21c338eff30c33d588b31814852cf4ae85a3f2f6eacd0ce9e1836ba1.png">：你的密码</p>
+</li>
+<li><p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/a9a751589440a751b4d71f58199310a4d569146cbd94c4046ede1184632a3b23.png">：你的用户名（好好填！以后你的网站要用）</p>
+</li>
+<li><p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/945c106798566807d113d280dc73e6d9e14754680929e89c656b526c87f8122a.png">：你是否接收Github发送的活动通知</p>
+</li>
+</ul>
+<p>然后他们检查你的链接安全性，如下图:<br><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/8730fbe6ccace43796bd27dd85ac1fe749be814e646f128fb81e2191070766fa.png"></p>
+<p>情况1：直接通过</p>
+<p>情况2：如下图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/ad827d799a0ee6bd7bd381728d8879534784be2f3c44ed5c8d7be6eb3f7e0d7c.png"></p>
+<p>按照提示完成即可。</p>
+<ol start="4">
+<li>然后就进入Github主页面了：</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/62cec8d35f912bba3802f23b0c84d4b09b9daa4b2c3386850b099307c5b2bfa6.png"></p>
+<p>点击<img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/9661467d4657aef14cd39180743ca7ac34eef59dd489c1116e27e782cd245dac.png"></p>
+<p>第一步<br><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/885b4cc6de6026b5cb42f0a5f9e43fade4abf890b43a0675bc87907556d5c69b.png"><br>第二步（描述）<br><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/d9d067079f4ed210f6d42998aa9f2508b529a30e322f2169538775518da9f393.png"><br>第三步<br><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/54bce0caad0455e3817a3174157c978388056f3f5aa1b0876ba18bf06efd459d.png"></p>
+<p>最后点<code>Create repository</code>。</p>
+<ol start="5">
+<li>进入仓库页面：</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/724a3bf6f78ef3e9f93a617949435624c6330525bd2fcd10f8c7d684a6944b78.png"></p>
+<p>点<code>Add file</code>➡<code>Upload files</code>。</p>
+<p>之后的页面：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/1/75df6fcc0879c1990ac029d3af262a47434a216f8b5e44b467aae2cd9eae62d6.png"></p>
+<p>将之前讲的<code>public</code>文件夹打开，把全部文件拖进去。（当然你也可以用Github Desktop）</p>
+<div class="note  danger flat fas fa-circle-xmark"><p>注意：单次上传的文件不能大于100件或100MB!</p>
+</div>
+
+<p>最后点<code>Commit Changes</code>。</p>
+<ol start="6">
+<li>等待几分钟，就可以通过下面的地址访问了！</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://你的用户名.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>Hexo</code>是一个很不错的博客框架，适合绝大部分用户。</p>
+<p>版权所有©Minecraft-Sep。</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Github</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -311,7 +551,7 @@
 <td align="center">-</td>
 </tr>
 </tbody></table>
-<h1 id="本月-Top-3"><a href="#本月-Top-3" class="headerlink" title="本月 Top 3"></a>本月 Top 3</h1><p><img src="/img/article/15/1.png" alt="本月 Top3 分析"></p>
+<h1 id="本月-Top-3"><a href="#本月-Top-3" class="headerlink" title="本月 Top 3"></a>本月 Top 3</h1><p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/15/1.png" alt="本月 Top3 分析"></p>
 <h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>这一个月下来，我们要以最热烈的掌声欢迎本月明星——Cquitra！</p>
 <p>不过他的博客还在建设，所以你们就看不了了（我教的awa）</p>
 <div class="note  info flat fas fa-circle-info"><p>如果你也想入选，可以加入我们的友链！！</p>
@@ -330,139 +570,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【Hexo】Hexo+Github搭建个人博客</title>
-    <url>//post/4nd3.html</url>
-    <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间90分钟，请放心食用！</p>
-</div>
-
-<div class="note  danger flat fas fa-circle-xmark"><p>密码不可以外传（除非允许），不然你会被列入<strong>黑名单</strong>！</p>
-</div>
-
-<div class="note  warning flat fas fa-triangle-exclamation"><p>鉴于Github的访问慢，可以使用<a href="https://steampp.net/">Watt Toolkit加速器</a>进行访问，可以加速许多游戏和网站！</p>
-</div>
-
-
-<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>最近我收到了亿点点私信：</p>
-<p><img src="/img/article/1/831c75073352d065bee94f80b1f8db2d5bf523bd664d31ca8ac8eec650d7188d.png"></p>
-<p><img src="/img/article/1/4bead4b616ac5f73dedd50bdabcc628a640bb89c34977f9b899514bf139f0107.png"></p>
-<p><img src="/img/article/1/f0740c4deb5f6051d9604821191f48805ce9031ccfaeda767b6e965f36e5a7c2.png"></p>
-<p>所以！今天我就出教程吧！！！</p>
-<h1 id="实践s"><a href="#实践s" class="headerlink" title="实践s"></a>实践s</h1><h3 id="Part1-准备活动"><a href="#Part1-准备活动" class="headerlink" title="Part1.准备活动"></a>Part1.准备活动</h3><ol>
-<li>下载<strong>Node.js</strong></li>
-</ol>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>不建议修改安装路径，否则可能会无法调用<code>系统变量</code>！</p>
-</div>
-
-<ol start="3">
-<li>下载完毕后打开<code>cmd</code>，输入</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
-
-<p><img src="/img/article/1/ec9601d45ca8f7d78bb9f8a711be160c05efee79d4a26f3ee5edc75750cec21c.png"></p>
-<p>等待下载，注意期间不要按Ctrl+C，否则会导致进度取消！</p>
-<p>下载完毕后：</p>
-<p><img src="/img/article/1/37571ffc50dd2032305e07efae54f6cad9bf503925b6b21fc9b024399ab1e167.png"></p>
-<ol start="4">
-<li>打开任意一个<code>空</code>文件夹的cmd，分别输入（每输入一行等待）：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>hexo init blog</code>：安装博客到blog文件夹里</li>
-<li><code>npm install</code>：安装依赖</li>
-</ul>
-<ol start="6">
-<li>到这里，你的博客已经初步成型：</li>
-</ol>
-<p><img src="/img/article/1/99586ae7171f8fa78c7b390cd8073b8d815c9cacada82fb3cff1d1c105187a69.png"></p>
-<h2 id="Part2-博客配置文件和主题配置文件的认识"><a href="#Part2-博客配置文件和主题配置文件的认识" class="headerlink" title="Part2: 博客配置文件和主题配置文件的认识"></a>Part2: 博客配置文件和主题配置文件的认识</h2><p>博客配置文件是这个东西：<img src="/img/article/1/f4a84c180811b3ead36d09a908abee0c7d01c18be9afa368bcbf109d7d92959e.png"></p>
-<p>打开后的东西：</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>注意：各个值的配置之间要和<code>:</code>之间有一个空格！例如：<code>name: value</code></p>
-</div>
-
-<ul>
-<li>title: 你的博客标题</li>
-<li>subtitle: 你的博客副标题</li>
-<li>description: 你的博客介绍</li>
-<li>author: 博客作者名字</li>
-<li>language: 语言，可以选择<code>en</code>，<code>zh-CN</code>和<code>zh-TW</code></li>
-<li>timezone: 时区，建议填<code>Asia/Shanghai</code></li>
-<li>url: 你的博客地址，必须填对！否则站内图片将会加载出问题</li>
-<li>theme: 主题名字，全部是小写</li>
-</ul>
-<p>其余的可以不用配置。</p>
-<p>主题配置文件请见你选择的主题的官方文档。</p>
-<h2 id="Part3-基本命令"><a href="#Part3-基本命令" class="headerlink" title="Part3: 基本命令"></a>Part3: 基本命令</h2><ul>
-<li><code>hexo c</code>:清理博客缓存</li>
-<li><code>hexo s</code>:启动本地服务器，可以从<code>http://localhost:4000/</code>访问</li>
-<li><code>hexo g</code>:生成博客主文件，保存至public文件夹内，以后上传到Github要用</li>
-<li><code>hexo d</code>:通过git的方式上传到Github</li>
-</ul>
-<h2 id="Part4-安装-使用主题"><a href="#Part4-安装-使用主题" class="headerlink" title="Part4: 安装&amp;使用主题"></a>Part4: 安装&amp;使用主题</h2><p>可以前去<a href="https://hexo.io/themes">Hexo Themes</a>挑选你喜欢的主题！</p>
-<p>不懂得如何安装的可以加入我的QQ群或加我QQ<code>3630179822</code>或下方留言！</p>
-<h2 id="Part5-上传到Github"><a href="#Part5-上传到Github" class="headerlink" title="Part5: 上传到Github"></a>Part5: 上传到Github</h2><ol>
-<li>打开你的博客源文件，打开<code>cmd</code>，输入：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>等待生成博客源文件。</p>
-<ol start="2">
-<li>打开<a href="https://github.com/">github</a>，如下图：</li>
-</ol>
-<p><img src="/img/article/1/6816ace35cb5d27ea0d2c1a765e536c4517cc4c562e4df11a60523d8abf51f4c.png"></p>
-<ol start="3">
-<li>点击<img src="/img/article/1/df217c019f410eab4ca7e7a130ef206565a267bde692d8f146528043b7c36e12.png">，如下图：</li>
-</ol>
-<p><img src="/img/article/1/9fee061f2c82ef8833a6ba17f9bb898951749953919b048c26d74eaccc754b1c.png"></p>
-<ul>
-<li><p><img src="/img/article/1/4922810fd9d9e09ced18c74ea9cf7edbd2f12cd04852da015ee3e17ecb5991da.png">：你的邮箱</p>
-</li>
-<li><p><img src="/img/article/1/3b7e85db21c338eff30c33d588b31814852cf4ae85a3f2f6eacd0ce9e1836ba1.png">：你的密码</p>
-</li>
-<li><p><img src="/img/article/1/a9a751589440a751b4d71f58199310a4d569146cbd94c4046ede1184632a3b23.png">：你的用户名（好好填！以后你的网站要用）</p>
-</li>
-<li><p><img src="/img/article/1/945c106798566807d113d280dc73e6d9e14754680929e89c656b526c87f8122a.png">：你是否接收Github发送的活动通知</p>
-</li>
-</ul>
-<p>然后他们检查你的链接安全性，如下图:<br><img src="/img/article/1/8730fbe6ccace43796bd27dd85ac1fe749be814e646f128fb81e2191070766fa.png"></p>
-<p>情况1：直接通过</p>
-<p>情况2：如下图</p>
-<p><img src="/img/article/1/ad827d799a0ee6bd7bd381728d8879534784be2f3c44ed5c8d7be6eb3f7e0d7c.png"></p>
-<p>按照提示完成即可。</p>
-<ol start="4">
-<li>然后就进入Github主页面了：</li>
-</ol>
-<p><img src="/img/article/1/62cec8d35f912bba3802f23b0c84d4b09b9daa4b2c3386850b099307c5b2bfa6.png"></p>
-<p>点击<img src="/img/article/1/9661467d4657aef14cd39180743ca7ac34eef59dd489c1116e27e782cd245dac.png"></p>
-<p>第一步<br><img src="/img/article/1/885b4cc6de6026b5cb42f0a5f9e43fade4abf890b43a0675bc87907556d5c69b.png"><br>第二步（描述）<br><img src="/img/article/1/d9d067079f4ed210f6d42998aa9f2508b529a30e322f2169538775518da9f393.png"><br>第三步<br><img src="/img/article/1/54bce0caad0455e3817a3174157c978388056f3f5aa1b0876ba18bf06efd459d.png"></p>
-<p>最后点<code>Create repository</code>。</p>
-<ol start="5">
-<li>进入仓库页面：</li>
-</ol>
-<p><img src="/img/article/1/724a3bf6f78ef3e9f93a617949435624c6330525bd2fcd10f8c7d684a6944b78.png"></p>
-<p>点<code>Add file</code>➡<code>Upload files</code>。</p>
-<p>之后的页面：</p>
-<p><img src="/img/article/1/75df6fcc0879c1990ac029d3af262a47434a216f8b5e44b467aae2cd9eae62d6.png"></p>
-<p>将之前讲的<code>public</code>文件夹打开，把全部文件拖进去。（当然你也可以用Github Desktop）</p>
-<div class="note  danger flat fas fa-circle-xmark"><p>注意：单次上传的文件不能大于100件或100MB!</p>
-</div>
-
-<p>最后点<code>Commit Changes</code>。</p>
-<ol start="6">
-<li>等待几分钟，就可以通过下面的地址访问了！</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://你的用户名.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>Hexo</code>是一个很不错的博客框架，适合绝大部分用户。</p>
-<p>版权所有©Minecraft-Sep。</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Github</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Cloudflare Pages+Telegraph搭建简易图床</title>
     <url>//post/5trr.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
@@ -473,12 +580,12 @@
 
 <h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
 <li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
-<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
 </li>
 <li><p>进入 <a href="https://github.com/cf-pages/Telegraph-Image/fork">Fork cf-pages&#x2F;Telegraph-Image (github.com)</a> fork这个仓库</p>
 </li>
 <li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
-<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
 <ol start="4">
 <li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
 </li>
@@ -500,15 +607,15 @@
 </div>
 </li>
 <li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
-<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
 </li>
 <li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
-<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
 </li>
 <li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
 </li>
 <li><p>（可选）自定义域名的绑定：</p>
-<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
 </li>
 </ol>
 </li>
@@ -545,7 +652,7 @@
     <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
     <url>//post/76gl.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
-<p><img src="/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
 <p>由于影响不是很大，为了他人隐私（也不能不给他机会改正吧），就不“公开处刑”了。</p>
 <p>那么，什么是DDos？它会对博客造成什么威胁？今天我就讲讲DDos攻击原理与防护方法。</p>
 <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>DDoS全称Distributed Denial of Service，意思为“分布式拒绝服务”，即利用大量合法的分布式服务器对目标发送请求，从而导致正常合法用户无法获得服务。</p>
@@ -558,9 +665,9 @@
 <li><strong>CC攻击</strong>。黑客借助代理服务器生成指向受害主机的合法网页请求，实现DDoS和伪装就叫CC（全名Challenge Collapsar）。傀儡CC攻击是黑客使用CC攻击软件，控制大量傀儡发动攻击，模拟正常用户访问网站的请求，伪造成合法数据包。</li>
 </ol>
 <p>DDos攻击原理如下：</p>
-<p><img src="/img/article/16/1.png" alt="原理"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/16/1.png" alt="原理"></p>
 <h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
-<p><img src="/img/article/16/2.png" alt="1"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/16/2.png" alt="1"></p>
 <p>Cloudflare里可以设置。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
 <p>版权所有©MC-Sep 2024.</p>
@@ -586,7 +693,7 @@
 <li>建议好的会被采纳，结果公开展示！</li>
 </ul>
 <h2 id="在线问答"><a href="#在线问答" class="headerlink" title="在线问答"></a>在线问答</h2><p>您也可以扫描本文封面的二维码参与！</p>
-<iframe width="640px" height="480px" src="https://forms.office.com/r/YA2AbJ8fvV?embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+<iframe width="1000px" height="480px" src="https://forms.office.com/r/YA2AbJ8fvV?embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
 
 <h2 id="问答结果"><a href="#问答结果" class="headerlink" title="问答结果"></a>问答结果</h2><div class="note  info flat fas fa-circle-info"><p>统计截止于 <strong>2024.12.31</strong>，结束后自动公开！</p>
 </div>
@@ -685,7 +792,7 @@
 <h2 id="准备——配置Leancloud"><a href="#准备——配置Leancloud" class="headerlink" title="准备——配置Leancloud"></a>准备——配置<strong>Leancloud</strong></h2><ol>
 <li>进入<a href="https://console.leancloud.app/register">Leancloud国际版</a>进行注册并进入控制台：</li>
 </ol>
-<p><img src="/img/article/2/14bf60d9d7fd5964ccee88f86c9139cb.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/14bf60d9d7fd5964ccee88f86c9139cb.webp"></p>
 <div class="note  warning flat fas fa-triangle-exclamation"><p>如果你正在使用 Leancloud 国内版 (leancloud.cn)，我们推荐你切换到国际版 (leancloud.app)。否则，你需要为应用额外绑定已备案的域名，同时购买独立 IP 并完成备案接入:</p>
 <p>登录国内版并进入需要使用的应用<br>选择 设置 &gt; 域名绑定 &gt; API 访问域名 &gt; 绑定新域名 &gt; 输入域名 &gt; 确定。<br>按照页面上的提示按要求在 DNS 上完成 CNAME 解析。<br>购买独立 IP 并提交工单完成备案接入。(独立 IP 目前价格为 ￥ 50&#x2F;个&#x2F;月)</p>
 <p><img src="/img/article/2/leancloud-3-CT_lZM0A.png"></p>
@@ -694,49 +801,49 @@
 <ol start="2">
 <li>点击左上角<strong>创建应用</strong>，选择<strong>开发板</strong>（免费）</li>
 </ol>
-<p><img src="/img/article/2/e26c2a7f16d7a7164cb0ecb98c5b390e.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/e26c2a7f16d7a7164cb0ecb98c5b390e.webp"></p>
 <ol start="3">
 <li>进入应用，选择左下角的 设置 &gt; 应用 Key。你可以看到你的 APP ID,APP Key 和 Master Key，记录它们以便后续使用。</li>
 </ol>
-<p><img src="/img/article/2/58676c1bb4fd2f35fb23a213fd21dac3.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/58676c1bb4fd2f35fb23a213fd21dac3.webp"></p>
 <h2 id="方式1——Vercel"><a href="#方式1——Vercel" class="headerlink" title="方式1——Vercel"></a>方式1——Vercel</h2><p>点击一键部署：</p>
-<p><a href="https://vercel.com/new/clone?repository-url=https://github.com/walinejs/waline/tree/main/example"><img src="/img/article/2/default.svg"></a></p>
+<p><a href="https://vercel.com/new/clone?repository-url=https://github.com/walinejs/waline/tree/main/example"><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/default.svg"></a></p>
 <ol>
 <li>点击上面的按钮，输入你喜欢的名字，点击Create，等待部署：</li>
 </ol>
-<p><img src="/img/article/2/0574cea0bdc82870997e823195e5348b.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/0574cea0bdc82870997e823195e5348b.webp"></p>
 <ol start="2">
 <li>之后满屏的烟花，点击<strong>Continue to Dashboard</strong></li>
 </ol>
-<p><img src="/img/article/2/2d8c921741af863b046ebbb8d7b7cfe5.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/2d8c921741af863b046ebbb8d7b7cfe5.webp"></p>
 <ol start="3">
 <li>点击顶部的 Settings - Environment Variables 进入环境变量配置页，并配置三个环境变量 LEAN_ID, LEAN_KEY 和 LEAN_MASTER_KEY 。它们的值分别对应上一步在 LeanCloud 中获得的 APP ID, APP KEY, Master Key。</li>
 </ol>
-<p><img src="/img/article/2/c6f4d6bced949fdb7ec9bdef576dab88.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/c6f4d6bced949fdb7ec9bdef576dab88.webp"></p>
 <ol start="4">
 <li>回到开头的免费域名，注册一下并关注作者，可以获得5免费域名，点击<strong>创建</strong>：</li>
 </ol>
-<p><img src="/img/article/2/85bae92761dd2705683b4185a7a26f6d.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/85bae92761dd2705683b4185a7a26f6d.webp"></p>
 <ol start="5">
 <li>输入名字，按如下填写：</li>
 </ol>
-<p><img src="/img/article/2/5bf63e5dfd90864d24ada804360e52ed.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/5bf63e5dfd90864d24ada804360e52ed.webp"></p>
 <ol start="6">
 <li>你就等待审核，预计1小时~2天</li>
 </ol>
-<p><img src="/img/article/2/496a8213fcfe1b3eac0793bfc0ea0077.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/496a8213fcfe1b3eac0793bfc0ea0077.webp"></p>
 <ol start="7">
 <li>审核完成后会显示<strong>编辑</strong>按钮，回到Vercel，点击<strong>Domains</strong>：</li>
 </ol>
-<p><img src="/img/article/2/1bbc317d1b20d9b5532b2850505292c9.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/1bbc317d1b20d9b5532b2850505292c9.webp"></p>
 <ol start="8">
 <li>填写你申请的域名，点击<strong>Add</strong>：</li>
 </ol>
-<p><img src="/img/article/2/a438e0447a386031df099a74e7f39961.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/a438e0447a386031df099a74e7f39961.webp"></p>
 <ol start="9">
 <li>等待他解析，然会就可以访问了！</li>
 </ol>
-<p><img src="/img/article/2/2244070e801aa2177e1925005fb5b874.webp"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/2244070e801aa2177e1925005fb5b874.webp"></p>
 <h2 id="方式2——Deta（已失效）"><a href="#方式2——Deta（已失效）" class="headerlink" title="方式2——Deta（已失效）"></a>方式2——Deta（已失效）</h2><p><del>Deta 是一个可免费使用的 Serverless 部署平台。我们可以快速的将 Waline 部署到 Deta 平台上。</del></p>
 <p>在 deta.space 的官网中指出：</p>
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br></pre></td></tr></table></figure>
@@ -746,16 +853,16 @@
 <ol>
 <li>点击 <a href="https://github.com/walinejs/netlify-starter/fork">Fork</a> Waline的Netlify数据库。</li>
 </ol>
-<p><img src="/img/article/2/04534a32d06f65ade0c7f53bb36c7e03e954e5360a2eaca53027caad3e428692.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/04534a32d06f65ade0c7f53bb36c7e03e954e5360a2eaca53027caad3e428692.png"></p>
 <ol start="2">
 <li>进入 <a href="https://app.netlify.com/">https://app.netlify.com</a> ，注册账号后登录控制台，点击<code>Add new site</code> -&gt; <code>Import an exist project</code>，选择刚刚Fork的数据库（先绑定Github）。(不要着急Deploy ！！！)</li>
 </ol>
-<p><img src="/img/article/2/f9b2d3bfbfd1a5004c38c2fb0be33170311b7dd267a84276af6ab0ca2a1e207f.png"></p>
-<p><img src="/img/article/2/e42e4fe3e37f9989479c685e36456b00e9cc9dc56fc37b020d842ab35de70387.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/f9b2d3bfbfd1a5004c38c2fb0be33170311b7dd267a84276af6ab0ca2a1e207f.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/e42e4fe3e37f9989479c685e36456b00e9cc9dc56fc37b020d842ab35de70387.png"></p>
 <ol start="3">
 <li>部署之前添加环境变量，以 LeanCloud 部署服务为例，我们在这里增加上 Waline 需要的数据库服务环境变量。点击底部的 Deploy 开始部署网站。</li>
 </ol>
-<p><img src="/img/article/2/f289d5ae538df8c6b7882685f62626de3681c625958f049df33ebc4cb6ddc1e9.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/2/f289d5ae538df8c6b7882685f62626de3681c625958f049df33ebc4cb6ddc1e9.png"></p>
 <ol start="4">
 <li>部署完成，可通过一下的域名访问：</li>
 </ol>
@@ -848,6 +955,146 @@
       </tags>
   </entry>
   <entry>
+    <title>API构建①——Bing每日一图接口</title>
+    <url>//post/r5fd.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解bing每日一图链接规律"><a href="#Part1-了解bing每日一图链接规律" class="headerlink" title="Part1. 了解bing每日一图链接规律"></a>Part1. 了解bing每日一图链接规律</h3><p>就拿今天的做例子：<a href="https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg">https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg</a></p>
+<p>获取到的json内容如下所示：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240730&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fullstartdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;202407301600&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;enddate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240731&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;urlbase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyright&quot;</span><span class="punctuation">:</span> <span class="string">&quot;石林，日落点，布莱斯峡谷国家公园，犹他州，美国 (© Tim Fitzharris/Minden Pictures)&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyrightlink&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.bing.com/search?q=%E5%B8%83%E8%8E%B1%E6%96%AF%E5%B3%A1%E8%B0%B7%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD&amp;form=hpcapt&amp;mkt=zh-cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里有“胡图”吗？&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;quiz&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20240730_HoodoosBryce%22&amp;FORM=HPQUIZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wp&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hsh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1cabac064d004edabc8b0d2e375052ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;drk&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;top&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bot&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tooltips&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span> <span class="string">&quot;正在加载...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;previous&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;next&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;此图片不能下载用作壁纸。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walls&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下载今日美图。仅限用作桌面壁纸。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们就可以猜出其中的规律了：</p>
+<p><a href="https://cn.bing.com/">https://cn.bing.com</a> + 上面的”url”，构成了该链接。</p>
+<h3 id="Part2-构建API"><a href="#Part2-构建API" class="headerlink" title="Part2. 构建API"></a>Part2. 构建API</h3><p>我们使用<strong>GET</strong>方法构建我们的API，名称为<code>bing.php</code>，也可以从 <a href="https://mc-sep.js.cool/api/bing.php">https://mc-sep.js.cool/api/bing.php</a> 下载！</p>
+<ol>
+<li><p>判断是否是随机调用（我们的API可以指定日期）</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果不是，则指定日期</p>
+</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>获取Bing Json详细信息，转换为PHP数组，再提取基础URL</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>判断是否制定了图片大小，否则默认1920 * 1080</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>建立完整URL</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>获取其他信息并判断是否需要</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>不是则直接返回</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>完整代码</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgsizebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>可以去参考一下API接口：</p>
+<ul>
+<li><a href="https://api.kdcc.cn/">https://api.kdcc.cn</a></li>
+<li><a href="https://api.isoyu.com/bing_images.php">https://api.isoyu.com/bing_images.php</a></li>
+<li><a href="http://api.muvip.cn//api/bing/index.php?rand=false&day=0&size=1920x1080&info=false">http://api.muvip.cn//api/bing/index.php?rand=false&amp;day=0&amp;size=1920x1080&amp;info=false</a></li>
+<li><a href="https://source.unsplash.com/random">https://source.unsplash.com/random</a></li>
+<li><a href="https://api.dujin.org/bing/1366.php">https://api.dujin.org/bing/1366.php</a></li>
+<li><a href="https://picsum.photos/">https://picsum.photos/</a></li>
+</ul>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>API</tag>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>免费域名怎么弄？常见免费域名指南</title>
+    <url>//post/re8u.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
+<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
+<p>今天我就整理了常见的免费域名，分享给大家。</p>
+<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
+<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
+<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
+
+<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
+<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
+<p>方法：</p>
+<ol>
+<li>打开链接，点击右上角用户图标</li>
+<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
+<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
+<li>返回控制台刷新后会发现可以创建了</li>
+<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
+<li>等待审核，通过后会有这个画面：</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
+<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
+
+<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
+<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
+<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
+
+<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
+<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
+<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：No</p>
+<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
+<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：审核时间长</p>
+<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
+<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
+<p>地址：<a href="https://js.org/">https://js.org</a></p>
+<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.one</span><br></pre></td></tr></table></figure>
+
+<p>优点：顶级域名<br>缺点：要买主机后才有</p>
+<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Pages</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Hexo】Twikoo--评论系统的添加(2)</title>
     <url>//post/rh35.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Twikoo作为一种轻量方便的评论系统，一度被许多博客使用。此文基于<a href="/post/7ghd.html">原文</a>继续添加一个评论系统，让你可以顺利<del>装逼</del>！(bushi)</p>
@@ -897,23 +1144,23 @@
 <li><p>点击快速部署：</p>
 </li>
 </ol>
-<p><a href="https://vercel.com/import/project?template=https://github.com/twikoojs/twikoo/tree/main/src/server/vercel-min"><img src="/img/article/6/button.svg"></a></p>
+<p><a href="https://vercel.com/import/project?template=https://github.com/twikoojs/twikoo/tree/main/src/server/vercel-min"><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/6/button.svg"></a></p>
 <ol start="3">
 <li>输入你喜欢的名字，点击<code>Create</code>:</li>
 </ol>
-<p><img src="/img/article/6/285b32b471fe35b7458082bf79b5de021a409eba384d63b3447c22a72f3b54f6.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/6/285b32b471fe35b7458082bf79b5de021a409eba384d63b3447c22a72f3b54f6.png"></p>
 <ol start="4">
 <li>满屏烟花时点击<code>Continue to Dashboard</code>:</li>
 </ol>
-<p><img src="/img/article/6/81b3c0dca629f3a669198dbb517a142fdf51515a73b5045a2bc00d565e415b6b.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/6/81b3c0dca629f3a669198dbb517a142fdf51515a73b5045a2bc00d565e415b6b.png"></p>
 <ol start="5">
 <li>点击<code>Settings</code>-&gt;<code>Environment Variables</code>，变量添加<code>MONGODB_URI</code>，内容则是你获取到的mongodb获取接口，点击<code>Save</code>：</li>
 </ol>
-<p><img src="/img/article/6/d8cac22ed204b505c9182ec91e02f78d9af40660e7aeae9f4a2426dc80178d3e.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/6/d8cac22ed204b505c9182ec91e02f78d9af40660e7aeae9f4a2426dc80178d3e.png"></p>
 <ol start="6">
 <li>点击<code>Domains</code>，确保你的域名已添加内容为<code>cname-china.vercel-dns.com</code>的<code>CNAME</code>记录，输入你的域名，点击<code>Add</code>，等待后即可访问：</li>
 </ol>
-<p><img src="/img/article/6/189f1b096b56932f6d6adc1cfdecee9e0bc0c8423b21741fcc82595236dc525f.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/6/189f1b096b56932f6d6adc1cfdecee9e0bc0c8423b21741fcc82595236dc525f.png"></p>
 <ol start="7">
 <li>回到主题配置文件，修改：</li>
 </ol>
@@ -928,7 +1175,7 @@
 <li>检查无误后即可。</li>
 </ol>
 <div class="note  danger flat fas fa-circle-xmark"><p>因为Vercel业务的调整，现在使用这种方式很容易就：</p>
-<p><img src="/img/article/6/d73a75082e19c1354828e0489f372cf72132edffd790d51a219bb19ddbfec69c.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/6/d73a75082e19c1354828e0489f372cf72132edffd790d51a219bb19ddbfec69c.png"></p>
 <p>所以多试几次吧。。。。。。</p>
 </div>
 
@@ -1010,251 +1257,42 @@
       </tags>
   </entry>
   <entry>
-    <title>API构建①——Bing每日一图接口</title>
-    <url>//post/r5fd.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解bing每日一图链接规律"><a href="#Part1-了解bing每日一图链接规律" class="headerlink" title="Part1. 了解bing每日一图链接规律"></a>Part1. 了解bing每日一图链接规律</h3><p>就拿今天的做例子：<a href="https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg">https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg</a></p>
-<p>获取到的json内容如下所示：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240730&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fullstartdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;202407301600&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;enddate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240731&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;urlbase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyright&quot;</span><span class="punctuation">:</span> <span class="string">&quot;石林，日落点，布莱斯峡谷国家公园，犹他州，美国 (© Tim Fitzharris/Minden Pictures)&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyrightlink&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.bing.com/search?q=%E5%B8%83%E8%8E%B1%E6%96%AF%E5%B3%A1%E8%B0%B7%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD&amp;form=hpcapt&amp;mkt=zh-cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里有“胡图”吗？&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;quiz&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20240730_HoodoosBryce%22&amp;FORM=HPQUIZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wp&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hsh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1cabac064d004edabc8b0d2e375052ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;drk&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;top&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bot&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tooltips&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span> <span class="string">&quot;正在加载...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;previous&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;next&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;此图片不能下载用作壁纸。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walls&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下载今日美图。仅限用作桌面壁纸。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+    <title>博客一周年记</title>
+    <url>//post/te2r.html</url>
+    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
+<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
+<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
+<p>  我使用了Github Pages，域名仍是有效的：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
 
-<p>我们就可以猜出其中的规律了：</p>
-<p><a href="https://cn.bing.com/">https://cn.bing.com</a> + 上面的”url”，构成了该链接。</p>
-<h3 id="Part2-构建API"><a href="#Part2-构建API" class="headerlink" title="Part2. 构建API"></a>Part2. 构建API</h3><p>我们使用<strong>GET</strong>方法构建我们的API，名称为<code>bing.php</code>，也可以从 <a href="https://mc-sep.js.cool/api/bing.php">https://mc-sep.js.cool/api/bing.php</a> 下载！</p>
-<ol>
-<li><p>判断是否是随机调用（我们的API可以指定日期）</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果不是，则指定日期</p>
-</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
+<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
+<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li>获取Bing Json详细信息，转换为PHP数组，再提取基础URL</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
+<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
+<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
+<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
+<p>  直到2024年6月，我发现了一个新主题：<strong>Solitude</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
+<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li>判断是否制定了图片大小，否则默认1920 * 1080</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
-<li>建立完整URL</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<ol start="6">
-<li>获取其他信息并判断是否需要</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>不是则直接返回</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="8">
-<li>完整代码</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgsizebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>可以去参考一下API接口：</p>
-<ul>
-<li><a href="https://api.kdcc.cn/">https://api.kdcc.cn</a></li>
-<li><a href="https://api.isoyu.com/bing_images.php">https://api.isoyu.com/bing_images.php</a></li>
-<li><a href="http://api.muvip.cn//api/bing/index.php?rand=false&day=0&size=1920x1080&info=false">http://api.muvip.cn//api/bing/index.php?rand=false&amp;day=0&amp;size=1920x1080&amp;info=false</a></li>
-<li><a href="http://img.xjh.me/random_img.php">http://img.xjh.me/random_img.php</a></li>
-<li><a href="https://source.unsplash.com/random">https://source.unsplash.com/random</a></li>
-<li><a href="https://api.dujin.org/bing/1366.php">https://api.dujin.org/bing/1366.php</a></li>
-<li><a href="https://picsum.photos/">https://picsum.photos/</a></li>
-</ul>
-<p>版权所有©MC-Sep 2024.</p>
+<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
+<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
+<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
+<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
+<p>  版权所有©MC-Sep 2024.</p>
 ]]></content>
       <categories>
-        <category>PHP</category>
+        <category>周年记</category>
       </categories>
       <tags>
-        <tag>API</tag>
-        <tag>PHP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>免费小型数据库——Vercel Blob初体验</title>
-    <url>//post/239d.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
-<p>他的配置还不错的：</p>
-<table>
-<thead>
-<tr>
-<th align="center">计划</th>
-<th align="center">数据库大小</th>
-<th align="center">读</th>
-<th align="center">写</th>
-<th align="center">请求数</th>
-<th align="center">请求时长</th>
-<th align="center">是否要Projects</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Hobby</td>
-<td align="center">250MB&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">1 hour&#x2F;Month</td>
-<td align="center">✅</td>
-</tr>
-<tr>
-<td align="center">Pro</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">✅</td>
-</tr>
-<tr>
-<td align="center">Team</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">✅</td>
-</tr>
-</tbody></table>
-<p>今天就teach你怎么搞！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li><p>准备一个Vercel账号，可以直接用Github登录</p>
-</li>
-<li><p>创建存储库（点击快速创建）：<a href="https://vercel.com/new/mc-sep-vercel-team/clone?demo-description=Simple%20Next.js%20template%20that%20uses%20Vercel%20Blob%20for%20image%20uploads&demo-image=//images.ctfassets.net/e5382hct74si/W7szxXAHpF3eZ4RFT33Cb/4d8a64904b67980e449b487089dd7b2b/opengraph-image.png&demo-title=Vercel%20Blob%20Next.js%20Starter&demo-url=https://blob-starter.vercel.app/&project-name=blob-starter&repository-name=blob-starter&repository-url=https://github.com/vercel/examples/tree/main/storage/blob-starter&stores=%5B%7B%22type%22:%22blob%22%7D%5D">Create</a></p>
-</li>
-<li><p>在接下来的页面中，名字自己填，然后 Add 一个 Blob Store，确定即可</p>
-</li>
-</ol>
-<p><img src="/img/article/13/db6a8c47c47a8e6a1a8612261ed977e7c6081bf45a699d8b675c2e2a7837a32c.png" alt="add vercel blob storage"></p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>注意，每个用户只允许创建一个Vercel Blob Storage!</p>
-</div>
-
-<ol start="4">
-<li><p>直到满屏烟花，点击 <strong>Continue to Dashboard</strong>。</p>
-</li>
-<li><p>点击 <strong>Settings</strong> -&gt; <strong>Environment Variables</strong>，最下面找到名为 <code>BLOB_READ_WRITE_TOKEN</code> 的环境变量，点击复制，格式是这样的：</p>
-</li>
-</ol>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">vercel_blob_rw_*************************************</span><br></pre></td></tr></table></figure>
-
-<p><img src="/img/article/13/055fc988aad255241065ea6737692f16aee76e52558272107f3633d3a171d77a.png" alt="copy the envirnment variables"></p>
-<ol start="6">
-<li>回到 <strong>Settings</strong> -&gt; <strong>Functions</strong>，将区域改为 <strong>Hong Kong (East) – hkg1</strong> 或 <strong>Tokyo, Japan (Northeast) – hnd1</strong></li>
-</ol>
-<p><img src="/img/article/13/9c1fdfb473e882beb42399ea02144f61e24fe5dfb0f49cc3e377db3d4007b6c8.png" alt="set functions"></p>
-<ol start="7">
-<li>回到 Dashboard 主页面，点击这个进入创建的Github Repo:</li>
-</ol>
-<p><img src="/img/article/13/aefa06c390feaa84978126eafd0247ebf1e6eaa33fd90308ff7e46241f9b5321.png"></p>
-<ol start="8">
-<li>打开文件 <strong>.env.example</strong>，将复制的内容粘贴在末尾，格式如下：</li>
-</ol>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">BLOB_READ_WRITE_TOKEN=vercel_blob_rw_*******************************</span><br></pre></td></tr></table></figure>
-
-<ol start="9">
-<li>打开 [Main Blob Storage] &#x2F; app &#x2F; page.tsx，修改里面的内容为中文（建议保留原站链接），可参照我的配置</li>
-</ol>
-<figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Image</span> <span class="keyword">from</span> <span class="string">&#x27;next/image&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Link</span> <span class="keyword">from</span> <span class="string">&#x27;next/link&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ExpandingArrow</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/expanding-arrow&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Uploader</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/uploader&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Toaster</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/components/toaster&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">Home</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">main</span> <span class="attr">className</span>=<span class="string">&quot;relative flex min-h-screen flex-col items-center justify-center&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Toaster</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/templates/next.js/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">className</span>=<span class="string">&quot;group mt-20 sm:mt-0 rounded-full flex space-x-1 bg-white/30 shadow-sm ring-1 ring-gray-900/5 text-gray-600 text-sm font-medium px-10 py-2 hover:shadow-lg active:shadow-sm transition-all&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>🎉使用Vercel免费搭建🎉<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">ExpandingArrow</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">&quot;pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        MC-Sep 免费网盘</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Uploader</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light text-gray-600 w-full max-w-lg text-center mt-6&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/blob&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Vercel Blob</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span>&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        Web. Built with&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://nextjs.org/docs&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Next.js App Router</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        .</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;sm:absolute sm:bottom-0 w-full px-20 py-10 flex justify-between&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span> <span class="attr">href</span>=<span class="string">&quot;https://vercel.com&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/vercel.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;Vercel Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;100&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://github.com/vercel/examples/tree/main/storage/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;flex items-center space-x-2&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/github.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;GitHub Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light&quot;</span>&gt;</span>Github<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="10">
-<li>保存后，系统会重新部署一次，回到 <strong>Settings</strong> -&gt; <strong>Domains</strong>，添加你的域名（确保你的域名托管商已经添加记录为<code>A</code>:<strong>76.76.21.98</strong> 的记录，Add 即可。</li>
-</ol>
-<p><img src="/img/article/13/902e66cfb6bd99a53d7402fc6d61eb9d57b7995dac607c36b5190af4d7ba6771.png" alt="add domain"></p>
-<ol start="11">
-<li>完工！</li>
-</ol>
-<div class="note  info flat fas fa-circle-info"><p>提示：可以在 <strong>Storage</strong> 页面查看存储库，状态，如大小、读写次数统计等。</p>
-<p><img src="/img/article/13/790eebd56379643ae8fcb33c5994ddb0845a0720020a20fb9891829e4b49e42b.png" alt="View the Storage"></p>
-<p><img src="/img/article/13/e20224e68a0c4f90f5d488748b8ddd1d0f01ea03d275ec8d10f6c05d948b940c.png" alt="See the storage message"></p>
-</div>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel Blob是一个不错的存储系统，对Hobby计划用户很友好。</p>
-]]></content>
-      <categories>
-        <category>实用教程</category>
-      </categories>
-      <tags>
-        <tag>Vercel</tag>
-        <tag>图床</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>免费域名怎么弄？常见免费域名指南</title>
-    <url>//post/re8u.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
-<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
-<p>今天我就整理了常见的免费域名，分享给大家。</p>
-<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
-<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
-<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
-
-<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
-<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
-<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
-<p>方法：</p>
-<ol>
-<li>打开链接，点击右上角用户图标</li>
-<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
-<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
-<li>返回控制台刷新后会发现可以创建了</li>
-<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
-<li>等待审核，通过后会有这个画面：</li>
-</ol>
-<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
-<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
-
-<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
-<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
-<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
-
-<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
-<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
-<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：No</p>
-<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
-<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：审核时间长</p>
-<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
-<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
-<p>地址：<a href="https://js.org/">https://js.org</a></p>
-<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.one</span><br></pre></td></tr></table></figure>
-
-<p>优点：顶级域名<br>缺点：要买主机后才有</p>
-<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Pages</tag>
-        <tag>Hexo</tag>
+        <tag>周年记</tag>
       </tags>
   </entry>
   <entry>
@@ -1289,7 +1327,7 @@
 <ol start="3">
 <li>那么在hexo中就是这样的画面：</li>
 </ol>
-<p><img src="/img/article/12/d068699b430414e617c92223c6e4ffc049da653fc65e572010c96bb320746b6f.png" alt="加密后"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/mc-sep/mc-sep-blog/img//article/12/d068699b430414e617c92223c6e4ffc049da653fc65e572010c96bb320746b6f.png" alt="加密后"></p>
 <ol start="4">
 <li>可以添加更多，如：</li>
 </ol>
@@ -1404,45 +1442,6 @@
       <tags>
         <tag>Hexo</tag>
         <tag>Hexo插件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客一周年记</title>
-    <url>//post/te2r.html</url>
-    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
-<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
-<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
-<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
-<p>  我使用了Github Pages，域名仍是有效的：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
-<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
-<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
-<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
-<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
-<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
-<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
-<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
-<p>  直到2024年6月，我发现了一个新主题：<strong>Solitude</strong></p>
-<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
-<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
-<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
-<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
-<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
-<p>  版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>周年记</category>
-      </categories>
-      <tags>
-        <tag>周年记</tag>
       </tags>
   </entry>
 </search>
