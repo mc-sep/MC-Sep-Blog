@@ -1444,4 +1444,104 @@
         <tag>周年记</tag>
       </tags>
   </entry>
+  <entry>
+    <title>【Hexo】如何提高静态博客访问速度？Vercel+Cloudflare+CDN让你的网站速度飞起！</title>
+    <url>//post/5ytg.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着博客文章数量的增多，我们的博客可能会变得十分缓慢（比如前段时间的我），今天的教程可以让你的博客提速**90%**！</p>
+<h1 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h1><h2 id="整改1-扔掉Github-Pages"><a href="#整改1-扔掉Github-Pages" class="headerlink" title="整改1 扔掉Github Pages"></a>整改1 扔掉Github Pages</h2><p>Github Pages<del>真垃圾</del>很慢，看看对比：</p>
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">Vercel</th>
+<th align="center">CF Workers（反代）</th>
+<th align="center">CF Pages</th>
+<th align="center">Netlify</th>
+<th align="center">Zeabur</th>
+<th align="center">Github Pages</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">速度</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟</td>
+</tr>
+<tr>
+<td align="center">稳定性</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+<p>还不把Github Pages扔了！Vercel他不香吗！参考：</p>
+<div class="recent-post-item" onclick="pjax.loadUrl('//post/43vc.html')"><div class="post_cover"><a href="//post/43vc.html" class="fancybox" title="【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！"><img class="post_bg" src="/img/article/17/th.webp" alt="【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！"></a></div><div class="recent-post-info"><div class="recent-post-info-top"><div class="recent-post-info-top-tips"><span class="article-meta sticky-warp"><span class="original">Hexo</span></span></div><a class="article-title fancybox" href="//post/43vc.html" title="【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！">【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！</a></div><div class="content"></div><div class="article-meta-wrap"><span class="article-meta tags"><a class="article-meta__tags fancybox" href="tags/Vercel/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Vercel</span></a><a class="article-meta__tags fancybox" href="tags/Github/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Github</span></a><a class="article-meta__tags fancybox" href="tags/Pages/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Pages</span></a></span><span class="post-meta-date"><time datetime="Thu Oct 03 2024 08:15:00 GMT+0800" style="display: inline;"></time></span></div></div></div>
+
+<p>也可以使用 CF Workers反代，参考：<a href="https://blog.mc-sep.top/post/437r.html">利用Cloudflare Workers搭建镜像网站 | Minecraft-Sep (mc-sep.top)</a></p>
+<h2 id="整改2-域名"><a href="#整改2-域名" class="headerlink" title="整改2 域名"></a>整改2 域名</h2><p>参考（有几个提别好的）：</p>
+<div class="recent-post-item" onclick="pjax.loadUrl('//post/re8u.html')"><div class="post_cover"><a href="//post/re8u.html" class="fancybox" title="免费域名怎么弄？常见免费域名指南"><img class="post_bg" src="/img/article/10/th.webp" alt="免费域名怎么弄？常见免费域名指南"></a></div><div class="recent-post-info"><div class="recent-post-info-top"><div class="recent-post-info-top-tips"><span class="article-meta sticky-warp"><span class="original">Hexo</span></span></div><a class="article-title fancybox" href="//post/re8u.html" title="免费域名怎么弄？常见免费域名指南">免费域名怎么弄？常见免费域名指南</a></div><div class="content"></div><div class="article-meta-wrap"><span class="article-meta tags"><a class="article-meta__tags fancybox" href="tags/Pages/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Pages</span></a><a class="article-meta__tags fancybox" href="tags/Hexo/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Hexo</span></a></span><span class="post-meta-date"><time datetime="Fri Aug 09 2024 16:39:00 GMT+0800" style="display: inline;"></time></span></div></div></div>
+
+<h2 id="整改3-CDN"><a href="#整改3-CDN" class="headerlink" title="整改3 CDN"></a>整改3 CDN</h2><p>CDN的全称是Content Delivery Network，即内容分发网络。CDN是构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。CDN的关键技术主要有内容存储和分发技术。</p>
+<p>通俗易懂的解释： 通过IP访问实际资源时，如果CDN上并没有缓存资源，则会到源站请求资源，并缓存到CDN节点上，这样，用户下一次访问时，该CDN节点就会有对应资源的缓存了。</p>
+<p>Vercel CDN的优化</p>
+<ul>
+<li>使用他人的Vercel CDN（自动使用节点）：<a href="https://vercel.cdn.yt-blog.top/">Vercel CDN:利用CNAME负载均衡实现的Vercel加速CDN (yt-blog.top)</a></li>
+<li>在Vercel里使用Hong Kong节点</li>
+</ul>
+<p>CF的优化</p>
+<ul>
+<li>优化选项卡里的能开就开</li>
+</ul>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>注意：最近推出的Speed Brain有问题，不建议使用！</p>
+</div>
+
+<h2 id="整改4-图片问题"><a href="#整改4-图片问题" class="headerlink" title="整改4 图片问题"></a>整改4 图片问题</h2><p>最拖慢速度二巨头：图片过大，图片源不同一（特别是butterfly系列主题深有体会）</p>
+<p>建议统一使用一个图床，或者上传到自己的图床，这里提供两个教程</p>
+<ul>
+<li>CF+Telegraph（维护中）</li>
+<li>Vercel+Bulb</li>
+</ul>
+<div class="recent-post-item" onclick="pjax.loadUrl('//post/239d.html')"><div class="post_cover"><a href="//post/239d.html" class="fancybox" title="免费小型数据库——Vercel Blob初体验"><img class="post_bg" src="/img/article/13/th.webp" alt="免费小型数据库——Vercel Blob初体验"></a></div><div class="recent-post-info"><div class="recent-post-info-top"><div class="recent-post-info-top-tips"><span class="article-meta sticky-warp"><span class="original">实用教程</span></span></div><a class="article-title fancybox" href="//post/239d.html" title="免费小型数据库——Vercel Blob初体验">免费小型数据库——Vercel Blob初体验</a></div><div class="content"></div><div class="article-meta-wrap"><span class="article-meta tags"><a class="article-meta__tags fancybox" href="tags/Vercel/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Vercel</span></a><a class="article-meta__tags fancybox" href="tags/图床/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>图床</span></a></span><span class="post-meta-date"><time datetime="Mon Sep 16 2024 20:18:00 GMT+0800" style="display: inline;"></time></span></div></div></div>
+
+<p>其次，图片过大可以使用<a href="https://tinify.cn/">TinyPNG – 智能压缩您的WebP、JPEG和PNG图片 (tinify.cn)</a>或者<a href="https://tinypng.com/">TinyPNG – Compress WebP, PNG and JPEG images intelligently</a>压缩，是无损压缩，也可以转换为png,jpeg和webp格式。</p>
+<p>或者使用<a href="https://cdn.jsdelivr.net/">Jsdelivr (jsdelivr.net)</a>加速访问托管在github 的图片：</p>
+<ol>
+<li><p>将图片上传到github</p>
+</li>
+<li><p>在网址栏输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://cdn.jsdelivr.net/npm/你的github用户名/你保存图片的repo/[图片路径]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果出现图片就代表成功！</p>
+</li>
+</ol>
+<h2 id="整改5-Gulp"><a href="#整改5-Gulp" class="headerlink" title="整改5 Gulp"></a>整改5 Gulp</h2><p>Gulp是一个hexo插件，用于压缩js和css文件。</p>
+<ol>
+<li><p>安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install gulp compress gulp-clean-css gulp-html-minifier-terser gulp-htmlclean gulp-terser --save-dev</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建 <code>gulpfile.js</code> 文件：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> cleanCSS = <span class="built_in">require</span>(<span class="string">&#x27;gulp-clean-css&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlmin = <span class="built_in">require</span>(<span class="string">&#x27;gulp-html-minifier-terser&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlclean = <span class="built_in">require</span>(<span class="string">&#x27;gulp-htmlclean&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> terser = <span class="built_in">require</span>(<span class="string">&#x27;gulp-terser&#x27;</span>);</span><br><span class="line"><span class="comment">// 压缩js</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;compress&#x27;</span>, <span class="function">() =&gt;</span></span><br><span class="line">gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.js&#x27;</span>, <span class="string">&#x27;!./public/**/*.min.js&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">terser</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">)</span><br><span class="line"><span class="comment">//压缩css</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-css&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.css&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">cleanCSS</span>(&#123;</span><br><span class="line"><span class="attr">compatibility</span>: <span class="string">&#x27;ie11&#x27;</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//压缩html</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-html&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>(<span class="string">&#x27;./public/**/*.html&#x27;</span>)</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlclean</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlmin</span>(&#123;</span><br><span class="line"><span class="attr">removeComments</span>: <span class="literal">true</span>, <span class="comment">//清除html注释</span></span><br><span class="line"><span class="attr">collapseWhitespace</span>: <span class="literal">true</span>, <span class="comment">//压缩html</span></span><br><span class="line"><span class="attr">collapseBooleanAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//省略布尔属性的值，例如：&lt;input checked=&quot;true&quot;/&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeEmptyAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除所有空格作属性值，例如：&lt;input id=&quot;&quot; /&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeScriptTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;script&gt;的type=&quot;text/javascript&quot;</span></span><br><span class="line"><span class="attr">removeStyleLinkTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;style&gt;和&lt;link&gt;的 type=&quot;text/css&quot;</span></span><br><span class="line"><span class="attr">minifyJS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 JS</span></span><br><span class="line"><span class="attr">minifyCSS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 CSS</span></span><br><span class="line"><span class="attr">minifyURLs</span>: <span class="literal">true</span>  <span class="comment">//压缩页面URL</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行gulp命令时依次执行以下任务</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;default&#x27;</span>, gulp.<span class="title function_">parallel</span>(</span><br><span class="line"><span class="string">&#x27;compress&#x27;</span>, <span class="string">&#x27;minify-css&#x27;</span>, <span class="string">&#x27;minify-html&#x27;</span></span><br><span class="line">))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行gulp：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g&amp;&amp;gulp</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="加速你也做的差不多了"><a href="#加速你也做的差不多了" class="headerlink" title="加速你也做的差不多了"></a>加速你也做的差不多了</h1><p>结束！</p>
+<p>版权所有©MC-Sep.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>Cloudflare</tag>
+        <tag>Hexo</tag>
+        <tag>CDN</tag>
+      </tags>
+  </entry>
 </search>
