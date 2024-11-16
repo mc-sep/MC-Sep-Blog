@@ -2187,14 +2187,14 @@ span.tags-punctuation i {
   opacity: 0.2;
   width: 100%;
   height: 100%;
-  background-image: url("/img/background/light.jpg");
+  background-image: url("/img/background/light.webp");
   background-size: cover;
   background-position: center;
   pointer-events: none;
   background-repeat: no-repeat;
 }
 [data-theme=dark] #global_bg {
-  background-image: url("/img/background/dark.png");
+  background-image: url("/img/background/dark.webp");
 }
 #article-container {
   overflow-wrap: break-word;
