@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.mc-sep.top/post/5ytg.html</loc>
+    
+    <lastmod>2024-11-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.mc-sep.top/custom/twikoo/twikoo-emoji.json</loc>
     
     <lastmod>2024-11-09</lastmod>
@@ -229,7 +238,7 @@
 
   <url>
     <loc>http://blog.mc-sep.top/</loc>
-    <lastmod>2024-11-09</lastmod>
+    <lastmod>2024-11-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
