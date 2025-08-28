@@ -1,6 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>免费小型数据库——Vercel Blob初体验</title>
+    <url>//post/239d.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
+<p>他的配置还不错的：</p>
+<table>
+<thead>
+<tr>
+<th align="center">计划</th>
+<th align="center">数据库大小</th>
+<th align="center">读</th>
+<th align="center">写</th>
+<th align="center">请求数</th>
+<th align="center">请求时长</th>
+<th align="center">是否要Projects</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Hobby</td>
+<td align="center">250MB&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">1 hour&#x2F;Month</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="center">Pro</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="center">Team</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">✅</td>
+</tr>
+</tbody></table>
+<p>今天就teach你怎么搞！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li><p>准备一个Vercel账号，可以直接用Github登录</p>
+</li>
+<li><p>创建存储库（点击快速创建）：<a href="https://vercel.com/new/mc-sep-vercel-team/clone?demo-description=Simple%20Next.js%20template%20that%20uses%20Vercel%20Blob%20for%20image%20uploads&demo-image=//images.ctfassets.net/e5382hct74si/W7szxXAHpF3eZ4RFT33Cb/4d8a64904b67980e449b487089dd7b2b/opengraph-image.png&demo-title=Vercel%20Blob%20Next.js%20Starter&demo-url=https://blob-starter.vercel.app/&project-name=blob-starter&repository-name=blob-starter&repository-url=https://github.com/vercel/examples/tree/main/storage/blob-starter&stores=%5B%7B%22type%22:%22blob%22%7D%5D">Create</a></p>
+</li>
+<li><p>在接下来的页面中，名字自己填，然后 Add 一个 Blob Store，确定即可</p>
+</li>
+</ol>
+<p><img src="/img/article/13/db6a8c47c47a8e6a1a8612261ed977e7c6081bf45a699d8b675c2e2a7837a32c.png" alt="add vercel blob storage"></p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>注意，每个用户只允许创建一个Vercel Blob Storage!</p>
+</div>
+
+<ol start="4">
+<li><p>直到满屏烟花，点击 <strong>Continue to Dashboard</strong>。</p>
+</li>
+<li><p>点击 <strong>Settings</strong> -&gt; <strong>Environment Variables</strong>，最下面找到名为 <code>BLOB_READ_WRITE_TOKEN</code> 的环境变量，点击复制，格式是这样的：</p>
+</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">vercel_blob_rw_*************************************</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/article/13/055fc988aad255241065ea6737692f16aee76e52558272107f3633d3a171d77a.png" alt="copy the envirnment variables"></p>
+<ol start="6">
+<li>回到 <strong>Settings</strong> -&gt; <strong>Functions</strong>，将区域改为 <strong>Hong Kong (East) – hkg1</strong> 或 <strong>Tokyo, Japan (Northeast) – hnd1</strong></li>
+</ol>
+<p><img src="/img/article/13/9c1fdfb473e882beb42399ea02144f61e24fe5dfb0f49cc3e377db3d4007b6c8.png" alt="set functions"></p>
+<ol start="7">
+<li>回到 Dashboard 主页面，点击这个进入创建的Github Repo:</li>
+</ol>
+<p><img src="/img/article/13/aefa06c390feaa84978126eafd0247ebf1e6eaa33fd90308ff7e46241f9b5321.png"></p>
+<ol start="8">
+<li>打开文件 <strong>.env.example</strong>，将复制的内容粘贴在末尾，格式如下：</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">BLOB_READ_WRITE_TOKEN=vercel_blob_rw_*******************************</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>打开 [Main Blob Storage] &#x2F; app &#x2F; page.tsx，修改里面的内容为中文（建议保留原站链接），可参照我的配置</li>
+</ol>
+<figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Image</span> <span class="keyword">from</span> <span class="string">&#x27;next/image&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Link</span> <span class="keyword">from</span> <span class="string">&#x27;next/link&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ExpandingArrow</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/expanding-arrow&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Uploader</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/uploader&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Toaster</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/components/toaster&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">Home</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">main</span> <span class="attr">className</span>=<span class="string">&quot;relative flex min-h-screen flex-col items-center justify-center&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Toaster</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/templates/next.js/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">className</span>=<span class="string">&quot;group mt-20 sm:mt-0 rounded-full flex space-x-1 bg-white/30 shadow-sm ring-1 ring-gray-900/5 text-gray-600 text-sm font-medium px-10 py-2 hover:shadow-lg active:shadow-sm transition-all&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>🎉使用Vercel免费搭建🎉<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">ExpandingArrow</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">&quot;pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        MC-Sep 免费网盘</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Uploader</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light text-gray-600 w-full max-w-lg text-center mt-6&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/blob&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Vercel Blob</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span>&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        Web. Built with&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://nextjs.org/docs&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Next.js App Router</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        .</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;sm:absolute sm:bottom-0 w-full px-20 py-10 flex justify-between&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span> <span class="attr">href</span>=<span class="string">&quot;https://vercel.com&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/vercel.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;Vercel Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;100&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://github.com/vercel/examples/tree/main/storage/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;flex items-center space-x-2&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/github.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;GitHub Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light&quot;</span>&gt;</span>Github<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>保存后，系统会重新部署一次，回到 <strong>Settings</strong> -&gt; <strong>Domains</strong>，添加你的域名（确保你的域名托管商已经添加记录为<code>A</code>:<strong>76.76.21.98</strong> 的记录，Add 即可。</li>
+</ol>
+<p><img src="/img/article/13/902e66cfb6bd99a53d7402fc6d61eb9d57b7995dac607c36b5190af4d7ba6771.png" alt="add domain"></p>
+<ol start="11">
+<li>完工！</li>
+</ol>
+<div class="note  info flat fas fa-circle-info"><p>提示：可以在 <strong>Storage</strong> 页面查看存储库，状态，如大小、读写次数统计等。</p>
+<p><img src="/img/article/13/790eebd56379643ae8fcb33c5994ddb0845a0720020a20fb9891829e4b49e42b.png" alt="View the Storage"></p>
+<p><img src="/img/article/13/e20224e68a0c4f90f5d488748b8ddd1d0f01ea03d275ec8d10f6c05d948b940c.png" alt="See the storage message"></p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel Blob是一个不错的存储系统，对Hobby计划用户很友好。</p>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>图床</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搞机日记——华为儿童手表3X破解</title>
     <url>//post/3rhi.html</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有一段时间没有更新了。学业问题，好久才能更新一次。对不起大家！</p>
@@ -52,6 +159,214 @@
       </categories>
       <tags>
         <tag>Android</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>利用Cloudflare Workers搭建镜像网站</title>
+    <url>//post/437r.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
+<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li>准备你的Cloudflare账号</li>
+<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
+</ol>
+<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
+<ol start="3">
+<li>选择<strong>创建Workers</strong></li>
+<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
+</ol>
+<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
+<ol start="5">
+<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
+</ol>
+<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
+<ol start="6">
+<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
+</ol>
+<p><img src="/img/article/9/66ab1781dad21.png"></p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
+
+<div class="note  warning flat fas fa-triangle-exclamation"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
+</div>
+
+<div class="note  danger flat fas fa-circle-xmark"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
+<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Cloudflare</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！</title>
+    <url>//post/43vc.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是 Vercel ? Vercel，是一家软件服务企业，掌门人是Guillermo Rauch，2023年4月18日，以170亿人民币的企业估值入选《2023·胡润全球独角兽榜》，排名404。2024年4月9日，Vercel以180亿人民币的企业估值入选《2024·胡润全球独角兽榜》，排名422名。</p>
+<p>那么，今天我就叫你如何使用 Vercel 快速上线你的个人网站！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="Part1-导入博客Repo"><a href="#Part1-导入博客Repo" class="headerlink" title="Part1. 导入博客Repo"></a>Part1. 导入博客Repo</h2><ol>
+<li><p>进入 <strong><a href="vercel.com">Vercel</a></strong> ，先注册账号（建议使用Github注册）。</p>
+</li>
+<li><p>进入Dashboard，点击<code>Add New</code>-&gt;<code>Project</code></p>
+</li>
+</ol>
+<p><img src="/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p>
+<ol start="3">
+<li>进入选择界面，找到你的博客所在的Github仓库，点击一旁的<strong>Import</strong>，例如我的<code>mc-sep.github.io</code></li>
+</ol>
+<p><img src="/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p>
+<ol start="4">
+<li>进入到配置界面，如果你是Hexo博客（只上传public文件夹内文件的），请不要修改<strong>Build and Output Settings</strong>和<strong>Framework Preset</strong>，如果是Hexo（在线部署的），请在<strong>Framework Preset</strong>中选择<strong>Hexo</strong>，其他不用动。其余博客的方法可自行查阅。最后点击<strong>Deploy</strong></li>
+</ol>
+<p><img src="/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p>
+<p><img src="/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p>
+<ol start="5">
+<li>等待部署完成。完成后，点击<strong>Continue to Dashboard</strong></li>
+</ol>
+<p><img src="/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p>
+<p><img src="/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p>
+<h2 id="Part2-绑定域名"><a href="#Part2-绑定域名" class="headerlink" title="Part2. 绑定域名"></a>Part2. 绑定域名</h2><p>请在你的域名托管商内添加一个<strong>CNAME</strong>记录：<strong>cname-china.vercel-dns.com</strong>或者<strong>A</strong>记录：<strong>76.76.21.21</strong>或<strong>76.76.21.98</strong>，如图：</p>
+<p><img src="/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p>
+<p>接着去到你创建好的Project，点击<strong>Settings</strong>-&gt;<strong>Domains</strong>，再上面输入你的域名！</p>
+<p><img src="/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p>
+<p>如果你配置错了，可能就会：</p>
+<p><img src="/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p>
+<p><img src="/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p>
+<p>你也可以使用Vercel的自带域名（被ban了）：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">你喜欢的名字.vercel.app</span><br></pre></td></tr></table></figure>
+
+<h2 id="Part3-安全系统"><a href="#Part3-安全系统" class="headerlink" title="Part3. 安全系统"></a>Part3. 安全系统</h2><ol>
+<li><p>进入<strong>Settings</strong>-&gt;<strong>Security</strong></p>
+</li>
+<li><p>可以将<strong>Attack Challenge Mode</strong>打开（通过向每位访客显示验证质询来防止恶意流量），效果就不展示了。</p>
+</li>
+<li><p>下面的都可以打开。</p>
+</li>
+</ol>
+<h2 id="Part4-优化"><a href="#Part4-优化" class="headerlink" title="Part4. 优化"></a>Part4. 优化</h2><p>可以提出建议！我可能会采纳！</p>
+<ul>
+<li>进入<strong>Settings</strong>-&gt;<strong>Functions</strong>，可将服务器改为香港的（好像小日子的更快），如：</li>
+</ul>
+<p><img src="/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel挺好用的。</p>
+<p>版权所有©MC-Sep 2023~2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>Github</tag>
+        <tag>Pages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Hexo】如何提高静态博客访问速度？Vercel+Cloudflare+CDN让你的网站速度飞起！</title>
+    <url>//post/5ytg.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着博客文章数量的增多，我们的博客可能会变得十分缓慢（比如前段时间的我），今天的教程可以让你的博客提速<strong>90%</strong>！</p>
+<h1 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h1><h2 id="整改1-扔掉Github-Pages"><a href="#整改1-扔掉Github-Pages" class="headerlink" title="整改1 扔掉Github Pages"></a>整改1 扔掉Github Pages</h2><p>Github Pages<del>真垃圾</del>很慢，看看对比：</p>
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">Vercel</th>
+<th align="center">CF Workers（反代）</th>
+<th align="center">CF Pages</th>
+<th align="center">Netlify</th>
+<th align="center">Zeabur</th>
+<th align="center">Github Pages</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">速度</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟</td>
+</tr>
+<tr>
+<td align="center">稳定性</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+<p>还不把Github Pages扔了！Vercel他不香吗！参考：</p>
+
+
+<p>也可以使用 CF Workers反代，参考：<a href="https://blog.mc-sep.top/post/437r.html">利用Cloudflare Workers搭建镜像网站 | Minecraft-Sep (mc-sep.top)</a></p>
+<h2 id="整改2-域名"><a href="#整改2-域名" class="headerlink" title="整改2 域名"></a>整改2 域名</h2><p>参考（有几个提别好的）：</p>
+
+
+<h2 id="整改3-CDN"><a href="#整改3-CDN" class="headerlink" title="整改3 CDN"></a>整改3 CDN</h2><p>CDN的全称是Content Delivery Network，即内容分发网络。CDN是构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。CDN的关键技术主要有内容存储和分发技术。</p>
+<p>通俗易懂的解释： 通过IP访问实际资源时，如果CDN上并没有缓存资源，则会到源站请求资源，并缓存到CDN节点上，这样，用户下一次访问时，该CDN节点就会有对应资源的缓存了。</p>
+<p>Vercel CDN的优化</p>
+<ul>
+<li>使用他人的Vercel CDN（自动使用节点）：<a href="https://vercel.cdn.yt-blog.top/">Vercel CDN:利用CNAME负载均衡实现的Vercel加速CDN (yt-blog.top)</a></li>
+<li>在Vercel里使用Hong Kong节点</li>
+</ul>
+<p>CF的优化</p>
+<ul>
+<li>优化选项卡里的能开就开</li>
+</ul>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>注意：最近推出的Speed Brain有问题，不建议使用！</p>
+</div>
+
+<h2 id="整改4-图片问题"><a href="#整改4-图片问题" class="headerlink" title="整改4 图片问题"></a>整改4 图片问题</h2><p>最拖慢速度二巨头：图片过大，图片源不同一（特别是butterfly系列主题深有体会）</p>
+<p>建议统一使用一个图床，或者上传到自己的图床，这里提供两个教程</p>
+<ul>
+<li>CF+Telegraph（维护中）</li>
+<li>Vercel+Bulb</li>
+</ul>
+<div class="recent-post-item" onclick="pjax.loadUrl('//post/239d.html')"><div class="post_cover"><a href="//post/239d.html" class="fancybox" title="免费小型数据库——Vercel Blob初体验"><img class="post_bg" src="/img/article/13/th.webp" alt="免费小型数据库——Vercel Blob初体验"></a></div><div class="recent-post-info"><div class="recent-post-info-top"><div class="recent-post-info-top-tips"><span class="article-meta sticky-warp"><span class="original">实用教程</span></span></div><a class="article-title fancybox" href="//post/239d.html" title="免费小型数据库——Vercel Blob初体验">免费小型数据库——Vercel Blob初体验</a></div><div class="content"></div><div class="article-meta-wrap"><span class="article-meta tags"><a class="article-meta__tags fancybox" href="tags/Vercel/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Vercel</span></a><a class="article-meta__tags fancybox" href="tags/图床/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>图床</span></a></span><span class="post-meta-date"><time datetime="Mon Sep 16 2024 20:18:00 GMT+0800" style="display: inline;"></time></span></div></div></div>
+
+<p>其次，图片过大可以使用<a href="https://tinify.cn/">TinyPNG – 智能压缩您的WebP、JPEG和PNG图片 (tinify.cn)</a>或者<a href="https://tinypng.com/">TinyPNG – Compress WebP, PNG and JPEG images intelligently</a>压缩，是无损压缩，也可以转换为png,jpeg和webp格式。</p>
+<p>或者使用<a href="https://cdn.jsdelivr.net/">Jsdelivr (jsdelivr.net)</a>加速访问托管在github 的图片：</p>
+<ol>
+<li><p>将图片上传到github</p>
+</li>
+<li><p>在网址栏输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://cdn.jsdelivr.net/npm/你的github用户名/你保存图片的repo/[图片路径]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果出现图片就代表成功！</p>
+</li>
+</ol>
+<h2 id="整改5-Gulp"><a href="#整改5-Gulp" class="headerlink" title="整改5 Gulp"></a>整改5 Gulp</h2><p>Gulp是一个hexo插件，用于压缩js和css文件。</p>
+<ol>
+<li><p>安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install gulp compress gulp-clean-css gulp-html-minifier-terser gulp-htmlclean gulp-terser --save-dev</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建 <code>gulpfile.js</code> 文件：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> cleanCSS = <span class="built_in">require</span>(<span class="string">&#x27;gulp-clean-css&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlmin = <span class="built_in">require</span>(<span class="string">&#x27;gulp-html-minifier-terser&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlclean = <span class="built_in">require</span>(<span class="string">&#x27;gulp-htmlclean&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> terser = <span class="built_in">require</span>(<span class="string">&#x27;gulp-terser&#x27;</span>);</span><br><span class="line"><span class="comment">// 压缩js</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;compress&#x27;</span>, <span class="function">() =&gt;</span></span><br><span class="line">gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.js&#x27;</span>, <span class="string">&#x27;!./public/**/*.min.js&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">terser</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">)</span><br><span class="line"><span class="comment">//压缩css</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-css&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.css&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">cleanCSS</span>(&#123;</span><br><span class="line"><span class="attr">compatibility</span>: <span class="string">&#x27;ie11&#x27;</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//压缩html</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-html&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>(<span class="string">&#x27;./public/**/*.html&#x27;</span>)</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlclean</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlmin</span>(&#123;</span><br><span class="line"><span class="attr">removeComments</span>: <span class="literal">true</span>, <span class="comment">//清除html注释</span></span><br><span class="line"><span class="attr">collapseWhitespace</span>: <span class="literal">true</span>, <span class="comment">//压缩html</span></span><br><span class="line"><span class="attr">collapseBooleanAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//省略布尔属性的值，例如：&lt;input checked=&quot;true&quot;/&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeEmptyAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除所有空格作属性值，例如：&lt;input id=&quot;&quot; /&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeScriptTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;script&gt;的type=&quot;text/javascript&quot;</span></span><br><span class="line"><span class="attr">removeStyleLinkTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;style&gt;和&lt;link&gt;的 type=&quot;text/css&quot;</span></span><br><span class="line"><span class="attr">minifyJS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 JS</span></span><br><span class="line"><span class="attr">minifyCSS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 CSS</span></span><br><span class="line"><span class="attr">minifyURLs</span>: <span class="literal">true</span>  <span class="comment">//压缩页面URL</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行gulp命令时依次执行以下任务</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;default&#x27;</span>, gulp.<span class="title function_">parallel</span>(</span><br><span class="line"><span class="string">&#x27;compress&#x27;</span>, <span class="string">&#x27;minify-css&#x27;</span>, <span class="string">&#x27;minify-html&#x27;</span></span><br><span class="line">))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行gulp：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g&amp;&amp;gulp</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="加速你也做的差不多了"><a href="#加速你也做的差不多了" class="headerlink" title="加速你也做的差不多了"></a>加速你也做的差不多了</h1><p>结束！</p>
+<p>版权所有©MC-Sep.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>Cloudflare</tag>
+        <tag>Hexo</tag>
+        <tag>CDN</tag>
       </tags>
   </entry>
   <entry>
@@ -276,160 +591,6 @@
       </tags>
   </entry>
   <entry>
-    <title>利用Cloudflare Workers搭建镜像网站</title>
-    <url>//post/437r.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
-<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li>准备你的Cloudflare账号</li>
-<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
-<ol start="3">
-<li>选择<strong>创建Workers</strong></li>
-<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
-<ol start="5">
-<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
-</ol>
-<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
-<ol start="6">
-<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
-</ol>
-<p><img src="/img/article/9/66ab1781dad21.png"></p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
-
-<div class="note  warning flat fas fa-triangle-exclamation"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
-</div>
-
-<div class="note  danger flat fas fa-circle-xmark"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
-<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
-</div>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Cloudflare</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>免费小型数据库——Vercel Blob初体验</title>
-    <url>//post/239d.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
-<p>他的配置还不错的：</p>
-<table>
-<thead>
-<tr>
-<th align="center">计划</th>
-<th align="center">数据库大小</th>
-<th align="center">读</th>
-<th align="center">写</th>
-<th align="center">请求数</th>
-<th align="center">请求时长</th>
-<th align="center">是否要Projects</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Hobby</td>
-<td align="center">250MB&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">1 hour&#x2F;Month</td>
-<td align="center">✅</td>
-</tr>
-<tr>
-<td align="center">Pro</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">✅</td>
-</tr>
-<tr>
-<td align="center">Team</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">✅</td>
-</tr>
-</tbody></table>
-<p>今天就teach你怎么搞！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li><p>准备一个Vercel账号，可以直接用Github登录</p>
-</li>
-<li><p>创建存储库（点击快速创建）：<a href="https://vercel.com/new/mc-sep-vercel-team/clone?demo-description=Simple%20Next.js%20template%20that%20uses%20Vercel%20Blob%20for%20image%20uploads&demo-image=//images.ctfassets.net/e5382hct74si/W7szxXAHpF3eZ4RFT33Cb/4d8a64904b67980e449b487089dd7b2b/opengraph-image.png&demo-title=Vercel%20Blob%20Next.js%20Starter&demo-url=https://blob-starter.vercel.app/&project-name=blob-starter&repository-name=blob-starter&repository-url=https://github.com/vercel/examples/tree/main/storage/blob-starter&stores=%5B%7B%22type%22:%22blob%22%7D%5D">Create</a></p>
-</li>
-<li><p>在接下来的页面中，名字自己填，然后 Add 一个 Blob Store，确定即可</p>
-</li>
-</ol>
-<p><img src="/img/article/13/db6a8c47c47a8e6a1a8612261ed977e7c6081bf45a699d8b675c2e2a7837a32c.png" alt="add vercel blob storage"></p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>注意，每个用户只允许创建一个Vercel Blob Storage!</p>
-</div>
-
-<ol start="4">
-<li><p>直到满屏烟花，点击 <strong>Continue to Dashboard</strong>。</p>
-</li>
-<li><p>点击 <strong>Settings</strong> -&gt; <strong>Environment Variables</strong>，最下面找到名为 <code>BLOB_READ_WRITE_TOKEN</code> 的环境变量，点击复制，格式是这样的：</p>
-</li>
-</ol>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">vercel_blob_rw_*************************************</span><br></pre></td></tr></table></figure>
-
-<p><img src="/img/article/13/055fc988aad255241065ea6737692f16aee76e52558272107f3633d3a171d77a.png" alt="copy the envirnment variables"></p>
-<ol start="6">
-<li>回到 <strong>Settings</strong> -&gt; <strong>Functions</strong>，将区域改为 <strong>Hong Kong (East) – hkg1</strong> 或 <strong>Tokyo, Japan (Northeast) – hnd1</strong></li>
-</ol>
-<p><img src="/img/article/13/9c1fdfb473e882beb42399ea02144f61e24fe5dfb0f49cc3e377db3d4007b6c8.png" alt="set functions"></p>
-<ol start="7">
-<li>回到 Dashboard 主页面，点击这个进入创建的Github Repo:</li>
-</ol>
-<p><img src="/img/article/13/aefa06c390feaa84978126eafd0247ebf1e6eaa33fd90308ff7e46241f9b5321.png"></p>
-<ol start="8">
-<li>打开文件 <strong>.env.example</strong>，将复制的内容粘贴在末尾，格式如下：</li>
-</ol>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">BLOB_READ_WRITE_TOKEN=vercel_blob_rw_*******************************</span><br></pre></td></tr></table></figure>
-
-<ol start="9">
-<li>打开 [Main Blob Storage] &#x2F; app &#x2F; page.tsx，修改里面的内容为中文（建议保留原站链接），可参照我的配置</li>
-</ol>
-<figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Image</span> <span class="keyword">from</span> <span class="string">&#x27;next/image&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Link</span> <span class="keyword">from</span> <span class="string">&#x27;next/link&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ExpandingArrow</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/expanding-arrow&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Uploader</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/uploader&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Toaster</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/components/toaster&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">Home</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">main</span> <span class="attr">className</span>=<span class="string">&quot;relative flex min-h-screen flex-col items-center justify-center&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Toaster</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/templates/next.js/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">className</span>=<span class="string">&quot;group mt-20 sm:mt-0 rounded-full flex space-x-1 bg-white/30 shadow-sm ring-1 ring-gray-900/5 text-gray-600 text-sm font-medium px-10 py-2 hover:shadow-lg active:shadow-sm transition-all&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>🎉使用Vercel免费搭建🎉<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">ExpandingArrow</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">&quot;pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        MC-Sep 免费网盘</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Uploader</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light text-gray-600 w-full max-w-lg text-center mt-6&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/blob&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Vercel Blob</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span>&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        Web. Built with&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://nextjs.org/docs&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Next.js App Router</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        .</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;sm:absolute sm:bottom-0 w-full px-20 py-10 flex justify-between&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span> <span class="attr">href</span>=<span class="string">&quot;https://vercel.com&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/vercel.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;Vercel Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;100&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://github.com/vercel/examples/tree/main/storage/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;flex items-center space-x-2&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/github.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;GitHub Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light&quot;</span>&gt;</span>Github<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="10">
-<li>保存后，系统会重新部署一次，回到 <strong>Settings</strong> -&gt; <strong>Domains</strong>，添加你的域名（确保你的域名托管商已经添加记录为<code>A</code>:<strong>76.76.21.98</strong> 的记录，Add 即可。</li>
-</ol>
-<p><img src="/img/article/13/902e66cfb6bd99a53d7402fc6d61eb9d57b7995dac607c36b5190af4d7ba6771.png" alt="add domain"></p>
-<ol start="11">
-<li>完工！</li>
-</ol>
-<div class="note  info flat fas fa-circle-info"><p>提示：可以在 <strong>Storage</strong> 页面查看存储库，状态，如大小、读写次数统计等。</p>
-<p><img src="/img/article/13/790eebd56379643ae8fcb33c5994ddb0845a0720020a20fb9891829e4b49e42b.png" alt="View the Storage"></p>
-<p><img src="/img/article/13/e20224e68a0c4f90f5d488748b8ddd1d0f01ea03d275ec8d10f6c05d948b940c.png" alt="See the storage message"></p>
-</div>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel Blob是一个不错的存储系统，对Hobby计划用户很友好。</p>
-]]></content>
-      <categories>
-        <category>实用教程</category>
-      </categories>
-      <tags>
-        <tag>Vercel</tag>
-        <tag>图床</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【Hexo】Hexo+Github搭建个人博客</title>
     <url>//post/4nd3.html</url>
     <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间90分钟，请放心食用！</p>
@@ -560,8 +721,68 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>Github</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于博客评论更换的通知</title>
+    <url>//post/73dh.html</url>
+    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
+<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
+
+<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+
+<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+]]></content>
+      <categories>
+        <category>公告</category>
+      </categories>
+      <tags>
+        <tag>Waline</tag>
+        <tag>Twikoo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>提升效率必备Windows神器PowerToys</title>
+    <url>//post/qrea.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>终于复活了！！！</p>
+<p>最近blog经常发癫，我还要考试，就停更了好久。</p>
+<p>今天我来讲一讲一个Windows的实用小工具：<strong>PowerToys</strong></p>
+<h1 id="安装、使用"><a href="#安装、使用" class="headerlink" title="安装、使用"></a>安装、使用</h1><p>安装的话直接去Microsoft Store就可以：</p>
+<p><img src="/img/article/21/e684ccc486939315a387bbc53e8c33afda1505da.jpg" alt="Microsoft PowerToys 是一款帮助高级用户优化和简化 Windows 10 和 11 系统体验的实用工具集，以提高生产力。 [App Screenshot] (由 AI 生成标题)|529x499, 100%"></p>
+<p>推荐的功能：</p>
+<ol>
+<li>唤醒：这个功能可以调整你的计算机睡眠状态，如永不睡眠，隔一段时间在睡眠等：</li>
+</ol>
+<p><img src="/img/article/21/b6fa800413a1985483c7b6aa77114eee7c883c70.png" alt="截图显示了一个设置菜单，包含关于保持设备唤醒的选项，包括按时间间隔唤醒、无限期唤醒以及关闭唤醒功能。 {tag:screenshot, menu, settings} (由 AI 生成标题)|538x250"></p>
+<ol start="2">
+<li>命令面板：快捷的公式计算、指令运行：</li>
+</ol>
+<p><img src="/img/article/21/b4ed65ccc4d794617fda21e7bb92a17afc35bb3a.jpg" alt="截图显示了PowerToys的命令面板设置界面，包括启用&#x2F;禁用命令面板、快捷键设置、以及搜索和运行应用等功能。 (由 AI 生成标题)|395x499"></p>
+<ol start="3">
+<li>颜色选择器：如果你对颜色的HEX值特别苦恼，就用这个一件取色！</li>
+</ol>
+<p><img src="/img/article/21/edf0599f28d9039870da3f0f87d062adcdd29281.png" alt="PowerToys 颜色选取器设置界面显示了启用状态、快捷键和激活方式等选项。 (由 AI 生成标题)|629x500"></p>
+<p><img src="/img/article/21/6209e90bb2173d4197d47f74dd66024f073b1144.png" alt="图片显示了十六进制颜色代码f3f3f3，它代表白色。 (由 AI 生成标题)|453x200"></p>
+<ol start="4">
+<li>文本提取器：顾名思义，截图读取文字。</li>
+</ol>
+<p><img src="/img/article/21/7baae8917a20ba5202e594a5b05abc960fe01725.png" alt="这是一张PowerToys文本提取器设置界面的截图，显示了其功能、快捷键和语言设置。 (由 AI 生成标题)|450x500"></p>
+<p>建议使用截图工具而不是 TextExtractor 模块。（文本提取实例）</p>
+<ol start="5">
+<li>始终置顶：激活后会在窗口旁出现蓝色框，代表完全置顶<br><img src="/img/article/21/62ef1a187883f2ce2d813ddcba403aead16c7747.png" alt="这是PowerToys设置界面，显示了“始终置顶”功能的开关和快捷键设置。 (由 AI 生成标题)|690x390"></li>
+</ol>
+<p>其余的自己可以探索，这5个最好用！</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+      </categories>
+      <tags>
+        <tag>PowerToys</tag>
+        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -581,24 +802,24 @@
 </li>
 </ol>
 <div class="repo-card">
-  <a class='name-55lv3m7gc repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>
-  <p class='desc-55lv3m7gc repo-desc'></p>
+  <a class='name-ckz1oy75a repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>
+  <p class='desc-ckz1oy75a repo-desc'></p>
   <div class="repo-gist">
     <i class="fas fa-star"></i>
-    <span class='star-55lv3m7gc'></span>
+    <span class='star-ckz1oy75a'></span>
     <i class="fas fa-code-branch"></i>
-    <span class='fork-55lv3m7gc'></span>
+    <span class='fork-ckz1oy75a'></span>
   </div>
-  <img class='lang-55lv3m7gc repo-language no-lightbox' />
+  <img class='lang-ckz1oy75a repo-language no-lightbox' />
   <script>
     fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')
       .then(res => res.json())
       .then(data => {
-        document.querySelector('.name-55lv3m7gc').innerText = data.name;
-        document.querySelector('.desc-55lv3m7gc').innerText = data.description;
-        document.querySelector('.star-55lv3m7gc').innerText = data.stargazers_count;
-        document.querySelector('.fork-55lv3m7gc').innerText = data.forks_count;
-        document.querySelector('.lang-55lv3m7gc').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();
+        document.querySelector('.name-ckz1oy75a').innerText = data.name;
+        document.querySelector('.desc-ckz1oy75a').innerText = data.description;
+        document.querySelector('.star-ckz1oy75a').innerText = data.stargazers_count;
+        document.querySelector('.fork-ckz1oy75a').innerText = data.forks_count;
+        document.querySelector('.lang-ckz1oy75a').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();
     });
   </script>
   </div>
@@ -649,87 +870,6 @@
       </tags>
   </entry>
   <entry>
-    <title>关于博客评论更换的通知</title>
-    <url>//post/73dh.html</url>
-    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
-<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
-
-<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
-
-<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
-]]></content>
-      <categories>
-        <category>公告</category>
-      </categories>
-      <tags>
-        <tag>Waline</tag>
-        <tag>Twikoo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！</title>
-    <url>//post/43vc.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是 Vercel ? Vercel，是一家软件服务企业，掌门人是Guillermo Rauch，2023年4月18日，以170亿人民币的企业估值入选《2023·胡润全球独角兽榜》，排名404。2024年4月9日，Vercel以180亿人民币的企业估值入选《2024·胡润全球独角兽榜》，排名422名。</p>
-<p>那么，今天我就叫你如何使用 Vercel 快速上线你的个人网站！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="Part1-导入博客Repo"><a href="#Part1-导入博客Repo" class="headerlink" title="Part1. 导入博客Repo"></a>Part1. 导入博客Repo</h2><ol>
-<li><p>进入 <strong><a href="vercel.com">Vercel</a></strong> ，先注册账号（建议使用Github注册）。</p>
-</li>
-<li><p>进入Dashboard，点击<code>Add New</code>-&gt;<code>Project</code></p>
-</li>
-</ol>
-<p><img src="/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p>
-<ol start="3">
-<li>进入选择界面，找到你的博客所在的Github仓库，点击一旁的<strong>Import</strong>，例如我的<code>mc-sep.github.io</code></li>
-</ol>
-<p><img src="/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p>
-<ol start="4">
-<li>进入到配置界面，如果你是Hexo博客（只上传public文件夹内文件的），请不要修改<strong>Build and Output Settings</strong>和<strong>Framework Preset</strong>，如果是Hexo（在线部署的），请在<strong>Framework Preset</strong>中选择<strong>Hexo</strong>，其他不用动。其余博客的方法可自行查阅。最后点击<strong>Deploy</strong></li>
-</ol>
-<p><img src="/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p>
-<p><img src="/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p>
-<ol start="5">
-<li>等待部署完成。完成后，点击<strong>Continue to Dashboard</strong></li>
-</ol>
-<p><img src="/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p>
-<p><img src="/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p>
-<h2 id="Part2-绑定域名"><a href="#Part2-绑定域名" class="headerlink" title="Part2. 绑定域名"></a>Part2. 绑定域名</h2><p>请在你的域名托管商内添加一个<strong>CNAME</strong>记录：<strong>cname-china.vercel-dns.com</strong>或者<strong>A</strong>记录：<strong>76.76.21.21</strong>或<strong>76.76.21.98</strong>，如图：</p>
-<p><img src="/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p>
-<p>接着去到你创建好的Project，点击<strong>Settings</strong>-&gt;<strong>Domains</strong>，再上面输入你的域名！</p>
-<p><img src="/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p>
-<p>如果你配置错了，可能就会：</p>
-<p><img src="/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p>
-<p><img src="/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p>
-<p>你也可以使用Vercel的自带域名（被ban了）：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">你喜欢的名字.vercel.app</span><br></pre></td></tr></table></figure>
-
-<h2 id="Part3-安全系统"><a href="#Part3-安全系统" class="headerlink" title="Part3. 安全系统"></a>Part3. 安全系统</h2><ol>
-<li><p>进入<strong>Settings</strong>-&gt;<strong>Security</strong></p>
-</li>
-<li><p>可以将<strong>Attack Challenge Mode</strong>打开（通过向每位访客显示验证质询来防止恶意流量），效果就不展示了。</p>
-</li>
-<li><p>下面的都可以打开。</p>
-</li>
-</ol>
-<h2 id="Part4-优化"><a href="#Part4-优化" class="headerlink" title="Part4. 优化"></a>Part4. 优化</h2><p>可以提出建议！我可能会采纳！</p>
-<ul>
-<li>进入<strong>Settings</strong>-&gt;<strong>Functions</strong>，可将服务器改为香港的（好像小日子的更快），如：</li>
-</ul>
-<p><img src="/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel挺好用的。</p>
-<p>版权所有©MC-Sep 2023~2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Vercel</tag>
-        <tag>Github</tag>
-        <tag>Pages</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
     <url>//post/76gl.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
@@ -759,223 +899,6 @@
       <tags>
         <tag>Cloudflare</tag>
         <tag>DDos</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Hexo】 Waline--评论系统的添加(1)</title>
-    <url>//post/7ghd.html</url>
-    <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间43分钟，请放心食用！</p>
-</div>
-
-
-
-<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>众所周知，一个博客是不能没有评论的！</p>
-<p><code>2024.5.2</code>：上线了<code>waline</code>评论系统</p>
-<p><code>2024.5.9</code>：关闭了匿名评论功能</p>
-<p><code>2024.5.14</code>：启动了双评论，另一个是<code>twikoo</code></p>
-<p><code>2024.5.18</code>：关闭了双评论</p>
-<p><code>2024.6.14</code>：重新启动了双评论</p>
-<p>但是很多人不知道用什么评论……</p>
-<p>所以，今天还是老样子出教程！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解主流的评论系统"><a href="#Part1-了解主流的评论系统" class="headerlink" title="Part1:了解主流的评论系统"></a>Part1:了解主流的评论系统</h3><table>
-<thead>
-<tr>
-<th align="center">评论系统</th>
-<th align="center"><a href="https://valine.js.org/">Valine</a></th>
-<th align="center"><a href="https://waline.js.org/">Waline</a></th>
-<th align="center"><a href="https://twikoo.js.org/">Twikoo</a></th>
-<th align="center"><a href="https://artalk.js.org/">Artalk</a></th>
-<th align="center"><a href="https://github.com/gitalk/gitalk">Gitalk</a></th>
-<th align="center"><a href="https://giscus.app/zh-CN">Giscus</a></th>
-<th align="center"><a href="https://changyan.kuaizhan.com/">畅言</a></th>
-<th align="center"><a href="https://remark42.com/">Remark42</a></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">推荐指数</td>
-<td align="center">✔✔</td>
-<td align="center">✔✔✔✔</td>
-<td align="center">✔✔✔✔✔</td>
-<td align="center">✔✔✔</td>
-<td align="center">✔✔</td>
-<td align="center">✔✔</td>
-<td align="center">✔✔✔</td>
-<td align="center">✔✔</td>
-</tr>
-<tr>
-<td align="center">是否可以白嫖</td>
-<td align="center">❌</td>
-<td align="center">✅</td>
-<td align="center">✅</td>
-<td align="center">❌</td>
-<td align="center">✅</td>
-<td align="center">✅</td>
-<td align="center">✅</td>
-<td align="center">❌</td>
-</tr>
-<tr>
-<td align="center">说明</td>
-<td align="center">近期被爆出会泄露用户IP</td>
-<td align="center">方便，免费</td>
-<td align="center">方便，免费</td>
-<td align="center">方便，要服务器</td>
-<td align="center">访问慢</td>
-<td align="center">访问慢</td>
-<td align="center">要登录，功能全</td>
-<td align="center">访问慢</td>
-</tr>
-</tbody></table>
-<h3 id="Part2-主题配置文件"><a href="#Part2-主题配置文件" class="headerlink" title="Part2:主题配置文件"></a>Part2:主题配置文件</h3><ol>
-<li>修改<code>主题配置文件</code>：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 评论</span></span><br><span class="line"><span class="comment"># comment</span></span><br><span class="line"><span class="comment"># getting start: https://solitude.js.org/comments/comment</span></span><br><span class="line">comment:</span><br><span class="line">  use: waline <span class="comment"># use</span></span><br><span class="line">  commentBarrage: <span class="literal">true</span> <span class="comment"># 热评开关 / Hot comment switch</span></span><br><span class="line">  lazyload: <span class="literal">true</span> <span class="comment"># 懒加载</span></span><br><span class="line">  count: <span class="literal">true</span> <span class="comment"># 评论数展示</span></span><br><span class="line">  pv: <span class="literal">false</span> <span class="comment"># 是否使用評論統計頁面訪問</span></span><br><span class="line">  avatar: https://cravatar.cn <span class="comment"># Gravatar link</span></span><br><span class="line">  newest_comment:</span><br><span class="line">    <span class="built_in">enable</span>: ture</span><br><span class="line">    storage: .5 <span class="comment"># 缓存时间 1: 1天 / .5 : 半天 / Cache time 1: 1 day .5 : half a day</span></span><br></pre></td></tr></table></figure>
-
-<p>如果使用双评论，修改：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">use: 你的评论1,你的评论2 <span class="comment"># waline, twikoo, valine, artalk</span></span><br></pre></td></tr></table></figure>
-
-<p>随后修改Waline的配置：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># waline settings</span></span><br><span class="line">waline: <span class="comment"># https://waline.js.org/</span></span><br><span class="line">  envId:  <span class="comment"># 你的部署环境</span></span><br><span class="line">  pageview: <span class="literal">false</span> <span class="comment"># 懒加载</span></span><br><span class="line">  option: <span class="comment"># 更多设置，可以去官网找</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="Part3-配置评论"><a href="#Part3-配置评论" class="headerlink" title="Part3:配置评论"></a>Part3:配置评论</h1><p>教程出自：<a href="https://waline.js.org/">Waline</a></p>
-<p>特色：</p>
-<ul>
-<li>轻量级与高性能：Waline优化了代码结构，确保快速加载和响应，不增加网站负担。</li>
-<li>安全性：系统内置了多种安全机制，如垃圾邮件过滤（Akismet支持）、IP限制等，保护您的网站免受恶意评论的侵扰。</li>
-<li>Markdown 支持：全面支持Markdown语法，让用户可以方便地插入代码、链接、表情等元素，让评论更加生动。</li>
-<li>多平台兼容：不仅有前端组件@waline&#x2F;client，还有多种服务器端解决方案，如Vercel、Deta、CloudBase等，满足不同开发需求。</li>
-</ul>
-<p>配置：</p>
-<h2 id="准备——配置Leancloud"><a href="#准备——配置Leancloud" class="headerlink" title="准备——配置Leancloud"></a>准备——配置<strong>Leancloud</strong></h2><ol>
-<li>进入<a href="https://console.leancloud.app/register">Leancloud国际版</a>进行注册并进入控制台：</li>
-</ol>
-<p><img src="/img/article/2/14bf60d9d7fd5964ccee88f86c9139cb.webp"></p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>如果你正在使用 Leancloud 国内版 (leancloud.cn)，我们推荐你切换到国际版 (leancloud.app)。否则，你需要为应用额外绑定已备案的域名，同时购买独立 IP 并完成备案接入:</p>
-<p>登录国内版并进入需要使用的应用<br>选择 设置 &gt; 域名绑定 &gt; API 访问域名 &gt; 绑定新域名 &gt; 输入域名 &gt; 确定。<br>按照页面上的提示按要求在 DNS 上完成 CNAME 解析。<br>购买独立 IP 并提交工单完成备案接入。(独立 IP 目前价格为 ￥ 50&#x2F;个&#x2F;月)</p>
-<p><img src="/img/article/2/leancloud-3-CT_lZM0A.png"></p>
-</div>
-
-<ol start="2">
-<li>点击左上角<strong>创建应用</strong>，选择<strong>开发板</strong>（免费）</li>
-</ol>
-<p><img src="/img/article/2/e26c2a7f16d7a7164cb0ecb98c5b390e.webp"></p>
-<ol start="3">
-<li>进入应用，选择左下角的 设置 &gt; 应用 Key。你可以看到你的 APP ID,APP Key 和 Master Key，记录它们以便后续使用。</li>
-</ol>
-<p><img src="/img/article/2/58676c1bb4fd2f35fb23a213fd21dac3.webp"></p>
-<h2 id="方式1——Vercel"><a href="#方式1——Vercel" class="headerlink" title="方式1——Vercel"></a>方式1——Vercel</h2><p>点击一键部署：</p>
-<p><a href="https://vercel.com/new/clone?repository-url=https://github.com/walinejs/waline/tree/main/example"><img src="/img/article/2/default.svg"></a></p>
-<ol>
-<li>点击上面的按钮，输入你喜欢的名字，点击Create，等待部署：</li>
-</ol>
-<p><img src="/img/article/2/0574cea0bdc82870997e823195e5348b.webp"></p>
-<ol start="2">
-<li>之后满屏的烟花，点击<strong>Continue to Dashboard</strong></li>
-</ol>
-<p><img src="/img/article/2/2d8c921741af863b046ebbb8d7b7cfe5.webp"></p>
-<ol start="3">
-<li>点击顶部的 Settings - Environment Variables 进入环境变量配置页，并配置三个环境变量 LEAN_ID, LEAN_KEY 和 LEAN_MASTER_KEY 。它们的值分别对应上一步在 LeanCloud 中获得的 APP ID, APP KEY, Master Key。</li>
-</ol>
-<p><img src="/img/article/2/c6f4d6bced949fdb7ec9bdef576dab88.webp"></p>
-<ol start="4">
-<li>回到开头的免费域名，注册一下并关注作者，可以获得5免费域名，点击<strong>创建</strong>：</li>
-</ol>
-<p><img src="/img/article/2/85bae92761dd2705683b4185a7a26f6d.webp"></p>
-<ol start="5">
-<li>输入名字，按如下填写：</li>
-</ol>
-<p><img src="/img/article/2/5bf63e5dfd90864d24ada804360e52ed.webp"></p>
-<ol start="6">
-<li>你就等待审核，预计1小时~2天</li>
-</ol>
-<p><img src="/img/article/2/496a8213fcfe1b3eac0793bfc0ea0077.webp"></p>
-<ol start="7">
-<li>审核完成后会显示<strong>编辑</strong>按钮，回到Vercel，点击<strong>Domains</strong>：</li>
-</ol>
-<p><img src="/img/article/2/1bbc317d1b20d9b5532b2850505292c9.webp"></p>
-<ol start="8">
-<li>填写你申请的域名，点击<strong>Add</strong>：</li>
-</ol>
-<p><img src="/img/article/2/a438e0447a386031df099a74e7f39961.webp"></p>
-<ol start="9">
-<li>等待他解析，然会就可以访问了！</li>
-</ol>
-<p><img src="/img/article/2/2244070e801aa2177e1925005fb5b874.webp"></p>
-<h2 id="方式2——Deta（已失效）"><a href="#方式2——Deta（已失效）" class="headerlink" title="方式2——Deta（已失效）"></a>方式2——Deta（已失效）</h2><p><del>Deta 是一个可免费使用的 Serverless 部署平台。我们可以快速的将 Waline 部署到 Deta 平台上。</del></p>
-<p>在 deta.space 的官网中指出：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br></pre></td></tr></table></figure>
-
-<p>Deta Space 将于 <strong>2024.10.17 下午日落</strong> 关闭，请所有使用此方式部署的用户进入Waline控制台 -&gt; 管理 -&gt; 导入导出 -&gt; 导出 导出你的数据！</p>
-<h2 id="方式3——Netlify"><a href="#方式3——Netlify" class="headerlink" title="方式3——Netlify"></a>方式3——Netlify</h2><p>Netlify 是知名的静态网站部署服务提供商，Edge Functions 是 Netlify 平台推出的一种服务，它允许在网站的边缘节点上运行 JavaScript 代码。</p>
-<ol>
-<li>点击 <a href="https://github.com/walinejs/netlify-starter/fork">Fork</a> Waline的Netlify数据库。</li>
-</ol>
-<p><img src="/img/article/2/04534a32d06f65ade0c7f53bb36c7e03e954e5360a2eaca53027caad3e428692.png"></p>
-<ol start="2">
-<li>进入 <a href="https://app.netlify.com/">https://app.netlify.com</a> ，注册账号后登录控制台，点击<code>Add new site</code> -&gt; <code>Import an exist project</code>，选择刚刚Fork的数据库（先绑定Github）。(不要着急Deploy ！！！)</li>
-</ol>
-<p><img src="/img/article/2/f9b2d3bfbfd1a5004c38c2fb0be33170311b7dd267a84276af6ab0ca2a1e207f.png"></p>
-<p><img src="/img/article/2/e42e4fe3e37f9989479c685e36456b00e9cc9dc56fc37b020d842ab35de70387.png"></p>
-<ol start="3">
-<li>部署之前添加环境变量，以 LeanCloud 部署服务为例，我们在这里增加上 Waline 需要的数据库服务环境变量。点击底部的 Deploy 开始部署网站。</li>
-</ol>
-<p><img src="/img/article/2/f289d5ae538df8c6b7882685f62626de3681c625958f049df33ebc4cb6ddc1e9.png"></p>
-<ol start="4">
-<li>部署完成，可通过一下的域名访问：</li>
-</ol>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">https://你设置的名称.netlify.app/.netlify/functions/comment</span><br></pre></td></tr></table></figure>
-<h2 id="不推荐的其他方式："><a href="#不推荐的其他方式：" class="headerlink" title="不推荐的其他方式："></a>不推荐的其他方式：</h2><ol>
-<li>Railway的免费额度不足以一个月连续使用……</li>
-<li>Zeabur需要购买（5$每月），否则计划会在5天内被结束……</li>
-</ol>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Waline轻量方便，不亚于Twikoo，博客评论选择它也挺不错的！</p>
-<p>版权所有©MC-Sep。</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Waline</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>提升效率必备Windows神器PowerToys</title>
-    <url>//post/qrea.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>终于复活了！！！</p>
-<p>最近blog经常发癫，我还要考试，就停更了好久。</p>
-<p>今天我来讲一讲一个Windows的实用小工具：<strong>PowerToys</strong></p>
-<h1 id="安装、使用"><a href="#安装、使用" class="headerlink" title="安装、使用"></a>安装、使用</h1><p>安装的话直接去Microsoft Store就可以：</p>
-<p><img src="/img/article/21/e684ccc486939315a387bbc53e8c33afda1505da.jpg" alt="Microsoft PowerToys 是一款帮助高级用户优化和简化 Windows 10 和 11 系统体验的实用工具集，以提高生产力。 [App Screenshot] (由 AI 生成标题)|529x499, 100%"></p>
-<p>推荐的功能：</p>
-<ol>
-<li>唤醒：这个功能可以调整你的计算机睡眠状态，如永不睡眠，隔一段时间在睡眠等：</li>
-</ol>
-<p><img src="/img/article/21/b6fa800413a1985483c7b6aa77114eee7c883c70.png" alt="截图显示了一个设置菜单，包含关于保持设备唤醒的选项，包括按时间间隔唤醒、无限期唤醒以及关闭唤醒功能。 {tag:screenshot, menu, settings} (由 AI 生成标题)|538x250"></p>
-<ol start="2">
-<li>命令面板：快捷的公式计算、指令运行：</li>
-</ol>
-<p><img src="/img/article/21/b4ed65ccc4d794617fda21e7bb92a17afc35bb3a.jpg" alt="截图显示了PowerToys的命令面板设置界面，包括启用&#x2F;禁用命令面板、快捷键设置、以及搜索和运行应用等功能。 (由 AI 生成标题)|395x499"></p>
-<ol start="3">
-<li>颜色选择器：如果你对颜色的HEX值特别苦恼，就用这个一件取色！</li>
-</ol>
-<p><img src="/img/article/21/edf0599f28d9039870da3f0f87d062adcdd29281.png" alt="PowerToys 颜色选取器设置界面显示了启用状态、快捷键和激活方式等选项。 (由 AI 生成标题)|629x500"></p>
-<p><img src="/img/article/21/6209e90bb2173d4197d47f74dd66024f073b1144.png" alt="图片显示了十六进制颜色代码f3f3f3，它代表白色。 (由 AI 生成标题)|453x200"></p>
-<ol start="4">
-<li>文本提取器：顾名思义，截图读取文字。</li>
-</ol>
-<p><img src="/img/article/21/7baae8917a20ba5202e594a5b05abc960fe01725.png" alt="这是一张PowerToys文本提取器设置界面的截图，显示了其功能、快捷键和语言设置。 (由 AI 生成标题)|450x500"></p>
-<p>建议使用截图工具而不是 TextExtractor 模块。（文本提取实例）</p>
-<ol start="5">
-<li>始终置顶：激活后会在窗口旁出现蓝色框，代表完全置顶<br><img src="/img/article/21/62ef1a187883f2ce2d813ddcba403aead16c7747.png" alt="这是PowerToys设置界面，显示了“始终置顶”功能的开关和快捷键设置。 (由 AI 生成标题)|690x390"></li>
-</ol>
-<p>其余的自己可以探索，这5个最好用！</p>
-]]></content>
-      <categories>
-        <category>软件</category>
-      </categories>
-      <tags>
-        <tag>PowerToys</tag>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1048,177 +971,6 @@
       <tags>
         <tag>Javascript</tag>
         <tag>HTML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Hexo】如何提高静态博客访问速度？Vercel+Cloudflare+CDN让你的网站速度飞起！</title>
-    <url>//post/5ytg.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着博客文章数量的增多，我们的博客可能会变得十分缓慢（比如前段时间的我），今天的教程可以让你的博客提速<strong>90%</strong>！</p>
-<h1 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h1><h2 id="整改1-扔掉Github-Pages"><a href="#整改1-扔掉Github-Pages" class="headerlink" title="整改1 扔掉Github Pages"></a>整改1 扔掉Github Pages</h2><p>Github Pages<del>真垃圾</del>很慢，看看对比：</p>
-<table>
-<thead>
-<tr>
-<th align="center">名称</th>
-<th align="center">Vercel</th>
-<th align="center">CF Workers（反代）</th>
-<th align="center">CF Pages</th>
-<th align="center">Netlify</th>
-<th align="center">Zeabur</th>
-<th align="center">Github Pages</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">速度</td>
-<td align="center">🌟🌟🌟🌟🌟</td>
-<td align="center">🌟🌟🌟🌟</td>
-<td align="center">🌟🌟🌟🌟🌟</td>
-<td align="center">🌟🌟🌟🌟🌟</td>
-<td align="center">🌟🌟🌟🌟🌟</td>
-<td align="center">🌟🌟</td>
-</tr>
-<tr>
-<td align="center">稳定性</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">5</td>
-</tr>
-</tbody></table>
-<p>还不把Github Pages扔了！Vercel他不香吗！参考：</p>
-
-
-<p>也可以使用 CF Workers反代，参考：<a href="https://blog.mc-sep.top/post/437r.html">利用Cloudflare Workers搭建镜像网站 | Minecraft-Sep (mc-sep.top)</a></p>
-<h2 id="整改2-域名"><a href="#整改2-域名" class="headerlink" title="整改2 域名"></a>整改2 域名</h2><p>参考（有几个提别好的）：</p>
-
-
-<h2 id="整改3-CDN"><a href="#整改3-CDN" class="headerlink" title="整改3 CDN"></a>整改3 CDN</h2><p>CDN的全称是Content Delivery Network，即内容分发网络。CDN是构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。CDN的关键技术主要有内容存储和分发技术。</p>
-<p>通俗易懂的解释： 通过IP访问实际资源时，如果CDN上并没有缓存资源，则会到源站请求资源，并缓存到CDN节点上，这样，用户下一次访问时，该CDN节点就会有对应资源的缓存了。</p>
-<p>Vercel CDN的优化</p>
-<ul>
-<li>使用他人的Vercel CDN（自动使用节点）：<a href="https://vercel.cdn.yt-blog.top/">Vercel CDN:利用CNAME负载均衡实现的Vercel加速CDN (yt-blog.top)</a></li>
-<li>在Vercel里使用Hong Kong节点</li>
-</ul>
-<p>CF的优化</p>
-<ul>
-<li>优化选项卡里的能开就开</li>
-</ul>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>注意：最近推出的Speed Brain有问题，不建议使用！</p>
-</div>
-
-<h2 id="整改4-图片问题"><a href="#整改4-图片问题" class="headerlink" title="整改4 图片问题"></a>整改4 图片问题</h2><p>最拖慢速度二巨头：图片过大，图片源不同一（特别是butterfly系列主题深有体会）</p>
-<p>建议统一使用一个图床，或者上传到自己的图床，这里提供两个教程</p>
-<ul>
-<li>CF+Telegraph（维护中）</li>
-<li>Vercel+Bulb</li>
-</ul>
-
-
-<p>其次，图片过大可以使用<a href="https://tinify.cn/">TinyPNG – 智能压缩您的WebP、JPEG和PNG图片 (tinify.cn)</a>或者<a href="https://tinypng.com/">TinyPNG – Compress WebP, PNG and JPEG images intelligently</a>压缩，是无损压缩，也可以转换为png,jpeg和webp格式。</p>
-<p>或者使用<a href="https://cdn.jsdelivr.net/">Jsdelivr (jsdelivr.net)</a>加速访问托管在github 的图片：</p>
-<ol>
-<li><p>将图片上传到github</p>
-</li>
-<li><p>在网址栏输入：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://cdn.jsdelivr.net/npm/你的github用户名/你保存图片的repo/[图片路径]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果出现图片就代表成功！</p>
-</li>
-</ol>
-<h2 id="整改5-Gulp"><a href="#整改5-Gulp" class="headerlink" title="整改5 Gulp"></a>整改5 Gulp</h2><p>Gulp是一个hexo插件，用于压缩js和css文件。</p>
-<ol>
-<li><p>安装：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install gulp compress gulp-clean-css gulp-html-minifier-terser gulp-htmlclean gulp-terser --save-dev</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建 <code>gulpfile.js</code> 文件：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> cleanCSS = <span class="built_in">require</span>(<span class="string">&#x27;gulp-clean-css&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlmin = <span class="built_in">require</span>(<span class="string">&#x27;gulp-html-minifier-terser&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlclean = <span class="built_in">require</span>(<span class="string">&#x27;gulp-htmlclean&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> terser = <span class="built_in">require</span>(<span class="string">&#x27;gulp-terser&#x27;</span>);</span><br><span class="line"><span class="comment">// 压缩js</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;compress&#x27;</span>, <span class="function">() =&gt;</span></span><br><span class="line">gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.js&#x27;</span>, <span class="string">&#x27;!./public/**/*.min.js&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">terser</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">)</span><br><span class="line"><span class="comment">//压缩css</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-css&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.css&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">cleanCSS</span>(&#123;</span><br><span class="line"><span class="attr">compatibility</span>: <span class="string">&#x27;ie11&#x27;</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//压缩html</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-html&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>(<span class="string">&#x27;./public/**/*.html&#x27;</span>)</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlclean</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlmin</span>(&#123;</span><br><span class="line"><span class="attr">removeComments</span>: <span class="literal">true</span>, <span class="comment">//清除html注释</span></span><br><span class="line"><span class="attr">collapseWhitespace</span>: <span class="literal">true</span>, <span class="comment">//压缩html</span></span><br><span class="line"><span class="attr">collapseBooleanAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//省略布尔属性的值，例如：&lt;input checked=&quot;true&quot;/&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeEmptyAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除所有空格作属性值，例如：&lt;input id=&quot;&quot; /&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeScriptTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;script&gt;的type=&quot;text/javascript&quot;</span></span><br><span class="line"><span class="attr">removeStyleLinkTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;style&gt;和&lt;link&gt;的 type=&quot;text/css&quot;</span></span><br><span class="line"><span class="attr">minifyJS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 JS</span></span><br><span class="line"><span class="attr">minifyCSS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 CSS</span></span><br><span class="line"><span class="attr">minifyURLs</span>: <span class="literal">true</span>  <span class="comment">//压缩页面URL</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行gulp命令时依次执行以下任务</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;default&#x27;</span>, gulp.<span class="title function_">parallel</span>(</span><br><span class="line"><span class="string">&#x27;compress&#x27;</span>, <span class="string">&#x27;minify-css&#x27;</span>, <span class="string">&#x27;minify-html&#x27;</span></span><br><span class="line">))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行gulp：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g&amp;&amp;gulp</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h1 id="加速你也做的差不多了"><a href="#加速你也做的差不多了" class="headerlink" title="加速你也做的差不多了"></a>加速你也做的差不多了</h1><p>结束！</p>
-<p>版权所有©MC-Sep.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare</tag>
-        <tag>Vercel</tag>
-        <tag>Hexo</tag>
-        <tag>CDN</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>免费域名怎么弄？常见免费域名指南</title>
-    <url>//post/re8u.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
-<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
-<p>今天我就整理了常见的免费域名，分享给大家。</p>
-<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
-<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
-<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
-
-<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
-<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
-<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
-<p>方法：</p>
-<ol>
-<li>打开链接，点击右上角用户图标</li>
-<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
-<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
-<li>返回控制台刷新后会发现可以创建了</li>
-<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
-<li>等待审核，通过后会有这个画面：</li>
-</ol>
-<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
-<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
-
-<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
-<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
-<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
-
-<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
-<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
-<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：No</p>
-<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
-<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：审核时间长</p>
-<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
-<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
-
-<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
-<p>地址：<a href="https://js.org/">https://js.org</a></p>
-<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
-<p>可注册域名：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.one</span><br></pre></td></tr></table></figure>
-
-<p>优点：顶级域名<br>缺点：要买主机后才有</p>
-<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Pages</tag>
       </tags>
   </entry>
   <entry>
@@ -1441,6 +1193,293 @@
       </tags>
   </entry>
   <entry>
+    <title>【Hexo】 Waline--评论系统的添加(1)</title>
+    <url>//post/7ghd.html</url>
+    <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间43分钟，请放心食用！</p>
+</div>
+
+
+
+<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>众所周知，一个博客是不能没有评论的！</p>
+<p><code>2024.5.2</code>：上线了<code>waline</code>评论系统</p>
+<p><code>2024.5.9</code>：关闭了匿名评论功能</p>
+<p><code>2024.5.14</code>：启动了双评论，另一个是<code>twikoo</code></p>
+<p><code>2024.5.18</code>：关闭了双评论</p>
+<p><code>2024.6.14</code>：重新启动了双评论</p>
+<p>但是很多人不知道用什么评论……</p>
+<p>所以，今天还是老样子出教程！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解主流的评论系统"><a href="#Part1-了解主流的评论系统" class="headerlink" title="Part1:了解主流的评论系统"></a>Part1:了解主流的评论系统</h3><table>
+<thead>
+<tr>
+<th align="center">评论系统</th>
+<th align="center"><a href="https://valine.js.org/">Valine</a></th>
+<th align="center"><a href="https://waline.js.org/">Waline</a></th>
+<th align="center"><a href="https://twikoo.js.org/">Twikoo</a></th>
+<th align="center"><a href="https://artalk.js.org/">Artalk</a></th>
+<th align="center"><a href="https://github.com/gitalk/gitalk">Gitalk</a></th>
+<th align="center"><a href="https://giscus.app/zh-CN">Giscus</a></th>
+<th align="center"><a href="https://changyan.kuaizhan.com/">畅言</a></th>
+<th align="center"><a href="https://remark42.com/">Remark42</a></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">推荐指数</td>
+<td align="center">✔✔</td>
+<td align="center">✔✔✔✔</td>
+<td align="center">✔✔✔✔✔</td>
+<td align="center">✔✔✔</td>
+<td align="center">✔✔</td>
+<td align="center">✔✔</td>
+<td align="center">✔✔✔</td>
+<td align="center">✔✔</td>
+</tr>
+<tr>
+<td align="center">是否可以白嫖</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="center">说明</td>
+<td align="center">近期被爆出会泄露用户IP</td>
+<td align="center">方便，免费</td>
+<td align="center">方便，免费</td>
+<td align="center">方便，要服务器</td>
+<td align="center">访问慢</td>
+<td align="center">访问慢</td>
+<td align="center">要登录，功能全</td>
+<td align="center">访问慢</td>
+</tr>
+</tbody></table>
+<h3 id="Part2-主题配置文件"><a href="#Part2-主题配置文件" class="headerlink" title="Part2:主题配置文件"></a>Part2:主题配置文件</h3><ol>
+<li>修改<code>主题配置文件</code>：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 评论</span></span><br><span class="line"><span class="comment"># comment</span></span><br><span class="line"><span class="comment"># getting start: https://solitude.js.org/comments/comment</span></span><br><span class="line">comment:</span><br><span class="line">  use: waline <span class="comment"># use</span></span><br><span class="line">  commentBarrage: <span class="literal">true</span> <span class="comment"># 热评开关 / Hot comment switch</span></span><br><span class="line">  lazyload: <span class="literal">true</span> <span class="comment"># 懒加载</span></span><br><span class="line">  count: <span class="literal">true</span> <span class="comment"># 评论数展示</span></span><br><span class="line">  pv: <span class="literal">false</span> <span class="comment"># 是否使用評論統計頁面訪問</span></span><br><span class="line">  avatar: https://cravatar.cn <span class="comment"># Gravatar link</span></span><br><span class="line">  newest_comment:</span><br><span class="line">    <span class="built_in">enable</span>: ture</span><br><span class="line">    storage: .5 <span class="comment"># 缓存时间 1: 1天 / .5 : 半天 / Cache time 1: 1 day .5 : half a day</span></span><br></pre></td></tr></table></figure>
+
+<p>如果使用双评论，修改：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">use: 你的评论1,你的评论2 <span class="comment"># waline, twikoo, valine, artalk</span></span><br></pre></td></tr></table></figure>
+
+<p>随后修改Waline的配置：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># waline settings</span></span><br><span class="line">waline: <span class="comment"># https://waline.js.org/</span></span><br><span class="line">  envId:  <span class="comment"># 你的部署环境</span></span><br><span class="line">  pageview: <span class="literal">false</span> <span class="comment"># 懒加载</span></span><br><span class="line">  option: <span class="comment"># 更多设置，可以去官网找</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Part3-配置评论"><a href="#Part3-配置评论" class="headerlink" title="Part3:配置评论"></a>Part3:配置评论</h1><p>教程出自：<a href="https://waline.js.org/">Waline</a></p>
+<p>特色：</p>
+<ul>
+<li>轻量级与高性能：Waline优化了代码结构，确保快速加载和响应，不增加网站负担。</li>
+<li>安全性：系统内置了多种安全机制，如垃圾邮件过滤（Akismet支持）、IP限制等，保护您的网站免受恶意评论的侵扰。</li>
+<li>Markdown 支持：全面支持Markdown语法，让用户可以方便地插入代码、链接、表情等元素，让评论更加生动。</li>
+<li>多平台兼容：不仅有前端组件@waline&#x2F;client，还有多种服务器端解决方案，如Vercel、Deta、CloudBase等，满足不同开发需求。</li>
+</ul>
+<p>配置：</p>
+<h2 id="准备——配置Leancloud"><a href="#准备——配置Leancloud" class="headerlink" title="准备——配置Leancloud"></a>准备——配置<strong>Leancloud</strong></h2><ol>
+<li>进入<a href="https://console.leancloud.app/register">Leancloud国际版</a>进行注册并进入控制台：</li>
+</ol>
+<p><img src="/img/article/2/14bf60d9d7fd5964ccee88f86c9139cb.webp"></p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>如果你正在使用 Leancloud 国内版 (leancloud.cn)，我们推荐你切换到国际版 (leancloud.app)。否则，你需要为应用额外绑定已备案的域名，同时购买独立 IP 并完成备案接入:</p>
+<p>登录国内版并进入需要使用的应用<br>选择 设置 &gt; 域名绑定 &gt; API 访问域名 &gt; 绑定新域名 &gt; 输入域名 &gt; 确定。<br>按照页面上的提示按要求在 DNS 上完成 CNAME 解析。<br>购买独立 IP 并提交工单完成备案接入。(独立 IP 目前价格为 ￥ 50&#x2F;个&#x2F;月)</p>
+<p><img src="/img/article/2/leancloud-3-CT_lZM0A.png"></p>
+</div>
+
+<ol start="2">
+<li>点击左上角<strong>创建应用</strong>，选择<strong>开发板</strong>（免费）</li>
+</ol>
+<p><img src="/img/article/2/e26c2a7f16d7a7164cb0ecb98c5b390e.webp"></p>
+<ol start="3">
+<li>进入应用，选择左下角的 设置 &gt; 应用 Key。你可以看到你的 APP ID,APP Key 和 Master Key，记录它们以便后续使用。</li>
+</ol>
+<p><img src="/img/article/2/58676c1bb4fd2f35fb23a213fd21dac3.webp"></p>
+<h2 id="方式1——Vercel"><a href="#方式1——Vercel" class="headerlink" title="方式1——Vercel"></a>方式1——Vercel</h2><p>点击一键部署：</p>
+<p><a href="https://vercel.com/new/clone?repository-url=https://github.com/walinejs/waline/tree/main/example"><img src="/img/article/2/default.svg"></a></p>
+<ol>
+<li>点击上面的按钮，输入你喜欢的名字，点击Create，等待部署：</li>
+</ol>
+<p><img src="/img/article/2/0574cea0bdc82870997e823195e5348b.webp"></p>
+<ol start="2">
+<li>之后满屏的烟花，点击<strong>Continue to Dashboard</strong></li>
+</ol>
+<p><img src="/img/article/2/2d8c921741af863b046ebbb8d7b7cfe5.webp"></p>
+<ol start="3">
+<li>点击顶部的 Settings - Environment Variables 进入环境变量配置页，并配置三个环境变量 LEAN_ID, LEAN_KEY 和 LEAN_MASTER_KEY 。它们的值分别对应上一步在 LeanCloud 中获得的 APP ID, APP KEY, Master Key。</li>
+</ol>
+<p><img src="/img/article/2/c6f4d6bced949fdb7ec9bdef576dab88.webp"></p>
+<ol start="4">
+<li>回到开头的免费域名，注册一下并关注作者，可以获得5免费域名，点击<strong>创建</strong>：</li>
+</ol>
+<p><img src="/img/article/2/85bae92761dd2705683b4185a7a26f6d.webp"></p>
+<ol start="5">
+<li>输入名字，按如下填写：</li>
+</ol>
+<p><img src="/img/article/2/5bf63e5dfd90864d24ada804360e52ed.webp"></p>
+<ol start="6">
+<li>你就等待审核，预计1小时~2天</li>
+</ol>
+<p><img src="/img/article/2/496a8213fcfe1b3eac0793bfc0ea0077.webp"></p>
+<ol start="7">
+<li>审核完成后会显示<strong>编辑</strong>按钮，回到Vercel，点击<strong>Domains</strong>：</li>
+</ol>
+<p><img src="/img/article/2/1bbc317d1b20d9b5532b2850505292c9.webp"></p>
+<ol start="8">
+<li>填写你申请的域名，点击<strong>Add</strong>：</li>
+</ol>
+<p><img src="/img/article/2/a438e0447a386031df099a74e7f39961.webp"></p>
+<ol start="9">
+<li>等待他解析，然会就可以访问了！</li>
+</ol>
+<p><img src="/img/article/2/2244070e801aa2177e1925005fb5b874.webp"></p>
+<h2 id="方式2——Deta（已失效）"><a href="#方式2——Deta（已失效）" class="headerlink" title="方式2——Deta（已失效）"></a>方式2——Deta（已失效）</h2><p><del>Deta 是一个可免费使用的 Serverless 部署平台。我们可以快速的将 Waline 部署到 Deta 平台上。</del></p>
+<p>在 deta.space 的官网中指出：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br></pre></td></tr></table></figure>
+
+<p>Deta Space 将于 <strong>2024.10.17 下午日落</strong> 关闭，请所有使用此方式部署的用户进入Waline控制台 -&gt; 管理 -&gt; 导入导出 -&gt; 导出 导出你的数据！</p>
+<h2 id="方式3——Netlify"><a href="#方式3——Netlify" class="headerlink" title="方式3——Netlify"></a>方式3——Netlify</h2><p>Netlify 是知名的静态网站部署服务提供商，Edge Functions 是 Netlify 平台推出的一种服务，它允许在网站的边缘节点上运行 JavaScript 代码。</p>
+<ol>
+<li>点击 <a href="https://github.com/walinejs/netlify-starter/fork">Fork</a> Waline的Netlify数据库。</li>
+</ol>
+<p><img src="/img/article/2/04534a32d06f65ade0c7f53bb36c7e03e954e5360a2eaca53027caad3e428692.png"></p>
+<ol start="2">
+<li>进入 <a href="https://app.netlify.com/">https://app.netlify.com</a> ，注册账号后登录控制台，点击<code>Add new site</code> -&gt; <code>Import an exist project</code>，选择刚刚Fork的数据库（先绑定Github）。(不要着急Deploy ！！！)</li>
+</ol>
+<p><img src="/img/article/2/f9b2d3bfbfd1a5004c38c2fb0be33170311b7dd267a84276af6ab0ca2a1e207f.png"></p>
+<p><img src="/img/article/2/e42e4fe3e37f9989479c685e36456b00e9cc9dc56fc37b020d842ab35de70387.png"></p>
+<ol start="3">
+<li>部署之前添加环境变量，以 LeanCloud 部署服务为例，我们在这里增加上 Waline 需要的数据库服务环境变量。点击底部的 Deploy 开始部署网站。</li>
+</ol>
+<p><img src="/img/article/2/f289d5ae538df8c6b7882685f62626de3681c625958f049df33ebc4cb6ddc1e9.png"></p>
+<ol start="4">
+<li>部署完成，可通过一下的域名访问：</li>
+</ol>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">https://你设置的名称.netlify.app/.netlify/functions/comment</span><br></pre></td></tr></table></figure>
+<h2 id="不推荐的其他方式："><a href="#不推荐的其他方式：" class="headerlink" title="不推荐的其他方式："></a>不推荐的其他方式：</h2><ol>
+<li>Railway的免费额度不足以一个月连续使用……</li>
+<li>Zeabur需要购买（5$每月），否则计划会在5天内被结束……</li>
+</ol>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Waline轻量方便，不亚于Twikoo，博客评论选择它也挺不错的！</p>
+<p>版权所有©MC-Sep。</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Waline</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>免费域名怎么弄？常见免费域名指南</title>
+    <url>//post/re8u.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
+<p>回归正题，有些人是没有自己的域名的（<del>比如我</del>），所以想让网站访问速度快就不行了……</p>
+<p>今天我就整理了常见的免费域名，分享给大家。</p>
+<h1 id="举几个栗子"><a href="#举几个栗子" class="headerlink" title="举几个栗子"></a>举几个栗子</h1><h3 id="1-Freenom"><a href="#1-Freenom" class="headerlink" title="1. Freenom"></a>1. Freenom</h3><p>这个在2023年就停止使用了，原因是部分免费域名被用来做#$网站，这还是很可惜的，因为这个网站可以注册顶级域名，如<code>.tk</code>，已经注册过的网站也无法访问了。</p>
+<p>地址：<a href="https://www.freenom.com/zh/index.html?lang=zh">https://www.freenom.com/zh/index.html?lang=zh</a></p>
+<h3 id="2-Willin-Wang-Free-Domains"><a href="#2-Willin-Wang-Free-Domains" class="headerlink" title="2. Willin Wang Free Domains"></a>2. Willin Wang Free Domains</h3><p>这个我在我的部分文章里出现过，也挺不错的。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.cool（墙裂推荐）、***.sh.gg、***.log.lu、***.css.fund、***.kaiyuan.fund、***.v0.chat、***.憨憨.我爱你</span><br></pre></td></tr></table></figure>
+
+<p>优点：访问快，使用方便<br>缺点：要审核，多次因为重复用途而注册会被拒绝（拒绝后就浪费了一次注册机会），比如：</p>
+<p><img src="/img/article/10/0c02ff6cc4207d10ee23c2d8fe2c7caccad331bfd7a61607e12973152cc7b1ba.png" alt="被拒绝名场面"></p>
+<p>地址：<a href="https://domain.willin.wang/">https://domain.willin.wang/</a></p>
+<p>方法：</p>
+<ol>
+<li>打开链接，点击右上角用户图标</li>
+<li>点击<strong>使用Github登录</strong>，在Github里完成授权</li>
+<li>进入控制台，会发现一个都不能创建，我们要进入 <a href="https://github.com/willin">https://github.com/willin</a> 后，点击<strong>Follow</strong></li>
+<li>返回控制台刷新后会发现可以创建了</li>
+<li>点击<strong>创建</strong>，输入名字，填写好域名记录，要部署到哪里就按照部署商的提示填，注意CDN Proxy开不开都行，同意隐私条款，创建即可</li>
+<li>等待审核，通过后会有这个画面：</li>
+</ol>
+<p><img src="/img/article/10/f194ede44a20431d79396a4dda50ebf14539158a8a1b167fb3aeac4c9b6b6d53.png" alt="Access"></p>
+<h3 id="3-Namecheap"><a href="#3-Namecheap" class="headerlink" title="3. Namecheap"></a>3. Namecheap</h3><p>不太行，因为这是为外国学生开放的（免费），要验证外国邮箱，有的可以逝世看。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.me（Free）、***.com、***.io、***.tech、***.website</span><br></pre></td></tr></table></figure>
+
+<p>优点：免费好用<br>缺点：没外国邮箱用不了</p>
+<p>地址：<a href="https://nc.me/">https://nc.me/</a></p>
+<h3 id="4-CO-UK"><a href="#4-CO-UK" class="headerlink" title="4. CO.UK"></a>4. CO.UK</h3><p>英国的免费域名，首年免费，但是进去很慢。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.co.uk、***.uk</span><br></pre></td></tr></table></figure>
+
+<p>有点：免费顶级域名<br>缺点：仅首年免费</p>
+<p>地址：<a href="https://www.names.co.uk/">https://www.names.co.uk/</a></p>
+<h3 id="5-PP-UA"><a href="#5-PP-UA" class="headerlink" title="5. PP.UA"></a>5. PP.UA</h3><p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.pp.ua</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：No</p>
+<p>地址：<a href="https://nic.ua/en/domains">https://nic.ua/en/domains</a></p>
+<h3 id="6-EU-ORG"><a href="#6-EU-ORG" class="headerlink" title="6. EU.ORG"></a>6. EU.ORG</h3><p>由 United Kingdom 的黑客组织运营，提供免费域名注册，虽然界面简陋，但能注册且真正免费，人工审核时间相对长。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.eu.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：审核时间长</p>
+<p>地址：<a href="https://nic.eu.org/">https://nic.eu.org</a></p>
+<h3 id="7-JS-ORG"><a href="#7-JS-ORG" class="headerlink" title="7. JS.ORG"></a>7. JS.ORG</h3><p>不提供自定义。只解析运行于Github Pages上的内容（也可以是自己的链接）</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.js.org</span><br></pre></td></tr></table></figure>
+
+<p>优点：长期免费<br>缺点：普通用户不太好注册</p>
+<p>地址：<a href="https://js.org/">https://js.org</a></p>
+<h3 id="8-One"><a href="#8-One" class="headerlink" title="8. One"></a>8. One</h3><p>one.com 针对新冠疫情，推出 one 域名第一年免费，现在也已经变成了购买主机服务后的增值附加服务了，仍旧是免费1年，不是很推荐。</p>
+<p>可注册域名：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">***.one</span><br></pre></td></tr></table></figure>
+
+<p>优点：顶级域名<br>缺点：要买主机后才有</p>
+<p>地址：<a href="https://www.one.com/">https://www.one.com</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这就是我推荐的几个免费域名，如果你也有更好的可以在评论区留言反馈，我也会收录的。</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Pages</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客一周年记</title>
+    <url>//post/te2r.html</url>
+    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
+<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
+<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
+<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
+<p>  我使用了Github Pages，域名仍是有效的：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
+<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
+<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
+<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
+<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
+<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
+<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
+<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
+<p>  直到2024年6月，我发现了一个新主题：<strong>Solitude</strong></p>
+<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
+<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
+<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
+<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
+<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
+<p>  版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>周年记</category>
+      </categories>
+      <tags>
+        <tag>周年记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Hexo】Twikoo--评论系统的添加(2)</title>
     <url>//post/rh35.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Twikoo作为一种轻量方便的评论系统，一度被许多博客使用。此文基于<a href="/post/7ghd.html">原文</a>继续添加一个评论系统，让你可以顺利<del>装逼</del>！(bushi)</p>
@@ -1600,45 +1639,6 @@
       <tags>
         <tag>Hexo</tag>
         <tag>Twikoo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客一周年记</title>
-    <url>//post/te2r.html</url>
-    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
-<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
-<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
-<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
-<p>  我使用了Github Pages，域名仍是有效的：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
-<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
-<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
-<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
-<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
-<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
-<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
-<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
-<p>  直到2024年6月，我发现了一个新主题：<strong>Solitude</strong></p>
-<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
-<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
-<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
-<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
-<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
-<p>  版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>周年记</category>
-      </categories>
-      <tags>
-        <tag>周年记</tag>
       </tags>
   </entry>
 </search>
