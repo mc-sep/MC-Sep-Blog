@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>搞机日记——华为儿童手表3X破解</title>
+    <url>//post/3rhi.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有一段时间没有更新了。学业问题，好久才能更新一次。对不起大家！</p>
+<p>回到正题。今天，我偶然发现了家里的老古董：</p>
+<p><img src="/img/article/22/e0d65653cc2d336579e7c6052fb30e82e472043c.jpg"><br>是的，一个特别古老的手表，而今天，我尝试破解这个手表。</p>
+<h2 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h2><h3 id="破解目标"><a href="#破解目标" class="headerlink" title="破解目标"></a>破解目标</h3><ol>
+<li>打开并成功进入adb调试</li>
+<li>自由安装软件</li>
+<li>解除BL锁，Root</li>
+</ol>
+<h3 id="材料"><a href="#材料" class="headerlink" title="材料"></a>材料</h3><ul>
+<li>一个脑子</li>
+<li>一个华为儿童手表3X</li>
+<li>安卓手表ADB实用工具箱（或者WearOS）</li>
+<li>一根数据线（注意，是带数据传输的，而不是充电线）</li>
+<li>手机上安装MT管理器</li>
+</ul>
+<h3 id="开始肘击"><a href="#开始肘击" class="headerlink" title="开始肘击"></a>开始肘击</h3><ol>
+<li><p>老样子看看手表的CPU品牌和安卓版本<br><img src="/img/article/22/c8c709101568fbb18fc1b6507a0c474bb638db2a.png"></p>
+</li>
+<li><p>这个CPU已经很老了，3700多岁了（口误）<br><img src="/img/article/22/2f20afc69f18aefdd2a6470d5f462a39d27f627d.png"></p>
+</li>
+<li><p>打开设置，连续点击版本号，进入开发者模式。<br><img src="/img/article/22/dc7247b0f79f2250fbaa89e5defb2fe94819d000.png"><br><img src="/img/article/22/1a26572af98c74410cbbeea674cfbebb66aaf744.png"></p>
+</li>
+<li><p>打开安卓手表ADB实用工具箱（后简称ADB工具），在手表上选择PTP模式，允许USB调试，出现这个页面就成功了<br><img src="/img/article/22/c5eb33f39a7a53de1a81ca836eee17a3a27a0bca.png"><br>至此，我们的目标1：打开并成功进入adb调试已经顺利完成了，开始我们的下一个目标。</p>
+</li>
+<li><p>打开ADB工具，修改一下DPI，以后方便操作。（我建议改成200)<br><img src="/img/article/22/cf26b92781fe045bb6ad51d05f34873f53bd8aa4.png"></p>
+</li>
+<li><p>打开你的浏览器，打开<a href="https://vincent8623.lanzn.com/b00zti91i">这个链接</a>来下载应用（这里下载过了，不在演示）</p>
+</li>
+<li><p>我们选择安装自定义APK，选择文件后安装。<br><img src="/img/article/22/823ecc64e158b343fe91255430cc0fe18a23f1ea.png"><br><img src="/img/article/22/796ba22c00276c9b31e45be1945879da6d6371ae.png"></p>
+</li>
+<li><p>Oh man!失败了！！！<br><img src="/img/article/22/a0c3070482e571c6fb7e0597762c01028aff7ce7.png"></p>
+</li>
+<li><p>为什么会失败呢？我让你们装的MT管理器不就来了？来看看安装包！<br><img src="/img/article/22/3b6de4cdd8081c3927448ccb097df7518320924d.jpg"><br>这就是问题。HW的工程师对V1前面的安装包做了限制。我们只需要改成V2,V3,V2+V3任选一个就可以了。</p>
+</li>
+<li><p>重新安装<br><img src="/img/article/22/1ab309e5ead29ed0a14e6e32ab0ecb5347a1e88c.png"></p>
+</li>
+<li><p>打开手表确认<br><img src="/img/article/22/1c6df661307420c79f04b47985b2f223e9f18241.png"><br>APP测试<br><img src="/img/article/22/6152a7172d125273d6aae1ff71bec41da50d87b3.png"><br><img src="/img/article/22/31dedf860decfb3d7d88c918dcc52c3e068e9e5a.png"><br>至此，我们的目标2：安装自定义软件已经顺利:check_mark:了，开始我们的下一个目标。</p>
+</li>
+<li><p>adb重启到fastboot模式</p>
+</li>
+</ol>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">adb reboot fastboot</span><br></pre></td></tr></table></figure>
+<p>很可惜，他失败了。BL锁无法解锁，我还要再花时间研究。。。</p>
+]]></content>
+      <categories>
+        <category>搞机日记</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>免费小型数据库——Vercel Blob初体验</title>
     <url>//post/239d.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
@@ -108,60 +162,6 @@
       </tags>
   </entry>
   <entry>
-    <title>搞机日记——华为儿童手表3X破解</title>
-    <url>//post/3rhi.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有一段时间没有更新了。学业问题，好久才能更新一次。对不起大家！</p>
-<p>回到正题。今天，我偶然发现了家里的老古董：</p>
-<p><img src="/img/article/22/e0d65653cc2d336579e7c6052fb30e82e472043c.jpg"><br>是的，一个特别古老的手表，而今天，我尝试破解这个手表。</p>
-<h2 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h2><h3 id="破解目标"><a href="#破解目标" class="headerlink" title="破解目标"></a>破解目标</h3><ol>
-<li>打开并成功进入adb调试</li>
-<li>自由安装软件</li>
-<li>解除BL锁，Root</li>
-</ol>
-<h3 id="材料"><a href="#材料" class="headerlink" title="材料"></a>材料</h3><ul>
-<li>一个脑子</li>
-<li>一个华为儿童手表3X</li>
-<li>安卓手表ADB实用工具箱（或者WearOS）</li>
-<li>一根数据线（注意，是带数据传输的，而不是充电线）</li>
-<li>手机上安装MT管理器</li>
-</ul>
-<h3 id="开始肘击"><a href="#开始肘击" class="headerlink" title="开始肘击"></a>开始肘击</h3><ol>
-<li><p>老样子看看手表的CPU品牌和安卓版本<br><img src="/img/article/22/c8c709101568fbb18fc1b6507a0c474bb638db2a.png"></p>
-</li>
-<li><p>这个CPU已经很老了，3700多岁了（口误）<br><img src="/img/article/22/2f20afc69f18aefdd2a6470d5f462a39d27f627d.png"></p>
-</li>
-<li><p>打开设置，连续点击版本号，进入开发者模式。<br><img src="/img/article/22/dc7247b0f79f2250fbaa89e5defb2fe94819d000.png"><br><img src="/img/article/22/1a26572af98c74410cbbeea674cfbebb66aaf744.png"></p>
-</li>
-<li><p>打开安卓手表ADB实用工具箱（后简称ADB工具），在手表上选择PTP模式，允许USB调试，出现这个页面就成功了<br><img src="/img/article/22/c5eb33f39a7a53de1a81ca836eee17a3a27a0bca.png"><br>至此，我们的目标1：打开并成功进入adb调试已经顺利完成了，开始我们的下一个目标。</p>
-</li>
-<li><p>打开ADB工具，修改一下DPI，以后方便操作。（我建议改成200)<br><img src="/img/article/22/cf26b92781fe045bb6ad51d05f34873f53bd8aa4.png"></p>
-</li>
-<li><p>打开你的浏览器，打开<a href="https://vincent8623.lanzn.com/b00zti91i">这个链接</a>来下载应用（这里下载过了，不在演示）</p>
-</li>
-<li><p>我们选择安装自定义APK，选择文件后安装。<br><img src="/img/article/22/823ecc64e158b343fe91255430cc0fe18a23f1ea.png"><br><img src="/img/article/22/796ba22c00276c9b31e45be1945879da6d6371ae.png"></p>
-</li>
-<li><p>Oh man!失败了！！！<br><img src="/img/article/22/a0c3070482e571c6fb7e0597762c01028aff7ce7.png"></p>
-</li>
-<li><p>为什么会失败呢？我让你们装的MT管理器不就来了？来看看安装包！<br><img src="/img/article/22/3b6de4cdd8081c3927448ccb097df7518320924d.jpg"><br>这就是问题。HW的工程师对V1前面的安装包做了限制。我们只需要改成V2,V3,V2+V3任选一个就可以了。</p>
-</li>
-<li><p>重新安装<br><img src="/img/article/22/1ab309e5ead29ed0a14e6e32ab0ecb5347a1e88c.png"></p>
-</li>
-<li><p>打开手表确认<br><img src="/img/article/22/1c6df661307420c79f04b47985b2f223e9f18241.png"><br>APP测试<br><img src="/img/article/22/6152a7172d125273d6aae1ff71bec41da50d87b3.png"><br><img src="/img/article/22/31dedf860decfb3d7d88c918dcc52c3e068e9e5a.png"><br>至此，我们的目标2：安装自定义软件已经顺利:check_mark:了，开始我们的下一个目标。</p>
-</li>
-<li><p>adb重启到fastboot模式</p>
-</li>
-</ol>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">adb reboot fastboot</span><br></pre></td></tr></table></figure>
-<p>很可惜，他失败了。BL锁无法解锁，我还要再花时间研究。。。</p>
-]]></content>
-      <categories>
-        <category>搞机日记</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>利用Cloudflare Workers搭建镜像网站</title>
     <url>//post/437r.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
@@ -206,167 +206,6 @@
       </categories>
       <tags>
         <tag>Cloudflare</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！</title>
-    <url>//post/43vc.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是 Vercel ? Vercel，是一家软件服务企业，掌门人是Guillermo Rauch，2023年4月18日，以170亿人民币的企业估值入选《2023·胡润全球独角兽榜》，排名404。2024年4月9日，Vercel以180亿人民币的企业估值入选《2024·胡润全球独角兽榜》，排名422名。</p>
-<p>那么，今天我就叫你如何使用 Vercel 快速上线你的个人网站！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="Part1-导入博客Repo"><a href="#Part1-导入博客Repo" class="headerlink" title="Part1. 导入博客Repo"></a>Part1. 导入博客Repo</h2><ol>
-<li><p>进入 <strong><a href="vercel.com">Vercel</a></strong> ，先注册账号（建议使用Github注册）。</p>
-</li>
-<li><p>进入Dashboard，点击<code>Add New</code>-&gt;<code>Project</code></p>
-</li>
-</ol>
-<p><img src="/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p>
-<ol start="3">
-<li>进入选择界面，找到你的博客所在的Github仓库，点击一旁的<strong>Import</strong>，例如我的<code>mc-sep.github.io</code></li>
-</ol>
-<p><img src="/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p>
-<ol start="4">
-<li>进入到配置界面，如果你是Hexo博客（只上传public文件夹内文件的），请不要修改<strong>Build and Output Settings</strong>和<strong>Framework Preset</strong>，如果是Hexo（在线部署的），请在<strong>Framework Preset</strong>中选择<strong>Hexo</strong>，其他不用动。其余博客的方法可自行查阅。最后点击<strong>Deploy</strong></li>
-</ol>
-<p><img src="/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p>
-<p><img src="/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p>
-<ol start="5">
-<li>等待部署完成。完成后，点击<strong>Continue to Dashboard</strong></li>
-</ol>
-<p><img src="/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p>
-<p><img src="/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p>
-<h2 id="Part2-绑定域名"><a href="#Part2-绑定域名" class="headerlink" title="Part2. 绑定域名"></a>Part2. 绑定域名</h2><p>请在你的域名托管商内添加一个<strong>CNAME</strong>记录：<strong>cname-china.vercel-dns.com</strong>或者<strong>A</strong>记录：<strong>76.76.21.21</strong>或<strong>76.76.21.98</strong>，如图：</p>
-<p><img src="/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p>
-<p>接着去到你创建好的Project，点击<strong>Settings</strong>-&gt;<strong>Domains</strong>，再上面输入你的域名！</p>
-<p><img src="/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p>
-<p>如果你配置错了，可能就会：</p>
-<p><img src="/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p>
-<p><img src="/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p>
-<p>你也可以使用Vercel的自带域名（被ban了）：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">你喜欢的名字.vercel.app</span><br></pre></td></tr></table></figure>
-
-<h2 id="Part3-安全系统"><a href="#Part3-安全系统" class="headerlink" title="Part3. 安全系统"></a>Part3. 安全系统</h2><ol>
-<li><p>进入<strong>Settings</strong>-&gt;<strong>Security</strong></p>
-</li>
-<li><p>可以将<strong>Attack Challenge Mode</strong>打开（通过向每位访客显示验证质询来防止恶意流量），效果就不展示了。</p>
-</li>
-<li><p>下面的都可以打开。</p>
-</li>
-</ol>
-<h2 id="Part4-优化"><a href="#Part4-优化" class="headerlink" title="Part4. 优化"></a>Part4. 优化</h2><p>可以提出建议！我可能会采纳！</p>
-<ul>
-<li>进入<strong>Settings</strong>-&gt;<strong>Functions</strong>，可将服务器改为香港的（好像小日子的更快），如：</li>
-</ul>
-<p><img src="/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel挺好用的。</p>
-<p>版权所有©MC-Sep 2023~2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Vercel</tag>
-        <tag>Github</tag>
-        <tag>Pages</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Hexo】如何提高静态博客访问速度？Vercel+Cloudflare+CDN让你的网站速度飞起！</title>
-    <url>//post/5ytg.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着博客文章数量的增多，我们的博客可能会变得十分缓慢（比如前段时间的我），今天的教程可以让你的博客提速<strong>90%</strong>！</p>
-<h1 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h1><h2 id="整改1-扔掉Github-Pages"><a href="#整改1-扔掉Github-Pages" class="headerlink" title="整改1 扔掉Github Pages"></a>整改1 扔掉Github Pages</h2><p>Github Pages<del>真垃圾</del>很慢，看看对比：</p>
-<table>
-<thead>
-<tr>
-<th align="center">名称</th>
-<th align="center">Vercel</th>
-<th align="center">CF Workers（反代）</th>
-<th align="center">CF Pages</th>
-<th align="center">Netlify</th>
-<th align="center">Zeabur</th>
-<th align="center">Github Pages</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">速度</td>
-<td align="center">🌟🌟🌟🌟🌟</td>
-<td align="center">🌟🌟🌟🌟</td>
-<td align="center">🌟🌟🌟🌟🌟</td>
-<td align="center">🌟🌟🌟🌟🌟</td>
-<td align="center">🌟🌟🌟🌟🌟</td>
-<td align="center">🌟🌟</td>
-</tr>
-<tr>
-<td align="center">稳定性</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">5</td>
-</tr>
-</tbody></table>
-<p>还不把Github Pages扔了！Vercel他不香吗！参考：</p>
-
-
-<p>也可以使用 CF Workers反代，参考：<a href="https://blog.mc-sep.top/post/437r.html">利用Cloudflare Workers搭建镜像网站 | Minecraft-Sep (mc-sep.top)</a></p>
-<h2 id="整改2-域名"><a href="#整改2-域名" class="headerlink" title="整改2 域名"></a>整改2 域名</h2><p>参考（有几个提别好的）：</p>
-
-
-<h2 id="整改3-CDN"><a href="#整改3-CDN" class="headerlink" title="整改3 CDN"></a>整改3 CDN</h2><p>CDN的全称是Content Delivery Network，即内容分发网络。CDN是构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。CDN的关键技术主要有内容存储和分发技术。</p>
-<p>通俗易懂的解释： 通过IP访问实际资源时，如果CDN上并没有缓存资源，则会到源站请求资源，并缓存到CDN节点上，这样，用户下一次访问时，该CDN节点就会有对应资源的缓存了。</p>
-<p>Vercel CDN的优化</p>
-<ul>
-<li>使用他人的Vercel CDN（自动使用节点）：<a href="https://vercel.cdn.yt-blog.top/">Vercel CDN:利用CNAME负载均衡实现的Vercel加速CDN (yt-blog.top)</a></li>
-<li>在Vercel里使用Hong Kong节点</li>
-</ul>
-<p>CF的优化</p>
-<ul>
-<li>优化选项卡里的能开就开</li>
-</ul>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>注意：最近推出的Speed Brain有问题，不建议使用！</p>
-</div>
-
-<h2 id="整改4-图片问题"><a href="#整改4-图片问题" class="headerlink" title="整改4 图片问题"></a>整改4 图片问题</h2><p>最拖慢速度二巨头：图片过大，图片源不同一（特别是butterfly系列主题深有体会）</p>
-<p>建议统一使用一个图床，或者上传到自己的图床，这里提供两个教程</p>
-<ul>
-<li>CF+Telegraph（维护中）</li>
-<li>Vercel+Bulb</li>
-</ul>
-<div class="recent-post-item" onclick="pjax.loadUrl('//post/239d.html')"><div class="post_cover"><a href="//post/239d.html" class="fancybox" title="免费小型数据库——Vercel Blob初体验"><img class="post_bg" src="/img/article/13/th.webp" alt="免费小型数据库——Vercel Blob初体验"></a></div><div class="recent-post-info"><div class="recent-post-info-top"><div class="recent-post-info-top-tips"><span class="article-meta sticky-warp"><span class="original">实用教程</span></span></div><a class="article-title fancybox" href="//post/239d.html" title="免费小型数据库——Vercel Blob初体验">免费小型数据库——Vercel Blob初体验</a></div><div class="content"></div><div class="article-meta-wrap"><span class="article-meta tags"><a class="article-meta__tags fancybox" href="tags/Vercel/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Vercel</span></a><a class="article-meta__tags fancybox" href="tags/图床/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>图床</span></a></span><span class="post-meta-date"><time datetime="Mon Sep 16 2024 20:18:00 GMT+0800" style="display: inline;"></time></span></div></div></div>
-
-<p>其次，图片过大可以使用<a href="https://tinify.cn/">TinyPNG – 智能压缩您的WebP、JPEG和PNG图片 (tinify.cn)</a>或者<a href="https://tinypng.com/">TinyPNG – Compress WebP, PNG and JPEG images intelligently</a>压缩，是无损压缩，也可以转换为png,jpeg和webp格式。</p>
-<p>或者使用<a href="https://cdn.jsdelivr.net/">Jsdelivr (jsdelivr.net)</a>加速访问托管在github 的图片：</p>
-<ol>
-<li><p>将图片上传到github</p>
-</li>
-<li><p>在网址栏输入：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://cdn.jsdelivr.net/npm/你的github用户名/你保存图片的repo/[图片路径]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果出现图片就代表成功！</p>
-</li>
-</ol>
-<h2 id="整改5-Gulp"><a href="#整改5-Gulp" class="headerlink" title="整改5 Gulp"></a>整改5 Gulp</h2><p>Gulp是一个hexo插件，用于压缩js和css文件。</p>
-<ol>
-<li><p>安装：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install gulp compress gulp-clean-css gulp-html-minifier-terser gulp-htmlclean gulp-terser --save-dev</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建 <code>gulpfile.js</code> 文件：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> cleanCSS = <span class="built_in">require</span>(<span class="string">&#x27;gulp-clean-css&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlmin = <span class="built_in">require</span>(<span class="string">&#x27;gulp-html-minifier-terser&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlclean = <span class="built_in">require</span>(<span class="string">&#x27;gulp-htmlclean&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> terser = <span class="built_in">require</span>(<span class="string">&#x27;gulp-terser&#x27;</span>);</span><br><span class="line"><span class="comment">// 压缩js</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;compress&#x27;</span>, <span class="function">() =&gt;</span></span><br><span class="line">gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.js&#x27;</span>, <span class="string">&#x27;!./public/**/*.min.js&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">terser</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">)</span><br><span class="line"><span class="comment">//压缩css</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-css&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.css&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">cleanCSS</span>(&#123;</span><br><span class="line"><span class="attr">compatibility</span>: <span class="string">&#x27;ie11&#x27;</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//压缩html</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-html&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>(<span class="string">&#x27;./public/**/*.html&#x27;</span>)</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlclean</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlmin</span>(&#123;</span><br><span class="line"><span class="attr">removeComments</span>: <span class="literal">true</span>, <span class="comment">//清除html注释</span></span><br><span class="line"><span class="attr">collapseWhitespace</span>: <span class="literal">true</span>, <span class="comment">//压缩html</span></span><br><span class="line"><span class="attr">collapseBooleanAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//省略布尔属性的值，例如：&lt;input checked=&quot;true&quot;/&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeEmptyAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除所有空格作属性值，例如：&lt;input id=&quot;&quot; /&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeScriptTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;script&gt;的type=&quot;text/javascript&quot;</span></span><br><span class="line"><span class="attr">removeStyleLinkTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;style&gt;和&lt;link&gt;的 type=&quot;text/css&quot;</span></span><br><span class="line"><span class="attr">minifyJS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 JS</span></span><br><span class="line"><span class="attr">minifyCSS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 CSS</span></span><br><span class="line"><span class="attr">minifyURLs</span>: <span class="literal">true</span>  <span class="comment">//压缩页面URL</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行gulp命令时依次执行以下任务</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;default&#x27;</span>, gulp.<span class="title function_">parallel</span>(</span><br><span class="line"><span class="string">&#x27;compress&#x27;</span>, <span class="string">&#x27;minify-css&#x27;</span>, <span class="string">&#x27;minify-html&#x27;</span></span><br><span class="line">))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行gulp：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g&amp;&amp;gulp</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h1 id="加速你也做的差不多了"><a href="#加速你也做的差不多了" class="headerlink" title="加速你也做的差不多了"></a>加速你也做的差不多了</h1><p>结束！</p>
-<p>版权所有©MC-Sep.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Vercel</tag>
-        <tag>Cloudflare</tag>
-        <tag>Hexo</tag>
-        <tag>CDN</tag>
       </tags>
   </entry>
   <entry>
@@ -591,6 +430,87 @@
       </tags>
   </entry>
   <entry>
+    <title>【Hexo】告别缓慢的 Github Pages，来试试更好的 Vercel 吧！</title>
+    <url>//post/43vc.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是 Vercel ? Vercel，是一家软件服务企业，掌门人是Guillermo Rauch，2023年4月18日，以170亿人民币的企业估值入选《2023·胡润全球独角兽榜》，排名404。2024年4月9日，Vercel以180亿人民币的企业估值入选《2024·胡润全球独角兽榜》，排名422名。</p>
+<p>那么，今天我就叫你如何使用 Vercel 快速上线你的个人网站！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="Part1-导入博客Repo"><a href="#Part1-导入博客Repo" class="headerlink" title="Part1. 导入博客Repo"></a>Part1. 导入博客Repo</h2><ol>
+<li><p>进入 <strong><a href="vercel.com">Vercel</a></strong> ，先注册账号（建议使用Github注册）。</p>
+</li>
+<li><p>进入Dashboard，点击<code>Add New</code>-&gt;<code>Project</code></p>
+</li>
+</ol>
+<p><img src="/img/article/17/bdfec6d578406a659bb3715c21f107059cc97ca6f853480f0d99d2d151c22909.png" alt="Add"></p>
+<ol start="3">
+<li>进入选择界面，找到你的博客所在的Github仓库，点击一旁的<strong>Import</strong>，例如我的<code>mc-sep.github.io</code></li>
+</ol>
+<p><img src="/img/article/17/d20a4793dea107d4098fecb31121944b4b3f4de62670c0bf4ea451cb3cdde6d3.png" alt="选择"></p>
+<ol start="4">
+<li>进入到配置界面，如果你是Hexo博客（只上传public文件夹内文件的），请不要修改<strong>Build and Output Settings</strong>和<strong>Framework Preset</strong>，如果是Hexo（在线部署的），请在<strong>Framework Preset</strong>中选择<strong>Hexo</strong>，其他不用动。其余博客的方法可自行查阅。最后点击<strong>Deploy</strong></li>
+</ol>
+<p><img src="/img/article/17/464d16c75c6fe1f39c4d852b01e19d98799822f3e529b516d1383e2af54088c2.png" alt="hexo仅public"></p>
+<p><img src="/img/article/17/11f2a5c31e0b95d1a3b434c2ab26b46baff66c62aad4d1d7ed3675867ea533c2.png" alt="hexo在线部署"></p>
+<ol start="5">
+<li>等待部署完成。完成后，点击<strong>Continue to Dashboard</strong></li>
+</ol>
+<p><img src="/img/article/17/5acb7ee42c86eca9cd7cb25bb2d018c1c34c8c432e8695f73aa3173b1d9f138e.png" alt="部署中"></p>
+<p><img src="/img/article/17/3786c51b1cec27e65425052f5e9b588b87112dfdf445c57353b9a71157d4ab39.png" alt="完成"></p>
+<h2 id="Part2-绑定域名"><a href="#Part2-绑定域名" class="headerlink" title="Part2. 绑定域名"></a>Part2. 绑定域名</h2><p>请在你的域名托管商内添加一个<strong>CNAME</strong>记录：<strong>cname-china.vercel-dns.com</strong>或者<strong>A</strong>记录：<strong>76.76.21.21</strong>或<strong>76.76.21.98</strong>，如图：</p>
+<p><img src="/img/article/17/357bb7e96510f913e7aff7ae031051eb652bf7ecca72d850efee38e0abe38d2c.png" alt="A"></p>
+<p>接着去到你创建好的Project，点击<strong>Settings</strong>-&gt;<strong>Domains</strong>，再上面输入你的域名！</p>
+<p><img src="/img/article/17/36f7594d1396d0e8d1725fd6982aa6910ed3dbe963628fde7ddddb76ceee4636.png" alt="doamins"></p>
+<p>如果你配置错了，可能就会：</p>
+<p><img src="/img/article/17/a63a312034cbf5214fb7a633cfa86e646e7195cc235c5d0f16153e6b203865f6.png" alt="记录填错"></p>
+<p><img src="/img/article/17/2c56b89bf1ecf53e12e60c6a1466276de9c3ef52f286a21523c214ee6320ebaa.png" alt="不支持Vercel&amp;其他用户再使用的"></p>
+<p>你也可以使用Vercel的自带域名（被ban了）：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">你喜欢的名字.vercel.app</span><br></pre></td></tr></table></figure>
+
+<h2 id="Part3-安全系统"><a href="#Part3-安全系统" class="headerlink" title="Part3. 安全系统"></a>Part3. 安全系统</h2><ol>
+<li><p>进入<strong>Settings</strong>-&gt;<strong>Security</strong></p>
+</li>
+<li><p>可以将<strong>Attack Challenge Mode</strong>打开（通过向每位访客显示验证质询来防止恶意流量），效果就不展示了。</p>
+</li>
+<li><p>下面的都可以打开。</p>
+</li>
+</ol>
+<h2 id="Part4-优化"><a href="#Part4-优化" class="headerlink" title="Part4. 优化"></a>Part4. 优化</h2><p>可以提出建议！我可能会采纳！</p>
+<ul>
+<li>进入<strong>Settings</strong>-&gt;<strong>Functions</strong>，可将服务器改为香港的（好像小日子的更快），如：</li>
+</ul>
+<p><img src="/img/article/17/e57638f9c44875449c011ce1f65024063a907f0048228efcfa267365abcf649b.png" alt="server"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel挺好用的。</p>
+<p>版权所有©MC-Sep 2023~2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>Github</tag>
+        <tag>Pages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于博客评论更换的通知</title>
+    <url>//post/73dh.html</url>
+    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
+<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
+
+<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+
+<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+]]></content>
+      <categories>
+        <category>公告</category>
+      </categories>
+      <tags>
+        <tag>Waline</tag>
+        <tag>Twikoo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Hexo】Hexo+Github搭建个人博客</title>
     <url>//post/4nd3.html</url>
     <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间90分钟，请放心食用！</p>
@@ -726,147 +646,103 @@
       </tags>
   </entry>
   <entry>
-    <title>关于博客评论更换的通知</title>
-    <url>//post/73dh.html</url>
-    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
-<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
-
-<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
-
-<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
-]]></content>
-      <categories>
-        <category>公告</category>
-      </categories>
-      <tags>
-        <tag>Waline</tag>
-        <tag>Twikoo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>提升效率必备Windows神器PowerToys</title>
-    <url>//post/qrea.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>终于复活了！！！</p>
-<p>最近blog经常发癫，我还要考试，就停更了好久。</p>
-<p>今天我来讲一讲一个Windows的实用小工具：<strong>PowerToys</strong></p>
-<h1 id="安装、使用"><a href="#安装、使用" class="headerlink" title="安装、使用"></a>安装、使用</h1><p>安装的话直接去Microsoft Store就可以：</p>
-<p><img src="/img/article/21/e684ccc486939315a387bbc53e8c33afda1505da.jpg" alt="Microsoft PowerToys 是一款帮助高级用户优化和简化 Windows 10 和 11 系统体验的实用工具集，以提高生产力。 [App Screenshot] (由 AI 生成标题)|529x499, 100%"></p>
-<p>推荐的功能：</p>
-<ol>
-<li>唤醒：这个功能可以调整你的计算机睡眠状态，如永不睡眠，隔一段时间在睡眠等：</li>
-</ol>
-<p><img src="/img/article/21/b6fa800413a1985483c7b6aa77114eee7c883c70.png" alt="截图显示了一个设置菜单，包含关于保持设备唤醒的选项，包括按时间间隔唤醒、无限期唤醒以及关闭唤醒功能。 {tag:screenshot, menu, settings} (由 AI 生成标题)|538x250"></p>
-<ol start="2">
-<li>命令面板：快捷的公式计算、指令运行：</li>
-</ol>
-<p><img src="/img/article/21/b4ed65ccc4d794617fda21e7bb92a17afc35bb3a.jpg" alt="截图显示了PowerToys的命令面板设置界面，包括启用&#x2F;禁用命令面板、快捷键设置、以及搜索和运行应用等功能。 (由 AI 生成标题)|395x499"></p>
-<ol start="3">
-<li>颜色选择器：如果你对颜色的HEX值特别苦恼，就用这个一件取色！</li>
-</ol>
-<p><img src="/img/article/21/edf0599f28d9039870da3f0f87d062adcdd29281.png" alt="PowerToys 颜色选取器设置界面显示了启用状态、快捷键和激活方式等选项。 (由 AI 生成标题)|629x500"></p>
-<p><img src="/img/article/21/6209e90bb2173d4197d47f74dd66024f073b1144.png" alt="图片显示了十六进制颜色代码f3f3f3，它代表白色。 (由 AI 生成标题)|453x200"></p>
-<ol start="4">
-<li>文本提取器：顾名思义，截图读取文字。</li>
-</ol>
-<p><img src="/img/article/21/7baae8917a20ba5202e594a5b05abc960fe01725.png" alt="这是一张PowerToys文本提取器设置界面的截图，显示了其功能、快捷键和语言设置。 (由 AI 生成标题)|450x500"></p>
-<p>建议使用截图工具而不是 TextExtractor 模块。（文本提取实例）</p>
-<ol start="5">
-<li>始终置顶：激活后会在窗口旁出现蓝色框，代表完全置顶<br><img src="/img/article/21/62ef1a187883f2ce2d813ddcba403aead16c7747.png" alt="这是PowerToys设置界面，显示了“始终置顶”功能的开关和快捷键设置。 (由 AI 生成标题)|690x390"></li>
-</ol>
-<p>其余的自己可以探索，这5个最好用！</p>
-]]></content>
-      <categories>
-        <category>软件</category>
-      </categories>
-      <tags>
-        <tag>PowerToys</tag>
-        <tag>Windows</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
-    <url>//post/5trr.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
-<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
-<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
-</div>
-
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
-<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
-</li>
-<li><p>fork这个仓库：</p>
-</li>
-</ol>
-<div class="repo-card">
-  <a class='name-ckz1oy75a repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>
-  <p class='desc-ckz1oy75a repo-desc'></p>
-  <div class="repo-gist">
-    <i class="fas fa-star"></i>
-    <span class='star-ckz1oy75a'></span>
-    <i class="fas fa-code-branch"></i>
-    <span class='fork-ckz1oy75a'></span>
-  </div>
-  <img class='lang-ckz1oy75a repo-language no-lightbox' />
-  <script>
-    fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')
-      .then(res => res.json())
-      .then(data => {
-        document.querySelector('.name-ckz1oy75a').innerText = data.name;
-        document.querySelector('.desc-ckz1oy75a').innerText = data.description;
-        document.querySelector('.star-ckz1oy75a').innerText = data.stargazers_count;
-        document.querySelector('.fork-ckz1oy75a').innerText = data.forks_count;
-        document.querySelector('.lang-ckz1oy75a').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();
-    });
-  </script>
-  </div>
-
-<ol start="3">
-<li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
-<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
-<ol start="4">
-<li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
-</li>
-<li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p>
+    <title>【Hexo】如何提高静态博客访问速度？Vercel+Cloudflare+CDN让你的网站速度飞起！</title>
+    <url>//post/5ytg.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着博客文章数量的增多，我们的博客可能会变得十分缓慢（比如前段时间的我），今天的教程可以让你的博客提速<strong>90%</strong>！</p>
+<h1 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h1><h2 id="整改1-扔掉Github-Pages"><a href="#整改1-扔掉Github-Pages" class="headerlink" title="整改1 扔掉Github Pages"></a>整改1 扔掉Github Pages</h2><p>Github Pages<del>真垃圾</del>很慢，看看对比：</p>
 <table>
 <thead>
 <tr>
-<th align="center">BASIC_USER</th>
-<th align="center">后台管理员的用户名</th>
+<th align="center">名称</th>
+<th align="center">Vercel</th>
+<th align="center">CF Workers（反代）</th>
+<th align="center">CF Pages</th>
+<th align="center">Netlify</th>
+<th align="center">Zeabur</th>
+<th align="center">Github Pages</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="center">BASIC_PASS</td>
-<td align="center">后台的登陆密码</td>
+<td align="center">速度</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟🌟🌟🌟</td>
+<td align="center">🌟🌟</td>
+</tr>
+<tr>
+<td align="center">稳定性</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">5</td>
 </tr>
 </tbody></table>
-<p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p>
+<p>还不把Github Pages扔了！Vercel他不香吗！参考：</p>
+
+
+<p>也可以使用 CF Workers反代，参考：<a href="https://blog.mc-sep.top/post/437r.html">利用Cloudflare Workers搭建镜像网站 | Minecraft-Sep (mc-sep.top)</a></p>
+<h2 id="整改2-域名"><a href="#整改2-域名" class="headerlink" title="整改2 域名"></a>整改2 域名</h2><p>参考（有几个提别好的）：</p>
+
+
+<h2 id="整改3-CDN"><a href="#整改3-CDN" class="headerlink" title="整改3 CDN"></a>整改3 CDN</h2><p>CDN的全称是Content Delivery Network，即内容分发网络。CDN是构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。CDN的关键技术主要有内容存储和分发技术。</p>
+<p>通俗易懂的解释： 通过IP访问实际资源时，如果CDN上并没有缓存资源，则会到源站请求资源，并缓存到CDN节点上，这样，用户下一次访问时，该CDN节点就会有对应资源的缓存了。</p>
+<p>Vercel CDN的优化</p>
+<ul>
+<li>使用他人的Vercel CDN（自动使用节点）：<a href="https://vercel.cdn.yt-blog.top/">Vercel CDN:利用CNAME负载均衡实现的Vercel加速CDN (yt-blog.top)</a></li>
+<li>在Vercel里使用Hong Kong节点</li>
+</ul>
+<p>CF的优化</p>
+<ul>
+<li>优化选项卡里的能开就开</li>
+</ul>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>注意：最近推出的Speed Brain有问题，不建议使用！</p>
 </div>
+
+<h2 id="整改4-图片问题"><a href="#整改4-图片问题" class="headerlink" title="整改4 图片问题"></a>整改4 图片问题</h2><p>最拖慢速度二巨头：图片过大，图片源不同一（特别是butterfly系列主题深有体会）</p>
+<p>建议统一使用一个图床，或者上传到自己的图床，这里提供两个教程</p>
+<ul>
+<li>CF+Telegraph（维护中）</li>
+<li>Vercel+Bulb</li>
+</ul>
+<div class="recent-post-item" onclick="pjax.loadUrl('//post/239d.html')"><div class="post_cover"><a href="//post/239d.html" class="fancybox" title="免费小型数据库——Vercel Blob初体验"><img class="post_bg" src="/img/article/13/th.webp" alt="免费小型数据库——Vercel Blob初体验"></a></div><div class="recent-post-info"><div class="recent-post-info-top"><div class="recent-post-info-top-tips"><span class="article-meta sticky-warp"><span class="original">实用教程</span></span></div><a class="article-title fancybox" href="//post/239d.html" title="免费小型数据库——Vercel Blob初体验">免费小型数据库——Vercel Blob初体验</a></div><div class="content"></div><div class="article-meta-wrap"><span class="article-meta tags"><a class="article-meta__tags fancybox" href="tags/Vercel/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Vercel</span></a><a class="article-meta__tags fancybox" href="tags/图床/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>图床</span></a></span><span class="post-meta-date"><time datetime="Mon Sep 16 2024 20:18:00 GMT+0800" style="display: inline;"></time></span></div></div></div>
+
+<p>其次，图片过大可以使用<a href="https://tinify.cn/">TinyPNG – 智能压缩您的WebP、JPEG和PNG图片 (tinify.cn)</a>或者<a href="https://tinypng.com/">TinyPNG – Compress WebP, PNG and JPEG images intelligently</a>压缩，是无损压缩，也可以转换为png,jpeg和webp格式。</p>
+<p>或者使用<a href="https://cdn.jsdelivr.net/">Jsdelivr (jsdelivr.net)</a>加速访问托管在github 的图片：</p>
+<ol>
+<li><p>将图片上传到github</p>
 </li>
-<li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
-<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
+<li><p>在网址栏输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://cdn.jsdelivr.net/npm/你的github用户名/你保存图片的repo/[图片路径]</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
-<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
-</li>
-<li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
-</li>
-<li><p>（可选）自定义域名的绑定：</p>
-<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
+<li><p>如果出现图片就代表成功！</p>
 </li>
 </ol>
+<h2 id="整改5-Gulp"><a href="#整改5-Gulp" class="headerlink" title="整改5 Gulp"></a>整改5 Gulp</h2><p>Gulp是一个hexo插件，用于压缩js和css文件。</p>
+<ol>
+<li><p>安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install gulp compress gulp-clean-css gulp-html-minifier-terser gulp-htmlclean gulp-terser --save-dev</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>创建 <code>gulpfile.js</code> 文件：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> cleanCSS = <span class="built_in">require</span>(<span class="string">&#x27;gulp-clean-css&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlmin = <span class="built_in">require</span>(<span class="string">&#x27;gulp-html-minifier-terser&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> htmlclean = <span class="built_in">require</span>(<span class="string">&#x27;gulp-htmlclean&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> terser = <span class="built_in">require</span>(<span class="string">&#x27;gulp-terser&#x27;</span>);</span><br><span class="line"><span class="comment">// 压缩js</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;compress&#x27;</span>, <span class="function">() =&gt;</span></span><br><span class="line">gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.js&#x27;</span>, <span class="string">&#x27;!./public/**/*.min.js&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">terser</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">)</span><br><span class="line"><span class="comment">//压缩css</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-css&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>([<span class="string">&#x27;./public/**/*.css&#x27;</span>])</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">cleanCSS</span>(&#123;</span><br><span class="line"><span class="attr">compatibility</span>: <span class="string">&#x27;ie11&#x27;</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//压缩html</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;minify-html&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">return</span> gulp.<span class="title function_">src</span>(<span class="string">&#x27;./public/**/*.html&#x27;</span>)</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlclean</span>())</span><br><span class="line">.<span class="title function_">pipe</span>(<span class="title function_">htmlmin</span>(&#123;</span><br><span class="line"><span class="attr">removeComments</span>: <span class="literal">true</span>, <span class="comment">//清除html注释</span></span><br><span class="line"><span class="attr">collapseWhitespace</span>: <span class="literal">true</span>, <span class="comment">//压缩html</span></span><br><span class="line"><span class="attr">collapseBooleanAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//省略布尔属性的值，例如：&lt;input checked=&quot;true&quot;/&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeEmptyAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除所有空格作属性值，例如：&lt;input id=&quot;&quot; /&gt; ==&gt; &lt;input /&gt;</span></span><br><span class="line"><span class="attr">removeScriptTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;script&gt;的type=&quot;text/javascript&quot;</span></span><br><span class="line"><span class="attr">removeStyleLinkTypeAttributes</span>: <span class="literal">true</span>,</span><br><span class="line"><span class="comment">//删除&lt;style&gt;和&lt;link&gt;的 type=&quot;text/css&quot;</span></span><br><span class="line"><span class="attr">minifyJS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 JS</span></span><br><span class="line"><span class="attr">minifyCSS</span>: <span class="literal">true</span>, <span class="comment">//压缩页面 CSS</span></span><br><span class="line"><span class="attr">minifyURLs</span>: <span class="literal">true</span>  <span class="comment">//压缩页面URL</span></span><br><span class="line">&#125;))</span><br><span class="line">.<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&#x27;./public&#x27;</span>))</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行gulp命令时依次执行以下任务</span></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&#x27;default&#x27;</span>, gulp.<span class="title function_">parallel</span>(</span><br><span class="line"><span class="string">&#x27;compress&#x27;</span>, <span class="string">&#x27;minify-css&#x27;</span>, <span class="string">&#x27;minify-html&#x27;</span></span><br><span class="line">))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行gulp：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g&amp;&amp;gulp</span><br></pre></td></tr></table></figure></li>
 </ol>
+<h1 id="加速你也做的差不多了"><a href="#加速你也做的差不多了" class="headerlink" title="加速你也做的差不多了"></a>加速你也做的差不多了</h1><p>结束！</p>
+<p>版权所有©MC-Sep.</p>
 ]]></content>
       <categories>
-        <category>实用教程</category>
+        <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Cloudflare Pages</tag>
+        <tag>Vercel</tag>
+        <tag>Cloudflare</tag>
+        <tag>Hexo</tag>
+        <tag>CDN</tag>
       </tags>
   </entry>
   <entry>
@@ -974,6 +850,46 @@
       </tags>
   </entry>
   <entry>
+    <title>提升效率必备Windows神器PowerToys</title>
+    <url>//post/qrea.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>终于复活了！！！</p>
+<p>最近blog经常发癫，我还要考试，就停更了好久。</p>
+<p>今天我来讲一讲一个Windows的实用小工具：<strong>PowerToys</strong></p>
+<h1 id="安装、使用"><a href="#安装、使用" class="headerlink" title="安装、使用"></a>安装、使用</h1><p>安装的话直接去Microsoft Store就可以：</p>
+<p><img src="/img/article/21/e684ccc486939315a387bbc53e8c33afda1505da.jpg" alt="Microsoft PowerToys 是一款帮助高级用户优化和简化 Windows 10 和 11 系统体验的实用工具集，以提高生产力。 [App Screenshot] (由 AI 生成标题)|529x499, 100%"></p>
+<p>推荐的功能：</p>
+<ol>
+<li>唤醒：这个功能可以调整你的计算机睡眠状态，如永不睡眠，隔一段时间在睡眠等：</li>
+</ol>
+<p><img src="/img/article/21/b6fa800413a1985483c7b6aa77114eee7c883c70.png" alt="截图显示了一个设置菜单，包含关于保持设备唤醒的选项，包括按时间间隔唤醒、无限期唤醒以及关闭唤醒功能。 {tag:screenshot, menu, settings} (由 AI 生成标题)|538x250"></p>
+<ol start="2">
+<li>命令面板：快捷的公式计算、指令运行：</li>
+</ol>
+<p><img src="/img/article/21/b4ed65ccc4d794617fda21e7bb92a17afc35bb3a.jpg" alt="截图显示了PowerToys的命令面板设置界面，包括启用&#x2F;禁用命令面板、快捷键设置、以及搜索和运行应用等功能。 (由 AI 生成标题)|395x499"></p>
+<ol start="3">
+<li>颜色选择器：如果你对颜色的HEX值特别苦恼，就用这个一件取色！</li>
+</ol>
+<p><img src="/img/article/21/edf0599f28d9039870da3f0f87d062adcdd29281.png" alt="PowerToys 颜色选取器设置界面显示了启用状态、快捷键和激活方式等选项。 (由 AI 生成标题)|629x500"></p>
+<p><img src="/img/article/21/6209e90bb2173d4197d47f74dd66024f073b1144.png" alt="图片显示了十六进制颜色代码f3f3f3，它代表白色。 (由 AI 生成标题)|453x200"></p>
+<ol start="4">
+<li>文本提取器：顾名思义，截图读取文字。</li>
+</ol>
+<p><img src="/img/article/21/7baae8917a20ba5202e594a5b05abc960fe01725.png" alt="这是一张PowerToys文本提取器设置界面的截图，显示了其功能、快捷键和语言设置。 (由 AI 生成标题)|450x500"></p>
+<p>建议使用截图工具而不是 TextExtractor 模块。（文本提取实例）</p>
+<ol start="5">
+<li>始终置顶：激活后会在窗口旁出现蓝色框，代表完全置顶<br><img src="/img/article/21/62ef1a187883f2ce2d813ddcba403aead16c7747.png" alt="这是PowerToys设置界面，显示了“始终置顶”功能的开关和快捷键设置。 (由 AI 生成标题)|690x390"></li>
+</ol>
+<p>其余的自己可以探索，这5个最好用！</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+      </categories>
+      <tags>
+        <tag>PowerToys</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>API构建①——Bing每日一图接口</title>
     <url>//post/r5fd.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
@@ -1041,155 +957,6 @@
       <tags>
         <tag>API</tag>
         <tag>PHP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何让你的博客更丰富？hexo常见插件推荐</title>
-    <url>//post/ugr2.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
-<h1 id="hexo插件集"><a href="#hexo插件集" class="headerlink" title="hexo插件集"></a>hexo插件集</h1><h3 id="hexo-abbrlink"><a href="#hexo-abbrlink" class="headerlink" title="hexo-abbrlink"></a>hexo-abbrlink</h3><ol>
-<li>安装：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-abbrlink --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>当你hexo g时，这个插件会对未生成abbrlink的文章中的front matter里添加这个东西（据说此种格式有利于SEO优化）：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink: *****（随机数字）</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>也可以自定义，尽量使用字母和数字，空格用<code>-</code>替代，提升链接可读性。</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink: 我的文章-my-post-*****</span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-encrypt"><a href="#hexo-encrypt" class="headerlink" title="hexo-encrypt"></a>hexo-encrypt</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-blog-encrypt</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在front matter里输入<code>password: 你的密码</code>，如：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">password: hello</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>那么在hexo中就是这样的画面：</li>
-</ol>
-<p><img src="/img/article/12/d068699b430414e617c92223c6e4ffc049da653fc65e572010c96bb320746b6f.png" alt="加密后"></p>
-<ol start="4">
-<li>可以添加更多，如：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2016-03-30 21:12:21</span><br><span class="line">password: 114514</span><br><span class="line">abstract: 有东西被加密了, 请输入密码查看. //系统信息</span><br><span class="line">message: 您好, 这里需要密码. //展示的信息</span><br><span class="line">wrong_pass_message: 抱歉, 这个密码看着不太对, 请再试试. //密码错误</span><br><span class="line">wrong_hash_message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容. //hash解密错误</span><br><span class="line">---</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-
-<p>或者在<code>_config.yml</code>里添加这些东西：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Security</span></span><br><span class="line"><span class="attr">encrypt:</span> <span class="comment"># hexo-blog-encrypt</span></span><br><span class="line">  <span class="attr">abstract:</span> <span class="string">有东西被加密了,</span> <span class="string">请输入密码查看.</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">您好,</span> <span class="string">这里需要密码.</span></span><br><span class="line">  <span class="attr">theme:</span> <span class="string">xray</span></span><br><span class="line">  <span class="attr">wrong_pass_message:</span> <span class="string">抱歉,</span> <span class="string">这个密码看着不太对,</span> <span class="string">请再试试.</span></span><br><span class="line">  <span class="attr">wrong_hash_message:</span> <span class="string">抱歉,</span> <span class="string">这个文章不能被校验,</span> <span class="string">不过您还是能看看解密后的内容.</span></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-generator"><a href="#hexo-generator" class="headerlink" title="hexo-generator"></a>hexo-generator</h3><ol>
-<li>安装（先第一个后第二个）</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-generator-index --save</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-index-pin-top --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在front matter里添加<code>top: ***</code>数字越大文章越靠前</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">top: 114514</span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-hide-posts"><a href="#hexo-hide-posts" class="headerlink" title="hexo-hide-posts"></a>hexo-hide-posts</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-hide-posts --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>默认 <code>hidden: true</code> 用于隐藏，可以修改成<code>false</code></li>
-</ol>
-<h3 id="hexo-generator-feed"><a href="#hexo-generator-feed" class="headerlink" title="hexo-generator-feed"></a>hexo-generator-feed</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>当你hexo d时会生成用于rss订阅，默认只获取文章摘要或者前140个字符</li>
-</ol>
-<h3 id="hexo-filter-nofollow"><a href="#hexo-filter-nofollow" class="headerlink" title="hexo-filter-nofollow"></a>hexo-filter-nofollow</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-filter-nofollow --save</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>可排除自定义域名。</li>
-</ol>
-<h3 id="hexo-submit-urls-to-search-engine"><a href="#hexo-submit-urls-to-search-engine" class="headerlink" title="hexo-submit-urls-to-search-engine"></a>hexo-submit-urls-to-search-engine</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-submit-urls-to-search-engine</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>hexo d时自动提交链接到搜索引擎。提交效果不错，但百度放出页面的速度依旧感人，谷歌、必应、雅虎的收录速度很快。</li>
-</ol>
-<h3 id="markdown-it-ruby-与-hexo-pinyin-ruby-marks"><a href="#markdown-it-ruby-与-hexo-pinyin-ruby-marks" class="headerlink" title="markdown-it-ruby 与 hexo-pinyin-ruby-marks"></a>markdown-it-ruby 与 hexo-pinyin-ruby-marks</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install markdown-it-ruby --save</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-pinyin-ruby-marks</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在<code>_config.yml</code>中输入以下内容：</li>
-</ol>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">markdown:</span></span><br><span class="line">  <span class="attr">plugins:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-ruby</span></span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>在文章中输入以下内容：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% pinyin 初音未来|chu1 yin1 wei4 lai2 %&#125; </span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>即可看到文字上的拼音注音效果</li>
-</ol>
-<h3 id="hexo-pangu"><a href="#hexo-pangu" class="headerlink" title="hexo-pangu"></a>hexo-pangu</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-pangu</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>送给所有中英混输必须加空格的强迫症患者。（但愿跟其它插件不存在冲突）</li>
-</ol>
-<h3 id="hexo-broken-links-checker"><a href="#hexo-broken-links-checker" class="headerlink" title="hexo-broken-links-checker"></a>hexo-broken-links-checker</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-broken-links-checker --save-dev</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>检查</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npx hexo check-links</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>等待一会就会出现：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">WARN  The following links are broken:</span><br><span class="line">   - https://</span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-tag-qrcode"><a href="#hexo-tag-qrcode" class="headerlink" title="hexo-tag-qrcode"></a>hexo-tag-qrcode</h3><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-tag-qrcode</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在文章中输入：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% qrcode &quot;自定义内容&quot; %&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>文章中的插件可以评论提示我你喜欢的插件，我可能会采纳！</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Hexo插件</tag>
       </tags>
   </entry>
   <entry>
@@ -1365,8 +1132,8 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>Waline</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1477,6 +1244,239 @@
       </categories>
       <tags>
         <tag>周年记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何让你的博客更丰富？hexo常见插件推荐</title>
+    <url>//post/ugr2.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
+<h1 id="hexo插件集"><a href="#hexo插件集" class="headerlink" title="hexo插件集"></a>hexo插件集</h1><h3 id="hexo-abbrlink"><a href="#hexo-abbrlink" class="headerlink" title="hexo-abbrlink"></a>hexo-abbrlink</h3><ol>
+<li>安装：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-abbrlink --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>当你hexo g时，这个插件会对未生成abbrlink的文章中的front matter里添加这个东西（据说此种格式有利于SEO优化）：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink: *****（随机数字）</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>也可以自定义，尽量使用字母和数字，空格用<code>-</code>替代，提升链接可读性。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink: 我的文章-my-post-*****</span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-encrypt"><a href="#hexo-encrypt" class="headerlink" title="hexo-encrypt"></a>hexo-encrypt</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-blog-encrypt</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在front matter里输入<code>password: 你的密码</code>，如：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">password: hello</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>那么在hexo中就是这样的画面：</li>
+</ol>
+<p><img src="/img/article/12/d068699b430414e617c92223c6e4ffc049da653fc65e572010c96bb320746b6f.png" alt="加密后"></p>
+<ol start="4">
+<li>可以添加更多，如：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2016-03-30 21:12:21</span><br><span class="line">password: 114514</span><br><span class="line">abstract: 有东西被加密了, 请输入密码查看. //系统信息</span><br><span class="line">message: 您好, 这里需要密码. //展示的信息</span><br><span class="line">wrong_pass_message: 抱歉, 这个密码看着不太对, 请再试试. //密码错误</span><br><span class="line">wrong_hash_message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容. //hash解密错误</span><br><span class="line">---</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>或者在<code>_config.yml</code>里添加这些东西：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Security</span></span><br><span class="line"><span class="attr">encrypt:</span> <span class="comment"># hexo-blog-encrypt</span></span><br><span class="line">  <span class="attr">abstract:</span> <span class="string">有东西被加密了,</span> <span class="string">请输入密码查看.</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">您好,</span> <span class="string">这里需要密码.</span></span><br><span class="line">  <span class="attr">theme:</span> <span class="string">xray</span></span><br><span class="line">  <span class="attr">wrong_pass_message:</span> <span class="string">抱歉,</span> <span class="string">这个密码看着不太对,</span> <span class="string">请再试试.</span></span><br><span class="line">  <span class="attr">wrong_hash_message:</span> <span class="string">抱歉,</span> <span class="string">这个文章不能被校验,</span> <span class="string">不过您还是能看看解密后的内容.</span></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-generator"><a href="#hexo-generator" class="headerlink" title="hexo-generator"></a>hexo-generator</h3><ol>
+<li>安装（先第一个后第二个）</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-generator-index --save</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-index-pin-top --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在front matter里添加<code>top: ***</code>数字越大文章越靠前</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">top: 114514</span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-hide-posts"><a href="#hexo-hide-posts" class="headerlink" title="hexo-hide-posts"></a>hexo-hide-posts</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-hide-posts --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>默认 <code>hidden: true</code> 用于隐藏，可以修改成<code>false</code></li>
+</ol>
+<h3 id="hexo-generator-feed"><a href="#hexo-generator-feed" class="headerlink" title="hexo-generator-feed"></a>hexo-generator-feed</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>当你hexo d时会生成用于rss订阅，默认只获取文章摘要或者前140个字符</li>
+</ol>
+<h3 id="hexo-filter-nofollow"><a href="#hexo-filter-nofollow" class="headerlink" title="hexo-filter-nofollow"></a>hexo-filter-nofollow</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-filter-nofollow --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>可排除自定义域名。</li>
+</ol>
+<h3 id="hexo-submit-urls-to-search-engine"><a href="#hexo-submit-urls-to-search-engine" class="headerlink" title="hexo-submit-urls-to-search-engine"></a>hexo-submit-urls-to-search-engine</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-submit-urls-to-search-engine</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>hexo d时自动提交链接到搜索引擎。提交效果不错，但百度放出页面的速度依旧感人，谷歌、必应、雅虎的收录速度很快。</li>
+</ol>
+<h3 id="markdown-it-ruby-与-hexo-pinyin-ruby-marks"><a href="#markdown-it-ruby-与-hexo-pinyin-ruby-marks" class="headerlink" title="markdown-it-ruby 与 hexo-pinyin-ruby-marks"></a>markdown-it-ruby 与 hexo-pinyin-ruby-marks</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install markdown-it-ruby --save</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-pinyin-ruby-marks</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在<code>_config.yml</code>中输入以下内容：</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">markdown:</span></span><br><span class="line">  <span class="attr">plugins:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-ruby</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在文章中输入以下内容：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% pinyin 初音未来|chu1 yin1 wei4 lai2 %&#125; </span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>即可看到文字上的拼音注音效果</li>
+</ol>
+<h3 id="hexo-pangu"><a href="#hexo-pangu" class="headerlink" title="hexo-pangu"></a>hexo-pangu</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-pangu</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>送给所有中英混输必须加空格的强迫症患者。（但愿跟其它插件不存在冲突）</li>
+</ol>
+<h3 id="hexo-broken-links-checker"><a href="#hexo-broken-links-checker" class="headerlink" title="hexo-broken-links-checker"></a>hexo-broken-links-checker</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-broken-links-checker --save-dev</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>检查</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npx hexo check-links</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>等待一会就会出现：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">WARN  The following links are broken:</span><br><span class="line">   - https://</span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-tag-qrcode"><a href="#hexo-tag-qrcode" class="headerlink" title="hexo-tag-qrcode"></a>hexo-tag-qrcode</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-tag-qrcode</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在文章中输入：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% qrcode &quot;自定义内容&quot; %&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>文章中的插件可以评论提示我你喜欢的插件，我可能会采纳！</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Hexo插件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
+    <url>//post/5trr.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
+<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
+<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
+</div>
+
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
+<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
+</li>
+<li><p>fork这个仓库：</p>
+</li>
+</ol>
+<div class="repo-card">
+  <a class='name-a3qcw1n4w repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>
+  <p class='desc-a3qcw1n4w repo-desc'></p>
+  <div class="repo-gist">
+    <i class="fas fa-star"></i>
+    <span class='star-a3qcw1n4w'></span>
+    <i class="fas fa-code-branch"></i>
+    <span class='fork-a3qcw1n4w'></span>
+  </div>
+  <img class='lang-a3qcw1n4w repo-language no-lightbox' />
+  <script>
+    fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')
+      .then(res => res.json())
+      .then(data => {
+        document.querySelector('.name-a3qcw1n4w').innerText = data.name;
+        document.querySelector('.desc-a3qcw1n4w').innerText = data.description;
+        document.querySelector('.star-a3qcw1n4w').innerText = data.stargazers_count;
+        document.querySelector('.fork-a3qcw1n4w').innerText = data.forks_count;
+        document.querySelector('.lang-a3qcw1n4w').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();
+    });
+  </script>
+  </div>
+
+<ol start="3">
+<li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
+<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
+<ol start="4">
+<li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
+</li>
+<li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p>
+<table>
+<thead>
+<tr>
+<th align="center">BASIC_USER</th>
+<th align="center">后台管理员的用户名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">BASIC_PASS</td>
+<td align="center">后台的登陆密码</td>
+</tr>
+</tbody></table>
+<p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p>
+</div>
+</li>
+<li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
+<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
+</li>
+<li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
+<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
+</li>
+<li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
+</li>
+<li><p>（可选）自定义域名的绑定：</p>
+<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
+</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare Pages</tag>
       </tags>
   </entry>
   <entry>
@@ -1637,8 +1637,8 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>Twikoo</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
 </search>
