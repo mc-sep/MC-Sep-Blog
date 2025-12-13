@@ -107,7 +107,7 @@
     <published>2024-10-26T19:24:00.000Z</published>
     <updated>2025-05-31T01:45:23.713Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p><p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p><p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p><div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p></div><h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol><li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p><p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p></li><li><p>fork这个仓库：</p></li></ol><div class="repo-card">  <a class='name-a3qcw1n4w repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>  <p class='desc-a3qcw1n4w repo-desc'></p>  <div class="repo-gist">    <i class="fas fa-star"></i>    <span class='star-a3qcw1n4w'></span>    <i class="fas fa-code-branch"></i>    <span class='fork-a3qcw1n4w'></span>  </div>  <img class='lang-a3qcw1n4w repo-language no-lightbox' />  <script>    fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')      .then(res => res.json())      .then(data => {        document.querySelector('.name-a3qcw1n4w').innerText = data.name;        document.querySelector('.desc-a3qcw1n4w').innerText = data.description;        document.querySelector('.star-a3qcw1n4w').innerText = data.stargazers_count;        document.querySelector('.fork-a3qcw1n4w').innerText = data.forks_count;        document.querySelector('.lang-a3qcw1n4w').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();    });  </script>  </div><ol start="3"><li><p>进入 CF 的 Workers和 pages页面，点击创建</p><p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p><ol start="4"><li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p></li><li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p><table><thead><tr><th align="center">BASIC_USER</th><th align="center">后台管理员的用户名</th></tr></thead><tbody><tr><td align="center">BASIC_PASS</td><td align="center">后台的登陆密码</td></tr></tbody></table><p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p><div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p></div></li><li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p><p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p></li><li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p><p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p></li><li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p></li><li><p>（可选）自定义域名的绑定：</p><p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p></li></ol></li></ol>]]></content>
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p><p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p><p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p><div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p></div><h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol><li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p><p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p></li><li><p>fork这个仓库：</p></li></ol><div class="repo-card">  <a class='name-u7f0ygmfn repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>  <p class='desc-u7f0ygmfn repo-desc'></p>  <div class="repo-gist">    <i class="fas fa-star"></i>    <span class='star-u7f0ygmfn'></span>    <i class="fas fa-code-branch"></i>    <span class='fork-u7f0ygmfn'></span>  </div>  <img class='lang-u7f0ygmfn repo-language no-lightbox' />  <script>    fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')      .then(res => res.json())      .then(data => {        document.querySelector('.name-u7f0ygmfn').innerText = data.name;        document.querySelector('.desc-u7f0ygmfn').innerText = data.description;        document.querySelector('.star-u7f0ygmfn').innerText = data.stargazers_count;        document.querySelector('.fork-u7f0ygmfn').innerText = data.forks_count;        document.querySelector('.lang-u7f0ygmfn').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();    });  </script>  </div><ol start="3"><li><p>进入 CF 的 Workers和 pages页面，点击创建</p><p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p><ol start="4"><li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p></li><li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p><table><thead><tr><th align="center">BASIC_USER</th><th align="center">后台管理员的用户名</th></tr></thead><tbody><tr><td align="center">BASIC_PASS</td><td align="center">后台的登陆密码</td></tr></tbody></table><p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p><div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p></div></li><li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p><p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p></li><li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p><p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p></li><li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p></li><li><p>（可选）自定义域名的绑定：</p><p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p></li></ol></li></ol>]]></content>
     
     
       
@@ -413,9 +413,9 @@
     <category term="Hexo" scheme="http://blog.mc-sep.top/categories/Hexo/"/>
     
     
-    <category term="Twikoo" scheme="http://blog.mc-sep.top/tags/Twikoo/"/>
-    
     <category term="Hexo" scheme="http://blog.mc-sep.top/tags/Hexo/"/>
+    
+    <category term="Twikoo" scheme="http://blog.mc-sep.top/tags/Twikoo/"/>
     
   </entry>
   
@@ -444,9 +444,9 @@
     <category term="Hexo" scheme="http://blog.mc-sep.top/categories/Hexo/"/>
     
     
-    <category term="Waline" scheme="http://blog.mc-sep.top/tags/Waline/"/>
-    
     <category term="Hexo" scheme="http://blog.mc-sep.top/tags/Hexo/"/>
+    
+    <category term="Waline" scheme="http://blog.mc-sep.top/tags/Waline/"/>
     
   </entry>
   
