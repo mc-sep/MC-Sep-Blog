@@ -199,3 +199,31 @@ window.oncontextmenu = (ele) => {
     addEventListener(rm.menuItems.copyImg, "click", () => rm.copyImage() && rm.hideRightMenu());
     addEventListener(rm.menuItems.copyLink, "click", () => rm.copyText(rm.domhref) && rm.hideRightMenu());
 })();
+
+
+// ҳ�����ʱ��ʼ���Ҽ��˵�ģʽ��ť�ı�
+document.addEventListener('DOMContentLoaded', function () {
+    // ��⵱ǰ����ģʽ
+    const isDarkMode = document.body.classList.contains('dark-mode') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.getAttribute('data-theme') === 'dark';
+
+    // ��ʼ���Ҽ��˵�ģʽ��ť�ı�
+    if (rm.menuItems.mode) {
+        rm.mode(isDarkMode);
+    }
+});
+
+// ע������仯������ȷ�������л�ʱ�Ҽ��˵���ť�ı�ͬ������
+if (window.globalFn) {
+    if (!window.globalFn.themeChange) {
+        window.globalFn.themeChange = {};
+    }
+
+    // �����Ҽ��˵�������仯��������
+    window.globalFn.themeChange.rightMenuMode = function (mode) {
+        if (rm.menuItems.mode) {
+            rm.mode(mode === 'dark');
+        }
+    };
+}
