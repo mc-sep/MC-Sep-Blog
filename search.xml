@@ -1,60 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>搞机日记——华为儿童手表3X破解</title>
-    <url>//post/3rhi.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有一段时间没有更新了。学业问题，好久才能更新一次。对不起大家！</p>
-<p>回到正题。今天，我偶然发现了家里的老古董：</p>
-<p><img src="/img/article/22/e0d65653cc2d336579e7c6052fb30e82e472043c.jpg"><br>是的，一个特别古老的手表，而今天，我尝试破解这个手表。</p>
-<h2 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h2><h3 id="破解目标"><a href="#破解目标" class="headerlink" title="破解目标"></a>破解目标</h3><ol>
-<li>打开并成功进入adb调试</li>
-<li>自由安装软件</li>
-<li>解除BL锁，Root</li>
-</ol>
-<h3 id="材料"><a href="#材料" class="headerlink" title="材料"></a>材料</h3><ul>
-<li>一个脑子</li>
-<li>一个华为儿童手表3X</li>
-<li>安卓手表ADB实用工具箱（或者WearOS）</li>
-<li>一根数据线（注意，是带数据传输的，而不是充电线）</li>
-<li>手机上安装MT管理器</li>
-</ul>
-<h3 id="开始肘击"><a href="#开始肘击" class="headerlink" title="开始肘击"></a>开始肘击</h3><ol>
-<li><p>老样子看看手表的CPU品牌和安卓版本<br><img src="/img/article/22/c8c709101568fbb18fc1b6507a0c474bb638db2a.png"></p>
-</li>
-<li><p>这个CPU已经很老了，3700多岁了（口误）<br><img src="/img/article/22/2f20afc69f18aefdd2a6470d5f462a39d27f627d.png"></p>
-</li>
-<li><p>打开设置，连续点击版本号，进入开发者模式。<br><img src="/img/article/22/dc7247b0f79f2250fbaa89e5defb2fe94819d000.png"><br><img src="/img/article/22/1a26572af98c74410cbbeea674cfbebb66aaf744.png"></p>
-</li>
-<li><p>打开安卓手表ADB实用工具箱（后简称ADB工具），在手表上选择PTP模式，允许USB调试，出现这个页面就成功了<br><img src="/img/article/22/c5eb33f39a7a53de1a81ca836eee17a3a27a0bca.png"><br>至此，我们的目标1：打开并成功进入adb调试已经顺利完成了，开始我们的下一个目标。</p>
-</li>
-<li><p>打开ADB工具，修改一下DPI，以后方便操作。（我建议改成200)<br><img src="/img/article/22/cf26b92781fe045bb6ad51d05f34873f53bd8aa4.png"></p>
-</li>
-<li><p>打开你的浏览器，打开<a href="https://vincent8623.lanzn.com/b00zti91i">这个链接</a>来下载应用（这里下载过了，不在演示）</p>
-</li>
-<li><p>我们选择安装自定义APK，选择文件后安装。<br><img src="/img/article/22/823ecc64e158b343fe91255430cc0fe18a23f1ea.png"><br><img src="/img/article/22/796ba22c00276c9b31e45be1945879da6d6371ae.png"></p>
-</li>
-<li><p>Oh man!失败了！！！<br><img src="/img/article/22/a0c3070482e571c6fb7e0597762c01028aff7ce7.png"></p>
-</li>
-<li><p>为什么会失败呢？我让你们装的MT管理器不就来了？来看看安装包！<br><img src="/img/article/22/3b6de4cdd8081c3927448ccb097df7518320924d.jpg"><br>这就是问题。HW的工程师对V1前面的安装包做了限制。我们只需要改成V2,V3,V2+V3任选一个就可以了。</p>
-</li>
-<li><p>重新安装<br><img src="/img/article/22/1ab309e5ead29ed0a14e6e32ab0ecb5347a1e88c.png"></p>
-</li>
-<li><p>打开手表确认<br><img src="/img/article/22/1c6df661307420c79f04b47985b2f223e9f18241.png"><br>APP测试<br><img src="/img/article/22/6152a7172d125273d6aae1ff71bec41da50d87b3.png"><br><img src="/img/article/22/31dedf860decfb3d7d88c918dcc52c3e068e9e5a.png"><br>至此，我们的目标2：安装自定义软件已经顺利:check_mark:了，开始我们的下一个目标。</p>
-</li>
-<li><p>adb重启到fastboot模式</p>
-</li>
-</ol>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">adb reboot fastboot</span><br></pre></td></tr></table></figure>
-<p>很可惜，他失败了。BL锁无法解锁，我还要再花时间研究。。。</p>
-]]></content>
-      <categories>
-        <category>搞机日记</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>免费小型数据库——Vercel Blob初体验</title>
     <url>//post/239d.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
@@ -159,6 +105,60 @@
       <tags>
         <tag>Vercel</tag>
         <tag>图床</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搞机日记——华为儿童手表3X破解</title>
+    <url>//post/3rhi.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有一段时间没有更新了。学业问题，好久才能更新一次。对不起大家！</p>
+<p>回到正题。今天，我偶然发现了家里的老古董：</p>
+<p><img src="/img/article/22/e0d65653cc2d336579e7c6052fb30e82e472043c.jpg"><br>是的，一个特别古老的手表，而今天，我尝试破解这个手表。</p>
+<h2 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h2><h3 id="破解目标"><a href="#破解目标" class="headerlink" title="破解目标"></a>破解目标</h3><ol>
+<li>打开并成功进入adb调试</li>
+<li>自由安装软件</li>
+<li>解除BL锁，Root</li>
+</ol>
+<h3 id="材料"><a href="#材料" class="headerlink" title="材料"></a>材料</h3><ul>
+<li>一个脑子</li>
+<li>一个华为儿童手表3X</li>
+<li>安卓手表ADB实用工具箱（或者WearOS）</li>
+<li>一根数据线（注意，是带数据传输的，而不是充电线）</li>
+<li>手机上安装MT管理器</li>
+</ul>
+<h3 id="开始肘击"><a href="#开始肘击" class="headerlink" title="开始肘击"></a>开始肘击</h3><ol>
+<li><p>老样子看看手表的CPU品牌和安卓版本<br><img src="/img/article/22/c8c709101568fbb18fc1b6507a0c474bb638db2a.png"></p>
+</li>
+<li><p>这个CPU已经很老了，3700多岁了（口误）<br><img src="/img/article/22/2f20afc69f18aefdd2a6470d5f462a39d27f627d.png"></p>
+</li>
+<li><p>打开设置，连续点击版本号，进入开发者模式。<br><img src="/img/article/22/dc7247b0f79f2250fbaa89e5defb2fe94819d000.png"><br><img src="/img/article/22/1a26572af98c74410cbbeea674cfbebb66aaf744.png"></p>
+</li>
+<li><p>打开安卓手表ADB实用工具箱（后简称ADB工具），在手表上选择PTP模式，允许USB调试，出现这个页面就成功了<br><img src="/img/article/22/c5eb33f39a7a53de1a81ca836eee17a3a27a0bca.png"><br>至此，我们的目标1：打开并成功进入adb调试已经顺利完成了，开始我们的下一个目标。</p>
+</li>
+<li><p>打开ADB工具，修改一下DPI，以后方便操作。（我建议改成200)<br><img src="/img/article/22/cf26b92781fe045bb6ad51d05f34873f53bd8aa4.png"></p>
+</li>
+<li><p>打开你的浏览器，打开<a href="https://vincent8623.lanzn.com/b00zti91i">这个链接</a>来下载应用（这里下载过了，不在演示）</p>
+</li>
+<li><p>我们选择安装自定义APK，选择文件后安装。<br><img src="/img/article/22/823ecc64e158b343fe91255430cc0fe18a23f1ea.png"><br><img src="/img/article/22/796ba22c00276c9b31e45be1945879da6d6371ae.png"></p>
+</li>
+<li><p>Oh man!失败了！！！<br><img src="/img/article/22/a0c3070482e571c6fb7e0597762c01028aff7ce7.png"></p>
+</li>
+<li><p>为什么会失败呢？我让你们装的MT管理器不就来了？来看看安装包！<br><img src="/img/article/22/3b6de4cdd8081c3927448ccb097df7518320924d.jpg"><br>这就是问题。HW的工程师对V1前面的安装包做了限制。我们只需要改成V2,V3,V2+V3任选一个就可以了。</p>
+</li>
+<li><p>重新安装<br><img src="/img/article/22/1ab309e5ead29ed0a14e6e32ab0ecb5347a1e88c.png"></p>
+</li>
+<li><p>打开手表确认<br><img src="/img/article/22/1c6df661307420c79f04b47985b2f223e9f18241.png"><br>APP测试<br><img src="/img/article/22/6152a7172d125273d6aae1ff71bec41da50d87b3.png"><br><img src="/img/article/22/31dedf860decfb3d7d88c918dcc52c3e068e9e5a.png"><br>至此，我们的目标2：安装自定义软件已经顺利:check_mark:了，开始我们的下一个目标。</p>
+</li>
+<li><p>adb重启到fastboot模式</p>
+</li>
+</ol>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">adb reboot fastboot</span><br></pre></td></tr></table></figure>
+<p>很可惜，他失败了。BL锁无法解锁，我还要再花时间研究。。。</p>
+]]></content>
+      <categories>
+        <category>搞机日记</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
       </tags>
   </entry>
   <entry>
@@ -491,90 +491,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
-    <url>//post/5trr.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
-<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
-<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
-</div>
-
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
-<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
-</li>
-<li><p>fork这个仓库：</p>
-</li>
-</ol>
-<div class="repo-card">
-  <a class='name-vwenvqt5c repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>
-  <p class='desc-vwenvqt5c repo-desc'></p>
-  <div class="repo-gist">
-    <i class="fas fa-star"></i>
-    <span class='star-vwenvqt5c'></span>
-    <i class="fas fa-code-branch"></i>
-    <span class='fork-vwenvqt5c'></span>
-  </div>
-  <img class='lang-vwenvqt5c repo-language no-lightbox' />
-  <script>
-    fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')
-      .then(res => res.json())
-      .then(data => {
-        document.querySelector('.name-vwenvqt5c').innerText = data.name;
-        document.querySelector('.desc-vwenvqt5c').innerText = data.description;
-        document.querySelector('.star-vwenvqt5c').innerText = data.stargazers_count;
-        document.querySelector('.fork-vwenvqt5c').innerText = data.forks_count;
-        document.querySelector('.lang-vwenvqt5c').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();
-    });
-  </script>
-  </div>
-
-<ol start="3">
-<li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
-<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
-<ol start="4">
-<li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
-</li>
-<li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p>
-<table>
-<thead>
-<tr>
-<th align="center">BASIC_USER</th>
-<th align="center">后台管理员的用户名</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">BASIC_PASS</td>
-<td align="center">后台的登陆密码</td>
-</tr>
-</tbody></table>
-<p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p>
-</div>
-</li>
-<li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
-<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
-</li>
-<li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
-<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
-</li>
-<li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
-</li>
-<li><p>（可选）自定义域名的绑定：</p>
-<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
-</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>实用教程</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare Pages</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【Hexo】Hexo+Github搭建个人博客</title>
     <url>//post/4nd3.html</url>
     <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间90分钟，请放心食用！</p>
@@ -710,6 +626,90 @@
       </tags>
   </entry>
   <entry>
+    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
+    <url>//post/5trr.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
+<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
+<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
+</div>
+
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
+<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
+</li>
+<li><p>fork这个仓库：</p>
+</li>
+</ol>
+<div class="repo-card">
+  <a class='name-rth2cp53f repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>
+  <p class='desc-rth2cp53f repo-desc'></p>
+  <div class="repo-gist">
+    <i class="fas fa-star"></i>
+    <span class='star-rth2cp53f'></span>
+    <i class="fas fa-code-branch"></i>
+    <span class='fork-rth2cp53f'></span>
+  </div>
+  <img class='lang-rth2cp53f repo-language no-lightbox' />
+  <script>
+    fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')
+      .then(res => res.json())
+      .then(data => {
+        document.querySelector('.name-rth2cp53f').innerText = data.name;
+        document.querySelector('.desc-rth2cp53f').innerText = data.description;
+        document.querySelector('.star-rth2cp53f').innerText = data.stargazers_count;
+        document.querySelector('.fork-rth2cp53f').innerText = data.forks_count;
+        document.querySelector('.lang-rth2cp53f').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();
+    });
+  </script>
+  </div>
+
+<ol start="3">
+<li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
+<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
+<ol start="4">
+<li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
+</li>
+<li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p>
+<table>
+<thead>
+<tr>
+<th align="center">BASIC_USER</th>
+<th align="center">后台管理员的用户名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">BASIC_PASS</td>
+<td align="center">后台的登陆密码</td>
+</tr>
+</tbody></table>
+<p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p>
+</div>
+</li>
+<li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
+<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
+</li>
+<li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
+<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
+</li>
+<li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
+</li>
+<li><p>（可选）自定义域名的绑定：</p>
+<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
+</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare Pages</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Hexo】如何提高静态博客访问速度？Vercel+Cloudflare+CDN让你的网站速度飞起！</title>
     <url>//post/5ytg.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着博客文章数量的增多，我们的博客可能会变得十分缓慢（比如前段时间的我），今天的教程可以让你的博客提速<strong>90%</strong>！</p>
@@ -807,6 +807,26 @@
         <tag>Cloudflare</tag>
         <tag>Hexo</tag>
         <tag>CDN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于博客评论更换的通知</title>
+    <url>//post/73dh.html</url>
+    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
+<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
+
+<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+
+<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+]]></content>
+      <categories>
+        <category>公告</category>
+      </categories>
+      <tags>
+        <tag>Waline</tag>
+        <tag>Twikoo</tag>
       </tags>
   </entry>
   <entry>
@@ -1019,23 +1039,75 @@
       </tags>
   </entry>
   <entry>
-    <title>关于博客评论更换的通知</title>
-    <url>//post/73dh.html</url>
-    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
-<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
+    <title>【HTML】利用localstrange临时存储数据</title>
+    <url>//post/8g66.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通过本地存储（Local Storage），web 应用程序能够在用户浏览器中对数据进行本地的存储。</p>
+<p>在 HTML5 之前，应用程序数据只能存储在 cookie 中，包括每个服务器请求。本地存储则更安全，并且可在不影响网站性能的前提下将大量数据存储于本地。</p>
+<p>与 cookie 不同，存储限制要大得多（至少5MB），并且信息不会被传输到服务器。</p>
+<p>本地存储经由起源地（origin）（经由域和协议）。所有页面，从起源地，能够存储和访问相同的数据。</p>
+<div class="note  danger simple"><p>注意：localstrange里的数据不是永久保存的，它可能会在浏览器自动清理或手动删除后消失。</p>
+</div>
 
-<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><h2 id="Example：登录界面"><a href="#Example：登录界面" class="headerlink" title="Example：登录界面"></a>Example：登录界面</h2><h3 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h3><p>利用<strong>localstrange</strong>做一个登录、注册页面，可以立即注册和登录。</p>
+<h3 id="项目图片"><a href="#项目图片" class="headerlink" title="项目图片"></a>项目图片</h3><p><img src="/img/article/3/d49fb2dab8c35cf50fcb8b7e8f77b0fe21f25a13ecb5a9005632d2044893a975.png"></p>
+<p><img src="/img/article/3/3ed214b0ee29b297605e3108ed5a276f0cf4ba4f5f8ad0aa55df2b80bae4ca62.png"></p>
+<p>如果你有服务器，将数据存储在服务器上是不二之选。但是没有服务器，我们也可以通过一下方法完成此操作。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
+<li><p>确定临时变量：登录、注册的账号密码，状态</p>
+</li>
+<li><p>明确如何调用。</p>
+</li>
+</ol>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>由于存储变量的单一，重复注册会覆盖之前的数据。</p>
+</div>
 
-<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>登录：</p>
+<ol>
+<li>HTML样式</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>定义</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>调用</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注册：</p>
+<ol>
+<li>HTML样式：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>2.定义+调用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="完整代码-–"><a href="#完整代码-–" class="headerlink" title="完整代码 –&gt;"></a>完整代码 –&gt;</h3><ul>
+<li>登录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注册</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Exercise-图片中转站"><a href="#Exercise-图片中转站" class="headerlink" title="Exercise: 图片中转站"></a>Exercise: 图片中转站</h2><h3 id="项目图片-–"><a href="#项目图片-–" class="headerlink" title="项目图片 –&gt;"></a>项目图片 –&gt;</h3><p><img src="/img/article/3/fc4caee593e7510f5e9b7923700b567a9caa39c4251ddfb820eb6235a24d6b50.png"></p>
+<p>源代码请见<code>评论区</code>。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>localstrange可以临时存放数据，但不建议长久存放。</p>
+<p>版权所有©Minecraft-Sep。</p>
 ]]></content>
       <categories>
-        <category>公告</category>
+        <category>HTML</category>
       </categories>
       <tags>
-        <tag>Waline</tag>
-        <tag>Twikoo</tag>
+        <tag>Javascript</tag>
+        <tag>HTML</tag>
       </tags>
   </entry>
   <entry>
@@ -1382,45 +1454,6 @@
       </tags>
   </entry>
   <entry>
-    <title>博客一周年记</title>
-    <url>//post/te2r.html</url>
-    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
-<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
-<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
-<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
-<p>  我使用了Github Pages，域名仍是有效的：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
-<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
-<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
-<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
-<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
-<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
-<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
-<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
-<p>  直到2024年6月，我发现了一个新主题：<strong>Solitude</strong></p>
-<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
-<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
-<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
-<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
-<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
-<p>  版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>周年记</category>
-      </categories>
-      <tags>
-        <tag>周年记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>如何让你的博客更丰富？hexo常见插件推荐</title>
     <url>//post/ugr2.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
@@ -1570,75 +1603,42 @@
       </tags>
   </entry>
   <entry>
-    <title>【HTML】利用localstrange临时存储数据</title>
-    <url>//post/8g66.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通过本地存储（Local Storage），web 应用程序能够在用户浏览器中对数据进行本地的存储。</p>
-<p>在 HTML5 之前，应用程序数据只能存储在 cookie 中，包括每个服务器请求。本地存储则更安全，并且可在不影响网站性能的前提下将大量数据存储于本地。</p>
-<p>与 cookie 不同，存储限制要大得多（至少5MB），并且信息不会被传输到服务器。</p>
-<p>本地存储经由起源地（origin）（经由域和协议）。所有页面，从起源地，能够存储和访问相同的数据。</p>
-<div class="note  danger simple"><p>注意：localstrange里的数据不是永久保存的，它可能会在浏览器自动清理或手动删除后消失。</p>
-</div>
+    <title>博客一周年记</title>
+    <url>//post/te2r.html</url>
+    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
+<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
+<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
+<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
+<p>  我使用了Github Pages，域名仍是有效的：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
 
-<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><h2 id="Example：登录界面"><a href="#Example：登录界面" class="headerlink" title="Example：登录界面"></a>Example：登录界面</h2><h3 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h3><p>利用<strong>localstrange</strong>做一个登录、注册页面，可以立即注册和登录。</p>
-<h3 id="项目图片"><a href="#项目图片" class="headerlink" title="项目图片"></a>项目图片</h3><p><img src="/img/article/3/d49fb2dab8c35cf50fcb8b7e8f77b0fe21f25a13ecb5a9005632d2044893a975.png"></p>
-<p><img src="/img/article/3/3ed214b0ee29b297605e3108ed5a276f0cf4ba4f5f8ad0aa55df2b80bae4ca62.png"></p>
-<p>如果你有服务器，将数据存储在服务器上是不二之选。但是没有服务器，我们也可以通过一下方法完成此操作。</p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
-<li><p>确定临时变量：登录、注册的账号密码，状态</p>
-</li>
-<li><p>明确如何调用。</p>
-</li>
-</ol>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>由于存储变量的单一，重复注册会覆盖之前的数据。</p>
-</div>
+<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
+<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
+<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
+<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
 
+<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
+<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
+<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
+<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
+<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
+<p>  直到2024年6月，我发现了一个新主题：<strong>Solitude</strong></p>
+<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
+<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
 
-<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>登录：</p>
-<ol>
-<li>HTML样式</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>定义</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>调用</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>注册：</p>
-<ol>
-<li>HTML样式：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<p>2.定义+调用</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="完整代码-–"><a href="#完整代码-–" class="headerlink" title="完整代码 –&gt;"></a>完整代码 –&gt;</h3><ul>
-<li>登录</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注册</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="Exercise-图片中转站"><a href="#Exercise-图片中转站" class="headerlink" title="Exercise: 图片中转站"></a>Exercise: 图片中转站</h2><h3 id="项目图片-–"><a href="#项目图片-–" class="headerlink" title="项目图片 –&gt;"></a>项目图片 –&gt;</h3><p><img src="/img/article/3/fc4caee593e7510f5e9b7923700b567a9caa39c4251ddfb820eb6235a24d6b50.png"></p>
-<p>源代码请见<code>评论区</code>。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>localstrange可以临时存放数据，但不建议长久存放。</p>
-<p>版权所有©Minecraft-Sep。</p>
+<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
+<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
+<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
+<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
+<p>  版权所有©MC-Sep 2024.</p>
 ]]></content>
       <categories>
-        <category>HTML</category>
+        <category>周年记</category>
       </categories>
       <tags>
-        <tag>Javascript</tag>
-        <tag>HTML</tag>
+        <tag>周年记</tag>
       </tags>
   </entry>
 </search>
