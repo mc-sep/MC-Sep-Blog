@@ -1,7 +1,7 @@
 class UptimeStatus {
     constructor() {
         this.isInitialized = false;
-        this.apiKey = 'u3220585-67dd9bde3e4c16d370b7a8e1';//���api��Կ
+        this.apiKey = 'ur3220585-91688fe5868046d629e37879';//���api��Կ
         this.apiUrl = 'https://api.uptimerobot.com/v2/getMonitors';
         this.config = {
             statusText: {

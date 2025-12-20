@@ -83,7 +83,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/music/index.html</loc>
+    <loc>http://blog.mc-sep.top/message/index.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -92,7 +92,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/message/index.html</loc>
+    <loc>http://blog.mc-sep.top/music/index.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -119,7 +119,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/ugr2.html</loc>
+    <loc>http://blog.mc-sep.top/post/te2r.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -128,7 +128,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/te2r.html</loc>
+    <loc>http://blog.mc-sep.top/post/ugr2.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -182,16 +182,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/4nd3.html</loc>
-    
-    <lastmod>2025-05-31</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.mc-sep.top/post/45vy.html</loc>
+    <loc>http://blog.mc-sep.top/post/43vc.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -209,7 +200,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/5trr.html</loc>
+    <loc>http://blog.mc-sep.top/post/45vy.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -218,7 +209,16 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/43vc.html</loc>
+    <loc>http://blog.mc-sep.top/post/4nd3.html</loc>
+    
+    <lastmod>2025-05-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.mc-sep.top/post/5trr.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -236,7 +236,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/76gl.html</loc>
+    <loc>http://blog.mc-sep.top/post/73dh.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -245,7 +245,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/7ghd.html</loc>
+    <loc>http://blog.mc-sep.top/post/76gl.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -263,7 +263,7 @@
   </url>
   
   <url>
-    <loc>http://blog.mc-sep.top/post/73dh.html</loc>
+    <loc>http://blog.mc-sep.top/post/7ghd.html</loc>
     
     <lastmod>2025-05-31</lastmod>
     
@@ -274,7 +274,7 @@
 
   <url>
     <loc>http://blog.mc-sep.top/</loc>
-    <lastmod>2025-12-14</lastmod>
+    <lastmod>2025-12-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
