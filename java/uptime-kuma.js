@@ -2,9 +2,9 @@
 class ServiceStatus {
     constructor() {
         this.isInitialized = false;
-        this.apiUrl = 'https://uptime.mc-sep.top/';
+        this.apiUrl = 'https://uptime.mc-sep.top/api/status-page/heartbeat/view';
         // 在这里直接配置你的 Uptime Kuma 状态页面URL
-        this.statusPageUrl = 'https://uptime.mc-sep.top/status/view';
+        this.statusPageUrl = 'https://uptime.mc-sep.top/api/status-page/heartbeat/view';
         this.config = {
             statusText: {
                 normal: '服务正常',

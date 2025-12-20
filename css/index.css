@@ -1,4 +1,35 @@
 @charset "UTF-8";
+.repo-card {
+  display: flex;
+  flex-direction: column;
+  border: var(--style-border);
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  transition: 0.3s;
+  position: relative;
+  box-shadow: var(--efu-shadow-border);
+}
+.repo-card .repo-title {
+  font-size: 1.25rem;
+}
+.repo-card .repo-title:hover {
+  color: var(--efu-lighttext) !important;
+}
+.repo-card .repo-desc {
+  margin: 0.5rem 0 !important;
+}
+.repo-card .repo-language {
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+}
+.repo-card .repo-gist {
+  margin-right: 0.1rem;
+}
+.repo-card .repo-gist span {
+  margin-right: 0.5rem;
+}
 .red {
   color: var(--efu-red);
 }
