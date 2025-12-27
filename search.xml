@@ -1,110 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>免费小型数据库——Vercel Blob初体验</title>
-    <url>//post/239d.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
-<p>他的配置还不错的：</p>
-<table>
-<thead>
-<tr>
-<th align="center">计划</th>
-<th align="center">数据库大小</th>
-<th align="center">读</th>
-<th align="center">写</th>
-<th align="center">请求数</th>
-<th align="center">请求时长</th>
-<th align="center">是否要Projects</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Hobby</td>
-<td align="center">250MB&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">100 Millions&#x2F;Month</td>
-<td align="center">1 hour&#x2F;Month</td>
-<td align="center">✅</td>
-</tr>
-<tr>
-<td align="center">Pro</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">✅</td>
-</tr>
-<tr>
-<td align="center">Team</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">未知</td>
-<td align="center">✅</td>
-</tr>
-</tbody></table>
-<p>今天就teach你怎么搞！</p>
+    <title>利用Cloudflare Workers搭建镜像网站</title>
+    <url>//post/437r.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
+<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
 <h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li><p>准备一个Vercel账号，可以直接用Github登录</p>
-</li>
-<li><p>创建存储库（点击快速创建）：<a href="https://vercel.com/new/mc-sep-vercel-team/clone?demo-description=Simple%20Next.js%20template%20that%20uses%20Vercel%20Blob%20for%20image%20uploads&demo-image=//images.ctfassets.net/e5382hct74si/W7szxXAHpF3eZ4RFT33Cb/4d8a64904b67980e449b487089dd7b2b/opengraph-image.png&demo-title=Vercel%20Blob%20Next.js%20Starter&demo-url=https://blob-starter.vercel.app/&project-name=blob-starter&repository-name=blob-starter&repository-url=https://github.com/vercel/examples/tree/main/storage/blob-starter&stores=%5B%7B%22type%22:%22blob%22%7D%5D">Create</a></p>
-</li>
-<li><p>在接下来的页面中，名字自己填，然后 Add 一个 Blob Store，确定即可</p>
-</li>
+<li>准备你的Cloudflare账号</li>
+<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
 </ol>
-<p><img src="/img/article/13/db6a8c47c47a8e6a1a8612261ed977e7c6081bf45a699d8b675c2e2a7837a32c.png" alt="add vercel blob storage"></p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>注意，每个用户只允许创建一个Vercel Blob Storage!</p>
-</div>
-
-<ol start="4">
-<li><p>直到满屏烟花，点击 <strong>Continue to Dashboard</strong>。</p>
-</li>
-<li><p>点击 <strong>Settings</strong> -&gt; <strong>Environment Variables</strong>，最下面找到名为 <code>BLOB_READ_WRITE_TOKEN</code> 的环境变量，点击复制，格式是这样的：</p>
-</li>
+<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
+<ol start="3">
+<li>选择<strong>创建Workers</strong></li>
+<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
 </ol>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">vercel_blob_rw_*************************************</span><br></pre></td></tr></table></figure>
-
-<p><img src="/img/article/13/055fc988aad255241065ea6737692f16aee76e52558272107f3633d3a171d77a.png" alt="copy the envirnment variables"></p>
+<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
+<ol start="5">
+<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
+</ol>
+<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
 <ol start="6">
-<li>回到 <strong>Settings</strong> -&gt; <strong>Functions</strong>，将区域改为 <strong>Hong Kong (East) – hkg1</strong> 或 <strong>Tokyo, Japan (Northeast) – hnd1</strong></li>
+<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
 </ol>
-<p><img src="/img/article/13/9c1fdfb473e882beb42399ea02144f61e24fe5dfb0f49cc3e377db3d4007b6c8.png" alt="set functions"></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ol start="7">
-<li>回到 Dashboard 主页面，点击这个进入创建的Github Repo:</li>
+<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
 </ol>
-<p><img src="/img/article/13/aefa06c390feaa84978126eafd0247ebf1e6eaa33fd90308ff7e46241f9b5321.png"></p>
-<ol start="8">
-<li>打开文件 <strong>.env.example</strong>，将复制的内容粘贴在末尾，格式如下：</li>
-</ol>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">BLOB_READ_WRITE_TOKEN=vercel_blob_rw_*******************************</span><br></pre></td></tr></table></figure>
+<p><img src="/img/article/9/66ab1781dad21.png"></p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
 
-<ol start="9">
-<li>打开 [Main Blob Storage] &#x2F; app &#x2F; page.tsx，修改里面的内容为中文（建议保留原站链接），可参照我的配置</li>
-</ol>
-<figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Image</span> <span class="keyword">from</span> <span class="string">&#x27;next/image&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Link</span> <span class="keyword">from</span> <span class="string">&#x27;next/link&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ExpandingArrow</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/expanding-arrow&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Uploader</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/uploader&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Toaster</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/components/toaster&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">Home</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">main</span> <span class="attr">className</span>=<span class="string">&quot;relative flex min-h-screen flex-col items-center justify-center&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Toaster</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/templates/next.js/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">className</span>=<span class="string">&quot;group mt-20 sm:mt-0 rounded-full flex space-x-1 bg-white/30 shadow-sm ring-1 ring-gray-900/5 text-gray-600 text-sm font-medium px-10 py-2 hover:shadow-lg active:shadow-sm transition-all&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>🎉使用Vercel免费搭建🎉<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">ExpandingArrow</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">&quot;pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        MC-Sep 免费网盘</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Uploader</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light text-gray-600 w-full max-w-lg text-center mt-6&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/blob&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Vercel Blob</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span>&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        Web. Built with&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://nextjs.org/docs&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Next.js App Router</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        .</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;sm:absolute sm:bottom-0 w-full px-20 py-10 flex justify-between&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span> <span class="attr">href</span>=<span class="string">&quot;https://vercel.com&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/vercel.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;Vercel Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;100&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://github.com/vercel/examples/tree/main/storage/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;flex items-center space-x-2&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/github.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;GitHub Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light&quot;</span>&gt;</span>Github<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="10">
-<li>保存后，系统会重新部署一次，回到 <strong>Settings</strong> -&gt; <strong>Domains</strong>，添加你的域名（确保你的域名托管商已经添加记录为<code>A</code>:<strong>76.76.21.98</strong> 的记录，Add 即可。</li>
-</ol>
-<p><img src="/img/article/13/902e66cfb6bd99a53d7402fc6d61eb9d57b7995dac607c36b5190af4d7ba6771.png" alt="add domain"></p>
-<ol start="11">
-<li>完工！</li>
-</ol>
-<div class="note  info flat fas fa-circle-info"><p>提示：可以在 <strong>Storage</strong> 页面查看存储库，状态，如大小、读写次数统计等。</p>
-<p><img src="/img/article/13/790eebd56379643ae8fcb33c5994ddb0845a0720020a20fb9891829e4b49e42b.png" alt="View the Storage"></p>
-<p><img src="/img/article/13/e20224e68a0c4f90f5d488748b8ddd1d0f01ea03d275ec8d10f6c05d948b940c.png" alt="See the storage message"></p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
 </div>
 
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel Blob是一个不错的存储系统，对Hobby计划用户很友好。</p>
+<div class="note  danger flat fas fa-circle-xmark"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
+<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
+<p>版权所有©MC-Sep 2024.</p>
 ]]></content>
       <categories>
-        <category>实用教程</category>
+        <category>Cloudflare</category>
       </categories>
       <tags>
-        <tag>Vercel</tag>
-        <tag>图床</tag>
+        <tag>Cloudflare</tag>
       </tags>
   </entry>
   <entry>
@@ -159,53 +99,6 @@
       </categories>
       <tags>
         <tag>Android</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>利用Cloudflare Workers搭建镜像网站</title>
-    <url>//post/437r.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候，一些问题让我们困扰：有人刷网站流量，相加IP黑名单不知道怎么加？很讨厌日本<del>排核污水</del>，想要禁止国外访问？……</p>
-<p>那么，Cloudflare Workers可以轻松解决这个问题！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li>准备你的Cloudflare账号</li>
-<li>来到主页 -&gt; Workers 和 Pages，点击<strong>创建</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0a3f065ee67cb5cc8ea68ca4ccb0246738c375a7568fade1b9088a56853dc942.png"></p>
-<ol start="3">
-<li>选择<strong>创建Workers</strong></li>
-<li>输入名字，其他不用管，点击<strong>部署</strong>：</li>
-</ol>
-<p><img src="/img/article/9/0276d1893166ba101c767dd8894a8e7ff6c545e036597ef45bd6563f96da8fd5.png"></p>
-<ol start="5">
-<li>进入控制台，选择<strong>编辑代码</strong>（右上角）：</li>
-</ol>
-<p><img src="/img/article/9/6918aa668530f92bc3b85f068d97a733b7b636ee09e162eb91f73b44c07684b4.png"></p>
-<ol start="6">
-<li>将里面的代码全部删除，粘贴下列代码并做好修改：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反代目标网站（修改）</span></span><br><span class="line"><span class="keyword">const</span> upstream = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反代目标网站的移动版（没有可不填）</span></span><br><span class="line"><span class="keyword">const</span> upstream_mobile = <span class="string">&#x27;google.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问区域黑名单（按需设置，使用国家简称，如CN,JP,US等）</span></span><br><span class="line"><span class="keyword">const</span> blocked_region = [<span class="string">&#x27;TK&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// IP地址黑名单（按需设置）</span></span><br><span class="line"><span class="keyword">const</span> blocked_ip_address = [<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径替换（你的网站）</span></span><br><span class="line"><span class="keyword">const</span> replace_dict = &#123;</span><br><span class="line"><span class="string">&#x27;$upstream&#x27;</span>: <span class="string">&#x27;$custom_domain&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;//archiveofourown.org&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&#x27;fetch&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">event.<span class="title function_">respondWith</span>(<span class="title function_">fetchAndApply</span>(event.<span class="property">request</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchAndApply</span>(<span class="params">request</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> region = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-ipcountry&#x27;</span>).<span class="title function_">toUpperCase</span>();</span><br><span class="line"><span class="keyword">const</span> ip_address = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;cf-connecting-ip&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user_agent = request.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&#x27;user-agent&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> response = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(request.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">let</span> url_host = url.<span class="property">host</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (url.<span class="property">protocol</span> == <span class="string">&#x27;http:&#x27;</span>) &#123;</span><br><span class="line">    url.<span class="property">protocol</span> = <span class="string">&#x27;https:&#x27;</span></span><br><span class="line">    response = <span class="title class_">Response</span>.<span class="title function_">redirect</span>(url.<span class="property">href</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">await</span> <span class="title function_">device_status</span>(user_agent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> upstream_domain = upstream_mobile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url.<span class="property">host</span> = upstream_domain;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (blocked_region.<span class="title function_">includes</span>(region)) &#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: WorkersProxy is not available in your region yet.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(blocked_ip_address.<span class="title function_">includes</span>(ip_address))&#123;</span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&#x27;Access denied: Your IP address is blocked by WorkersProxy.&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">status</span>: <span class="number">403</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> method = request.<span class="property">method</span>;</span><br><span class="line">    <span class="keyword">let</span> request_headers = request.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_request_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(request_headers);</span><br><span class="line"></span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Host&#x27;</span>, upstream_domain);</span><br><span class="line">    new_request_headers.<span class="title function_">set</span>(<span class="string">&#x27;Referer&#x27;</span>, url.<span class="property">href</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url.<span class="property">href</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: method,</span><br><span class="line">        <span class="attr">headers</span>: new_request_headers</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> original_response_clone = original_response.<span class="title function_">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> original_text = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">let</span> response_headers = original_response.<span class="property">headers</span>;</span><br><span class="line">    <span class="keyword">let</span> new_response_headers = <span class="keyword">new</span> <span class="title class_">Headers</span>(response_headers);</span><br><span class="line">    <span class="keyword">let</span> status = original_response.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;cache-control&#x27;</span> ,<span class="string">&#x27;public, max-age=14400&#x27;</span>)</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">set</span>(<span class="string">&#x27;access-control-allow-credentials&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;content-security-policy-report-only&#x27;</span>);</span><br><span class="line">    new_response_headers.<span class="title function_">delete</span>(<span class="string">&#x27;clear-site-data&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> content_type = new_response_headers.<span class="title function_">get</span>(<span class="string">&#x27;content-type&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (content_type.<span class="title function_">includes</span>(<span class="string">&#x27;text/html&#x27;</span>) &amp;&amp; content_type.<span class="title function_">includes</span>(<span class="string">&#x27;UTF-8&#x27;</span>)) &#123;</span><br><span class="line">        original_text = <span class="keyword">await</span> <span class="title function_">replace_response_text</span>(original_response_clone, upstream_domain, url_host);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        original_text = original_response_clone.<span class="property">body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response = <span class="keyword">new</span> <span class="title class_">Response</span>(original_text, &#123;</span><br><span class="line">        status,</span><br><span class="line">        <span class="attr">headers</span>: new_response_headers</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">replace_response_text</span>(<span class="params">response, upstream_domain, host_name</span>) &#123;</span><br><span class="line"><span class="keyword">let</span> text = <span class="keyword">await</span> response.<span class="title function_">text</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i, j;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> replace_dict) &#123;</span><br><span class="line">    j = replace_dict[i]</span><br><span class="line">    <span class="keyword">if</span> (i == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        i = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        i = host_name</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (j == <span class="string">&#x27;$upstream&#x27;</span>) &#123;</span><br><span class="line">        j = upstream_domain</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="string">&#x27;$custom_domain&#x27;</span>) &#123;</span><br><span class="line">        j = host_name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> re = <span class="keyword">new</span> <span class="title class_">RegExp</span>(i, <span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">    text = text.<span class="title function_">replace</span>(re, j);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">device_status</span> (user_agent_info) &#123;</span><br><span class="line"><span class="keyword">var</span> agents = [<span class="string">&quot;Android&quot;</span>, <span class="string">&quot;iPhone&quot;</span>, <span class="string">&quot;SymbianOS&quot;</span>, <span class="string">&quot;Windows Phone&quot;</span>, <span class="string">&quot;iPad&quot;</span>, <span class="string">&quot;iPod&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v = <span class="number">0</span>; v &lt; agents.<span class="property">length</span>; v++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (user_agent_info.<span class="title function_">indexOf</span>(agents[v]) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>点击右上角部署，等待几分钟即可出现反代网站：</li>
-</ol>
-<p><img src="/img/article/9/66ab1781dad21.png"></p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">https://你填的名字.账户名（邮箱@前的东西）.workers.dev</span><br></pre></td></tr></table></figure>
-
-<div class="note  warning flat fas fa-triangle-exclamation"><p>当你使用限制的IP或国家访问时，会弹出403报错：<code>Access denied: WorkersProxy is not available in your region yet.</code>或<code>Access denied: Your IP address is blocked by WorkersProxy.</code>。</p>
-</div>
-
-<div class="note  danger flat fas fa-circle-xmark"><p>因为<code>workers.dev</code>在中国已被污染无法访问，请自定义域名进行访问：</p>
-<p>设置 -&gt; 触发器 -&gt; 添加自定义域</p>
-</div>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>CloudFlare Workers相当于免费给我们多了IP保护，并且每日有<strong>10w</strong>的请求量，足够一日使用，还自带DDos防护，一举两得。</p>
-<p>版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>Cloudflare</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare</tag>
       </tags>
   </entry>
   <entry>
@@ -264,8 +157,8 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Vercel</tag>
         <tag>Github</tag>
+        <tag>Vercel</tag>
         <tag>Pages</tag>
       </tags>
   </entry>
@@ -491,6 +384,113 @@
       </tags>
   </entry>
   <entry>
+    <title>免费小型数据库——Vercel Blob初体验</title>
+    <url>//post/239d.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天我不是搞了一个图床吗？</p>
+<p>他的配置还不错的：</p>
+<table>
+<thead>
+<tr>
+<th align="center">计划</th>
+<th align="center">数据库大小</th>
+<th align="center">读</th>
+<th align="center">写</th>
+<th align="center">请求数</th>
+<th align="center">请求时长</th>
+<th align="center">是否要Projects</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Hobby</td>
+<td align="center">250MB&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">100 Millions&#x2F;Month</td>
+<td align="center">1 hour&#x2F;Month</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="center">Pro</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="center">Team</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">未知</td>
+<td align="center">✅</td>
+</tr>
+</tbody></table>
+<p>今天就teach你怎么搞！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li><p>准备一个Vercel账号，可以直接用Github登录</p>
+</li>
+<li><p>创建存储库（点击快速创建）：<a href="https://vercel.com/new/mc-sep-vercel-team/clone?demo-description=Simple%20Next.js%20template%20that%20uses%20Vercel%20Blob%20for%20image%20uploads&demo-image=//images.ctfassets.net/e5382hct74si/W7szxXAHpF3eZ4RFT33Cb/4d8a64904b67980e449b487089dd7b2b/opengraph-image.png&demo-title=Vercel%20Blob%20Next.js%20Starter&demo-url=https://blob-starter.vercel.app/&project-name=blob-starter&repository-name=blob-starter&repository-url=https://github.com/vercel/examples/tree/main/storage/blob-starter&stores=%5B%7B%22type%22:%22blob%22%7D%5D">Create</a></p>
+</li>
+<li><p>在接下来的页面中，名字自己填，然后 Add 一个 Blob Store，确定即可</p>
+</li>
+</ol>
+<p><img src="/img/article/13/db6a8c47c47a8e6a1a8612261ed977e7c6081bf45a699d8b675c2e2a7837a32c.png" alt="add vercel blob storage"></p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>注意，每个用户只允许创建一个Vercel Blob Storage!</p>
+</div>
+
+<ol start="4">
+<li><p>直到满屏烟花，点击 <strong>Continue to Dashboard</strong>。</p>
+</li>
+<li><p>点击 <strong>Settings</strong> -&gt; <strong>Environment Variables</strong>，最下面找到名为 <code>BLOB_READ_WRITE_TOKEN</code> 的环境变量，点击复制，格式是这样的：</p>
+</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">vercel_blob_rw_*************************************</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/article/13/055fc988aad255241065ea6737692f16aee76e52558272107f3633d3a171d77a.png" alt="copy the envirnment variables"></p>
+<ol start="6">
+<li>回到 <strong>Settings</strong> -&gt; <strong>Functions</strong>，将区域改为 <strong>Hong Kong (East) – hkg1</strong> 或 <strong>Tokyo, Japan (Northeast) – hnd1</strong></li>
+</ol>
+<p><img src="/img/article/13/9c1fdfb473e882beb42399ea02144f61e24fe5dfb0f49cc3e377db3d4007b6c8.png" alt="set functions"></p>
+<ol start="7">
+<li>回到 Dashboard 主页面，点击这个进入创建的Github Repo:</li>
+</ol>
+<p><img src="/img/article/13/aefa06c390feaa84978126eafd0247ebf1e6eaa33fd90308ff7e46241f9b5321.png"></p>
+<ol start="8">
+<li>打开文件 <strong>.env.example</strong>，将复制的内容粘贴在末尾，格式如下：</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">BLOB_READ_WRITE_TOKEN=vercel_blob_rw_*******************************</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>打开 [Main Blob Storage] &#x2F; app &#x2F; page.tsx，修改里面的内容为中文（建议保留原站链接），可参照我的配置</li>
+</ol>
+<figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Image</span> <span class="keyword">from</span> <span class="string">&#x27;next/image&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Link</span> <span class="keyword">from</span> <span class="string">&#x27;next/link&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ExpandingArrow</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/expanding-arrow&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Uploader</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/uploader&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Toaster</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/components/toaster&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">Home</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">main</span> <span class="attr">className</span>=<span class="string">&quot;relative flex min-h-screen flex-col items-center justify-center&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Toaster</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/templates/next.js/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">className</span>=<span class="string">&quot;group mt-20 sm:mt-0 rounded-full flex space-x-1 bg-white/30 shadow-sm ring-1 ring-gray-900/5 text-gray-600 text-sm font-medium px-10 py-2 hover:shadow-lg active:shadow-sm transition-all&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>🎉使用Vercel免费搭建🎉<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">ExpandingArrow</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">&quot;pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        MC-Sep 免费网盘</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Uploader</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light text-gray-600 w-full max-w-lg text-center mt-6&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://vercel.com/blob&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Vercel Blob</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span>&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        Web. Built with&#123;&#x27; &#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://nextjs.org/docs&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;font-medium underline underline-offset-4 hover:text-black transition-colors&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          Next.js App Router</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        .</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;sm:absolute sm:bottom-0 w-full px-20 py-10 flex justify-between&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span> <span class="attr">href</span>=<span class="string">&quot;https://vercel.com&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/vercel.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;Vercel Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;100&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">href</span>=<span class="string">&quot;https://github.com/vercel/examples/tree/main/storage/blob-starter&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">className</span>=<span class="string">&quot;flex items-center space-x-2&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        &gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">Image</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">src</span>=<span class="string">&quot;/github.svg&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">alt</span>=<span class="string">&quot;GitHub Logo&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">width</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">height</span>=<span class="string">&#123;24&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">priority</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          /&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;font-light&quot;</span>&gt;</span>Github<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>保存后，系统会重新部署一次，回到 <strong>Settings</strong> -&gt; <strong>Domains</strong>，添加你的域名（确保你的域名托管商已经添加记录为<code>A</code>:<strong>76.76.21.98</strong> 的记录，Add 即可。</li>
+</ol>
+<p><img src="/img/article/13/902e66cfb6bd99a53d7402fc6d61eb9d57b7995dac607c36b5190af4d7ba6771.png" alt="add domain"></p>
+<ol start="11">
+<li>完工！</li>
+</ol>
+<div class="note  info flat fas fa-circle-info"><p>提示：可以在 <strong>Storage</strong> 页面查看存储库，状态，如大小、读写次数统计等。</p>
+<p><img src="/img/article/13/790eebd56379643ae8fcb33c5994ddb0845a0720020a20fb9891829e4b49e42b.png" alt="View the Storage"></p>
+<p><img src="/img/article/13/e20224e68a0c4f90f5d488748b8ddd1d0f01ea03d275ec8d10f6c05d948b940c.png" alt="See the storage message"></p>
+</div>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Vercel Blob是一个不错的存储系统，对Hobby计划用户很友好。</p>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Vercel</tag>
+        <tag>图床</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Hexo】Hexo+Github搭建个人博客</title>
     <url>//post/4nd3.html</url>
     <content><![CDATA[<div class="note  info flat fas fa-circle-info"><p>预计完成时间90分钟，请放心食用！</p>
@@ -626,6 +626,142 @@
       </tags>
   </entry>
   <entry>
+    <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
+    <url>//post/76gl.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
+<p><img src="/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
+<p>由于影响不是很大，为了他人隐私（也不能不给他机会改正吧），就不“公开处刑”了。</p>
+<p>那么，什么是DDos？它会对博客造成什么威胁？今天我就讲讲DDos攻击原理与防护方法。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>DDoS全称Distributed Denial of Service，意思为“分布式拒绝服务”，即利用大量合法的分布式服务器对目标发送请求，从而导致正常合法用户无法获得服务。</p>
+<p>就比如，一个健身房生意十分火爆，那些“壮汉”看不下去了，就召集n个人进到他店，但是就是不健身，又堵住健身器材。这个商家看似很忙很火爆，其实啥也不是，同时，真正想要健身的顾客也没得到接待，因为店里挤得进不去。</p>
+<p>现在的DDoS让服务不仅可以直接阻断，还能够通过影响服务的客户体验实现攻击。他又这些特点：</p>
+<ol>
+<li><strong>造成“供不应求”现象</strong>。通过控制大量攻击主机同时连接网站端口，制造大流量无用数据，造成通往被攻击主机的网络拥塞，使被攻击主机无法正常和外界通信。</li>
+<li><strong>傀儡攻击</strong>。傀儡就是可以被黑客操控的机器，经常被用为DDos攻击，但是傀儡数量十分多，使后端无法准确辨识。</li>
+<li><strong>网络层攻击</strong>。通过发送伪造源IP的TCP数据包发送SYN或ACK包、发送包含错误设置的地址值等攻击方式，耗尽服务器资源，导致服务器拒绝访问。</li>
+<li><strong>CC攻击</strong>。黑客借助代理服务器生成指向受害主机的合法网页请求，实现DDoS和伪装就叫CC（全名Challenge Collapsar）。傀儡CC攻击是黑客使用CC攻击软件，控制大量傀儡发动攻击，模拟正常用户访问网站的请求，伪造成合法数据包。</li>
+</ol>
+<p>DDos攻击原理如下：</p>
+<p><img src="/img/article/16/1.png" alt="原理"></p>
+<h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
+<p><img src="/img/article/16/2.png" alt="1"></p>
+<p>Cloudflare里可以设置。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
+<p>版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare</tag>
+        <tag>DDos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于博客评论更换的通知</title>
+    <url>//post/73dh.html</url>
+    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
+<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
+
+<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
+
+<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
+]]></content>
+      <categories>
+        <category>公告</category>
+      </categories>
+      <tags>
+        <tag>Waline</tag>
+        <tag>Twikoo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
+    <url>//post/5trr.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
+<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
+<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
+</div>
+
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
+<li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
+<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
+</li>
+<li><p>fork这个仓库：</p>
+</li>
+</ol>
+<div class="repo-card">
+  <a class='name-7nve7oa6t repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>
+  <p class='desc-7nve7oa6t repo-desc'></p>
+  <div class="repo-gist">
+    <i class="fas fa-star"></i>
+    <span class='star-7nve7oa6t'></span>
+    <i class="fas fa-code-branch"></i>
+    <span class='fork-7nve7oa6t'></span>
+  </div>
+  <img class='lang-7nve7oa6t repo-language no-lightbox' />
+  <script>
+    fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')
+      .then(res => res.json())
+      .then(data => {
+        document.querySelector('.name-7nve7oa6t').innerText = data.name;
+        document.querySelector('.desc-7nve7oa6t').innerText = data.description;
+        document.querySelector('.star-7nve7oa6t').innerText = data.stargazers_count;
+        document.querySelector('.fork-7nve7oa6t').innerText = data.forks_count;
+        document.querySelector('.lang-7nve7oa6t').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();
+    });
+  </script>
+  </div>
+
+<ol start="3">
+<li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
+<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
+<ol start="4">
+<li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
+</li>
+<li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p>
+<table>
+<thead>
+<tr>
+<th align="center">BASIC_USER</th>
+<th align="center">后台管理员的用户名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">BASIC_PASS</td>
+<td align="center">后台的登陆密码</td>
+</tr>
+</tbody></table>
+<p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p>
+</div>
+</li>
+<li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
+<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
+</li>
+<li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
+<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
+</li>
+<li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
+</li>
+<li><p>（可选）自定义域名的绑定：</p>
+<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
+</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>实用教程</category>
+      </categories>
+      <tags>
+        <tag>Cloudflare Pages</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Hexo】如何提高静态博客访问速度？Vercel+Cloudflare+CDN让你的网站速度飞起！</title>
     <url>//post/5ytg.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着博客文章数量的增多，我们的博客可能会变得十分缓慢（比如前段时间的我），今天的教程可以让你的博客提速<strong>90%</strong>！</p>
@@ -688,7 +824,7 @@
 <li>CF+Telegraph（维护中）</li>
 <li>Vercel+Bulb</li>
 </ul>
-<div class="recent-post-item" onclick="pjax.loadUrl('//post/239d.html')"><div class="post_cover"><a href="//post/239d.html" class="fancybox" title="免费小型数据库——Vercel Blob初体验"><img class="post_bg" src="/img/article/13/th.webp" alt="免费小型数据库——Vercel Blob初体验"></a></div><div class="recent-post-info"><div class="recent-post-info-top"><div class="recent-post-info-top-tips"><span class="article-meta sticky-warp"><span class="original">实用教程</span></span></div><a class="article-title fancybox" href="//post/239d.html" title="免费小型数据库——Vercel Blob初体验">免费小型数据库——Vercel Blob初体验</a></div><div class="content"></div><div class="article-meta-wrap"><span class="article-meta tags"><a class="article-meta__tags fancybox" href="tags/Vercel/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>Vercel</span></a><a class="article-meta__tags fancybox" href="tags/图床/" onclick="event.stopPropagation();"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>图床</span></a></span><span class="post-meta-date"><time datetime="Mon Sep 16 2024 20:18:00 GMT+0800" style="display: inline;"></time></span></div></div></div>
+
 
 <p>其次，图片过大可以使用<a href="https://tinify.cn/">TinyPNG – 智能压缩您的WebP、JPEG和PNG图片 (tinify.cn)</a>或者<a href="https://tinypng.com/">TinyPNG – Compress WebP, PNG and JPEG images intelligently</a>压缩，是无损压缩，也可以转换为png,jpeg和webp格式。</p>
 <p>或者使用<a href="https://cdn.jsdelivr.net/">Jsdelivr (jsdelivr.net)</a>加速访问托管在github 的图片：</p>
@@ -719,184 +855,150 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Vercel</tag>
         <tag>Cloudflare</tag>
+        <tag>Vercel</tag>
         <tag>Hexo</tag>
         <tag>CDN</tag>
       </tags>
   </entry>
   <entry>
-    <title>关于博客评论更换的通知</title>
-    <url>//post/73dh.html</url>
-    <content><![CDATA[<h1 id="关于博客评论更换的通知"><a href="#关于博客评论更换的通知" class="headerlink" title="关于博客评论更换的通知"></a>关于博客评论更换的通知</h1><p>亲爱的访问者们：</p>
-<p>  你们好！<br>  2024年9月2日下午，Deta Space发出声明，Deta Space将于2024年10月17日的日落时分关闭，下面是具体的信息：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Dear Deta Community,</span><br><span class="line"></span><br><span class="line">After an incredible run, we&#x27;ve made the difficult decision to shut down Deta Space. You can continue to login until sunset on October 17, 2024, at which point we will start deleting all Horizons, apps (hosted or installed) and data in Collections.</span><br><span class="line"></span><br><span class="line">We&#x27;ve built tools for exporting your data (and code for developers), with tutorials available in the docs.</span><br><span class="line"></span><br><span class="line">We wanted to thank you for joining the journey so far. Everything we&#x27;ve done wouldn&#x27;t have been possible without our community, mods, investors, and friends. We hope you&#x27;ll stick around for what&#x27;s next.</span><br><span class="line"></span><br><span class="line">What&#x27;s next for Deta?</span><br><span class="line">The team is working on what we think is our most exciting product yet: Deta Surf. We can&#x27;t wait to onboard people in the very near future. If you were a fan of Deta&#x27;s past products, we&#x27;d love if you popped by.</span><br><span class="line"></span><br><span class="line">Why are we sunsetting Space?</span><br><span class="line">As a team, we want computing on the web to be more personal, powerful and fun. Space (&amp; our earlier products) were built in this vein. But they didn&#x27;t really hit enough for us to continue. We&#x27;re a startup and at some point, we have to move on from good (&amp; bad) products in search of really great ones.</span><br><span class="line"></span><br><span class="line">We&#x27;re still searching, and the team is working on Deta Surf. We&#x27;ve been pretty quiet about it, but it takes learnings from everything we&#x27;ve built. We&#x27;d love if you checked it out.</span><br><span class="line"></span><br><span class="line">What about my account?</span><br><span class="line">You can export all your code and data. You can decide if you want to delete your account entirely or be kept in the loop about Deta Surf .</span><br><span class="line"></span><br><span class="line">How long will the service be available?</span><br><span class="line">The service will be available until October 17, 2024. After that, all Horizons, apps (hosted or installed) and data in Collections will be deleted.</span><br></pre></td></tr></table></figure>
-
-<p>  由于本人的 Waline 评论系统部署在 Deta Space，所以从2024.9.12开始，本人开始通过Netlify和MongoDB搭建Twikoo评论系统。本人同样尝试过使用Vercel、Netlify+Leancloud搭建Waline评论系统，评论系统搭建成功，但是导入数据时发生了错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">500: Class or object doesn&#x27;t exists. [404 GET https://*********.api.lncldglobal.com/1.1/classes/Counter]</span><br></pre></td></tr></table></figure>
-
-<p>  故此博客将从Waline改为Twikoo为主要系统，对于之前的评论数据，我们别无选择。<br>  对此，请所有人于2024.10.17日前转至Twikoo评论系统，10.17日后将更换全新数据库！</p>
-]]></content>
-      <categories>
-        <category>公告</category>
-      </categories>
-      <tags>
-        <tag>Waline</tag>
-        <tag>Twikoo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Cloudflare Pages+Telegraph搭建简易图床</title>
-    <url>//post/5trr.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前那个Vercel Blob图床太LAJI了，这次换一个新的Cloudflare Pages+Telegraph搭建简易图床！</p>
-<p><del>总今天开始，本站的所有照片都会被托管到我的图床！</del></p>
-<p>本站的图床出现了点小问题，所以图床从今天开始维护，开放时间暂定。</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>请不要滥用，所有人都不想失去这免费的东西！ </p>
+    <title>【HTML】利用localstrange临时存储数据</title>
+    <url>//post/8g66.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通过本地存储（Local Storage），web 应用程序能够在用户浏览器中对数据进行本地的存储。</p>
+<p>在 HTML5 之前，应用程序数据只能存储在 cookie 中，包括每个服务器请求。本地存储则更安全，并且可在不影响网站性能的前提下将大量数据存储于本地。</p>
+<p>与 cookie 不同，存储限制要大得多（至少5MB），并且信息不会被传输到服务器。</p>
+<p>本地存储经由起源地（origin）（经由域和协议）。所有页面，从起源地，能够存储和访问相同的数据。</p>
+<div class="note  danger simple"><p>注意：localstrange里的数据不是永久保存的，它可能会在浏览器自动清理或手动删除后消失。</p>
 </div>
 
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><ol>
-<li><p>准备好域名，绑定到Cloudflare（后称cf）上，当然你不绑也行，毕竟.pages.dev域名还没有被ban。。。</p>
-<p><img src="/img/article/19/2e37d166e54b37a35710ea5d0499552a3fe8da92c40c22d1b72ee91f24f56c8f.png"></p>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><h2 id="Example：登录界面"><a href="#Example：登录界面" class="headerlink" title="Example：登录界面"></a>Example：登录界面</h2><h3 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h3><p>利用<strong>localstrange</strong>做一个登录、注册页面，可以立即注册和登录。</p>
+<h3 id="项目图片"><a href="#项目图片" class="headerlink" title="项目图片"></a>项目图片</h3><p><img src="/img/article/3/d49fb2dab8c35cf50fcb8b7e8f77b0fe21f25a13ecb5a9005632d2044893a975.png"></p>
+<p><img src="/img/article/3/3ed214b0ee29b297605e3108ed5a276f0cf4ba4f5f8ad0aa55df2b80bae4ca62.png"></p>
+<p>如果你有服务器，将数据存储在服务器上是不二之选。但是没有服务器，我们也可以通过一下方法完成此操作。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
+<li><p>确定临时变量：登录、注册的账号密码，状态</p>
 </li>
-<li><p>fork这个仓库：</p>
+<li><p>明确如何调用。</p>
 </li>
 </ol>
-<div class="repo-card">
-  <a class='name-q44ertxcw repo-title fancybox' href="https://github.com/cf-pages/Telegraph-Image"></a>
-  <p class='desc-q44ertxcw repo-desc'></p>
-  <div class="repo-gist">
-    <i class="fas fa-star"></i>
-    <span class='star-q44ertxcw'></span>
-    <i class="fas fa-code-branch"></i>
-    <span class='fork-q44ertxcw'></span>
-  </div>
-  <img class='lang-q44ertxcw repo-language no-lightbox' />
-  <script>
-    fetch('https://api.github.com/repos/cf-pages/Telegraph-Image')
-      .then(res => res.json())
-      .then(data => {
-        document.querySelector('.name-q44ertxcw').innerText = data.name;
-        document.querySelector('.desc-q44ertxcw').innerText = data.description;
-        document.querySelector('.star-q44ertxcw').innerText = data.stargazers_count;
-        document.querySelector('.fork-q44ertxcw').innerText = data.forks_count;
-        document.querySelector('.lang-q44ertxcw').src = 'https://skillicons.dev/icons?i=' + data.language.toLowerCase();
-    });
-  </script>
-  </div>
-
-<ol start="3">
-<li><p>进入 CF 的 Workers和 pages页面，点击创建</p>
-<p><img src="/img/article/19/0fe8b05d2463f89cf2f13ed9d9d7a6663a02478d226cf8c7415ea82749fa8cb5.png" alt="创建"></p>
-<ol start="4">
-<li><p>（这里用Pages不是Workers！）选择刚才的仓库，点击部署</p>
-</li>
-<li><p>部署完成后进入设置 -&gt; 变量和机密，添加两个值：</p>
-<table>
-<thead>
-<tr>
-<th align="center">BASIC_USER</th>
-<th align="center">后台管理员的用户名</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">BASIC_PASS</td>
-<td align="center">后台的登陆密码</td>
-</tr>
-</tbody></table>
-<p>后台在 <strong>https:&#x2F;&#x2F;你在cf pages的域名&#x2F;admin</strong> (有点丑。。。)</p>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>当然你也可以不设置（个容易被制裁）</p>
+<div class="note  warning flat fas fa-triangle-exclamation"><p>由于存储变量的单一，重复注册会覆盖之前的数据。</p>
 </div>
-</li>
-<li><p>回到 Workers和Pages，选择 KV ，创建命名空间，名字填 <strong>img_url</strong> （我这里已经搞了）</p>
-<p><img src="/img/article/19/349d5df03916a6fd05ec0003e8cf617dad7b24ac4d8b05691c14f77b6a43a810.png" alt="KV"></p>
-</li>
-<li><p>回到刚才的Pages，进入设置 -&gt; 绑定，添加一个，名字还是<strong>img_url</strong>，选择刚才的KV</p>
-<p><img src="/img/article/19/ec8d78269a423a223a25940d3b6227fd42a8fd1904fed0e3eba78f13a4de858d.png" alt="em"></p>
-</li>
-<li><p>重新部署一下就完成了！可以测试一下，效果还可以awa</p>
-</li>
-<li><p>（可选）自定义域名的绑定：</p>
-<p><img src="/img/article/19/a0cc918384e4fc93dccc3ef3cc6c32c624d51626af5ac3d039b7cb6d5f8ddd8f.png"></p>
-</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>实用教程</category>
-      </categories>
-      <tags>
-        <tag>Cloudflare Pages</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>API构建①——Bing每日一图接口</title>
-    <url>//post/r5fd.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
-<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解bing每日一图链接规律"><a href="#Part1-了解bing每日一图链接规律" class="headerlink" title="Part1. 了解bing每日一图链接规律"></a>Part1. 了解bing每日一图链接规律</h3><p>就拿今天的做例子：<a href="https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg">https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg</a></p>
-<p>获取到的json内容如下所示：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240730&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fullstartdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;202407301600&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;enddate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240731&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;urlbase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyright&quot;</span><span class="punctuation">:</span> <span class="string">&quot;石林，日落点，布莱斯峡谷国家公园，犹他州，美国 (© Tim Fitzharris/Minden Pictures)&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyrightlink&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.bing.com/search?q=%E5%B8%83%E8%8E%B1%E6%96%AF%E5%B3%A1%E8%B0%B7%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD&amp;form=hpcapt&amp;mkt=zh-cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里有“胡图”吗？&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;quiz&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20240730_HoodoosBryce%22&amp;FORM=HPQUIZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wp&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hsh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1cabac064d004edabc8b0d2e375052ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;drk&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;top&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bot&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tooltips&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span> <span class="string">&quot;正在加载...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;previous&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;next&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;此图片不能下载用作壁纸。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walls&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下载今日美图。仅限用作桌面壁纸。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p>我们就可以猜出其中的规律了：</p>
-<p><a href="https://cn.bing.com/">https://cn.bing.com</a> + 上面的”url”，构成了该链接。</p>
-<h3 id="Part2-构建API"><a href="#Part2-构建API" class="headerlink" title="Part2. 构建API"></a>Part2. 构建API</h3><p>我们使用<strong>GET</strong>方法构建我们的API，名称为<code>bing.php</code>，也可以从 <a href="https://mc-sep.js.cool/api/bing.php">https://mc-sep.js.cool/api/bing.php</a> 下载！</p>
+
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>登录：</p>
 <ol>
-<li>判断是否是随机调用（我们的API可以指定日期）</li>
+<li>HTML样式</li>
 </ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 
 <ol start="2">
-<li>如果不是，则指定日期</li>
+<li>定义</li>
 </ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
 <ol start="3">
-<li>获取Bing Json详细信息，转换为PHP数组，再提取基础URL</li>
+<li>调用</li>
 </ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li>判断是否制定了图片大小，否则默认1920 * 1080</li>
+<p>注册：</p>
+<ol>
+<li>HTML样式：</li>
 </ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 
-<ol start="5">
-<li>建立完整URL</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>2.定义+调用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-<ol start="6">
-<li>获取其他信息并判断是否需要</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>不是则直接返回</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="8">
-<li>完整代码</li>
-</ol>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgsizebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>可以去参考一下API接口：</p>
-<ul>
-<li><a href="https://api.kdcc.cn/">https://api.kdcc.cn</a></li>
-<li><a href="https://api.isoyu.com/bing_images.php">https://api.isoyu.com/bing_images.php</a></li>
-<li><a href="http://api.muvip.cn//api/bing/index.php?rand=false&day=0&size=1920x1080&info=false">http://api.muvip.cn//api/bing/index.php?rand=false&amp;day=0&amp;size=1920x1080&amp;info=false</a></li>
-<li><a href="https://source.unsplash.com/random">https://source.unsplash.com/random</a></li>
-<li><a href="https://api.dujin.org/bing/1366.php">https://api.dujin.org/bing/1366.php</a></li>
-<li><a href="https://picsum.photos/">https://picsum.photos/</a></li>
+<h3 id="完整代码-–"><a href="#完整代码-–" class="headerlink" title="完整代码 –&gt;"></a>完整代码 –&gt;</h3><ul>
+<li>登录</li>
 </ul>
-<p>版权所有©MC-Sep 2024.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注册</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Exercise-图片中转站"><a href="#Exercise-图片中转站" class="headerlink" title="Exercise: 图片中转站"></a>Exercise: 图片中转站</h2><h3 id="项目图片-–"><a href="#项目图片-–" class="headerlink" title="项目图片 –&gt;"></a>项目图片 –&gt;</h3><p><img src="/img/article/3/fc4caee593e7510f5e9b7923700b567a9caa39c4251ddfb820eb6235a24d6b50.png"></p>
+<p>源代码请见<code>评论区</code>。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>localstrange可以临时存放数据，但不建议长久存放。</p>
+<p>版权所有©Minecraft-Sep。</p>
 ]]></content>
       <categories>
-        <category>PHP</category>
+        <category>HTML</category>
       </categories>
       <tags>
-        <tag>API</tag>
-        <tag>PHP</tag>
+        <tag>Javascript</tag>
+        <tag>HTML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>提升效率必备Windows神器PowerToys</title>
+    <url>//post/qrea.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>终于复活了！！！</p>
+<p>最近blog经常发癫，我还要考试，就停更了好久。</p>
+<p>今天我来讲一讲一个Windows的实用小工具：<strong>PowerToys</strong></p>
+<h1 id="安装、使用"><a href="#安装、使用" class="headerlink" title="安装、使用"></a>安装、使用</h1><p>安装的话直接去Microsoft Store就可以：</p>
+<p><img src="/img/article/21/e684ccc486939315a387bbc53e8c33afda1505da.jpg" alt="Microsoft PowerToys 是一款帮助高级用户优化和简化 Windows 10 和 11 系统体验的实用工具集，以提高生产力。 [App Screenshot] (由 AI 生成标题)|529x499, 100%"></p>
+<p>推荐的功能：</p>
+<ol>
+<li>唤醒：这个功能可以调整你的计算机睡眠状态，如永不睡眠，隔一段时间在睡眠等：</li>
+</ol>
+<p><img src="/img/article/21/b6fa800413a1985483c7b6aa77114eee7c883c70.png" alt="截图显示了一个设置菜单，包含关于保持设备唤醒的选项，包括按时间间隔唤醒、无限期唤醒以及关闭唤醒功能。 {tag:screenshot, menu, settings} (由 AI 生成标题)|538x250"></p>
+<ol start="2">
+<li>命令面板：快捷的公式计算、指令运行：</li>
+</ol>
+<p><img src="/img/article/21/b4ed65ccc4d794617fda21e7bb92a17afc35bb3a.jpg" alt="截图显示了PowerToys的命令面板设置界面，包括启用&#x2F;禁用命令面板、快捷键设置、以及搜索和运行应用等功能。 (由 AI 生成标题)|395x499"></p>
+<ol start="3">
+<li>颜色选择器：如果你对颜色的HEX值特别苦恼，就用这个一件取色！</li>
+</ol>
+<p><img src="/img/article/21/edf0599f28d9039870da3f0f87d062adcdd29281.png" alt="PowerToys 颜色选取器设置界面显示了启用状态、快捷键和激活方式等选项。 (由 AI 生成标题)|629x500"></p>
+<p><img src="/img/article/21/6209e90bb2173d4197d47f74dd66024f073b1144.png" alt="图片显示了十六进制颜色代码f3f3f3，它代表白色。 (由 AI 生成标题)|453x200"></p>
+<ol start="4">
+<li>文本提取器：顾名思义，截图读取文字。</li>
+</ol>
+<p><img src="/img/article/21/7baae8917a20ba5202e594a5b05abc960fe01725.png" alt="这是一张PowerToys文本提取器设置界面的截图，显示了其功能、快捷键和语言设置。 (由 AI 生成标题)|450x500"></p>
+<p>建议使用截图工具而不是 TextExtractor 模块。（文本提取实例）</p>
+<ol start="5">
+<li>始终置顶：激活后会在窗口旁出现蓝色框，代表完全置顶<br><img src="/img/article/21/62ef1a187883f2ce2d813ddcba403aead16c7747.png" alt="这是PowerToys设置界面，显示了“始终置顶”功能的开关和快捷键设置。 (由 AI 生成标题)|690x390"></li>
+</ol>
+<p>其余的自己可以探索，这5个最好用！</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+      </categories>
+      <tags>
+        <tag>PowerToys</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows实用软件推荐</title>
+    <url>//post/dw23.html</url>
+    <content><![CDATA[<h2 id="1-Everything"><a href="#1-Everything" class="headerlink" title="1. Everything"></a>1. Everything</h2><p>你是否在为系统自带的搜索太慢而烦恼？又或者找不到你保存的文件？没关系，Everything会出手！Everything是一款小巧便携的搜索工具，占用小但是速度明显提升！</p>
+<p>官图：</p>
+<p><img src="https://www.voidtools.com/zh-cn/support/everything/Everything.Search.Window.png"></p>
+<p>下载地址：<a href="https://www.voidtools.com/zh-cn/downloads/">Click</a></p>
+<h2 id="2-Geek"><a href="#2-Geek" class="headerlink" title="2. Geek"></a>2. Geek</h2><p>流氓软件的克星！在Geek里，你可以快速解除软件占用，强力卸载软件，系统软件也可！</p>
+<p>官图：</p>
+<p><img src="https://geekuninstaller.com/assets/images/screen_1.png"></p>
+<p>下载地址：<a href="https://geekuninstaller.com/download">Click</a></p>
+<h2 id="3-SpaceSniffer"><a href="#3-SpaceSniffer" class="headerlink" title="3. SpaceSniffer"></a>3. SpaceSniffer</h2><p>利用这个软件你可以便携的找到电脑里的大文件，找到占用多的源头！</p>
+<p>官图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/c5617f35d7066ade1232bab70368693e.png"></p>
+<p>下载地址：<a href="https://pan.quark.cn/s/ee2104b6863a#/list/share">Click</a></p>
+<p>(这是汉化版的，网上没有别的版本了…)</p>
+<h2 id="4-Bongocat"><a href="#4-Bongocat" class="headerlink" title="4. Bongocat"></a>4. Bongocat</h2><p>一个会在桌面上生成小猫的工具！小猫的动作和你使用鼠标、键盘的动作一样！主播必用！</p>
+<p>官图：</p>
+<p><img src="https://s41.ax1x.com/2025/12/21/pZ3RSFx.png"></p>
+<p>下载地址：<a href="https://bongocat.gjxx.dev/">Click</a></p>
+]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1077,118 +1179,6 @@
       </tags>
   </entry>
   <entry>
-    <title>提升效率必备Windows神器PowerToys</title>
-    <url>//post/qrea.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>终于复活了！！！</p>
-<p>最近blog经常发癫，我还要考试，就停更了好久。</p>
-<p>今天我来讲一讲一个Windows的实用小工具：<strong>PowerToys</strong></p>
-<h1 id="安装、使用"><a href="#安装、使用" class="headerlink" title="安装、使用"></a>安装、使用</h1><p>安装的话直接去Microsoft Store就可以：</p>
-<p><img src="/img/article/21/e684ccc486939315a387bbc53e8c33afda1505da.jpg" alt="Microsoft PowerToys 是一款帮助高级用户优化和简化 Windows 10 和 11 系统体验的实用工具集，以提高生产力。 [App Screenshot] (由 AI 生成标题)|529x499, 100%"></p>
-<p>推荐的功能：</p>
-<ol>
-<li>唤醒：这个功能可以调整你的计算机睡眠状态，如永不睡眠，隔一段时间在睡眠等：</li>
-</ol>
-<p><img src="/img/article/21/b6fa800413a1985483c7b6aa77114eee7c883c70.png" alt="截图显示了一个设置菜单，包含关于保持设备唤醒的选项，包括按时间间隔唤醒、无限期唤醒以及关闭唤醒功能。 {tag:screenshot, menu, settings} (由 AI 生成标题)|538x250"></p>
-<ol start="2">
-<li>命令面板：快捷的公式计算、指令运行：</li>
-</ol>
-<p><img src="/img/article/21/b4ed65ccc4d794617fda21e7bb92a17afc35bb3a.jpg" alt="截图显示了PowerToys的命令面板设置界面，包括启用&#x2F;禁用命令面板、快捷键设置、以及搜索和运行应用等功能。 (由 AI 生成标题)|395x499"></p>
-<ol start="3">
-<li>颜色选择器：如果你对颜色的HEX值特别苦恼，就用这个一件取色！</li>
-</ol>
-<p><img src="/img/article/21/edf0599f28d9039870da3f0f87d062adcdd29281.png" alt="PowerToys 颜色选取器设置界面显示了启用状态、快捷键和激活方式等选项。 (由 AI 生成标题)|629x500"></p>
-<p><img src="/img/article/21/6209e90bb2173d4197d47f74dd66024f073b1144.png" alt="图片显示了十六进制颜色代码f3f3f3，它代表白色。 (由 AI 生成标题)|453x200"></p>
-<ol start="4">
-<li>文本提取器：顾名思义，截图读取文字。</li>
-</ol>
-<p><img src="/img/article/21/7baae8917a20ba5202e594a5b05abc960fe01725.png" alt="这是一张PowerToys文本提取器设置界面的截图，显示了其功能、快捷键和语言设置。 (由 AI 生成标题)|450x500"></p>
-<p>建议使用截图工具而不是 TextExtractor 模块。（文本提取实例）</p>
-<ol start="5">
-<li>始终置顶：激活后会在窗口旁出现蓝色框，代表完全置顶<br><img src="/img/article/21/62ef1a187883f2ce2d813ddcba403aead16c7747.png" alt="这是PowerToys设置界面，显示了“始终置顶”功能的开关和快捷键设置。 (由 AI 生成标题)|690x390"></li>
-</ol>
-<p>其余的自己可以探索，这5个最好用！</p>
-]]></content>
-      <categories>
-        <category>软件</category>
-      </categories>
-      <tags>
-        <tag>PowerToys</tag>
-        <tag>Windows</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【HTML】利用localstrange临时存储数据</title>
-    <url>//post/8g66.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通过本地存储（Local Storage），web 应用程序能够在用户浏览器中对数据进行本地的存储。</p>
-<p>在 HTML5 之前，应用程序数据只能存储在 cookie 中，包括每个服务器请求。本地存储则更安全，并且可在不影响网站性能的前提下将大量数据存储于本地。</p>
-<p>与 cookie 不同，存储限制要大得多（至少5MB），并且信息不会被传输到服务器。</p>
-<p>本地存储经由起源地（origin）（经由域和协议）。所有页面，从起源地，能够存储和访问相同的数据。</p>
-<div class="note  danger simple"><p>注意：localstrange里的数据不是永久保存的，它可能会在浏览器自动清理或手动删除后消失。</p>
-</div>
-
-<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><h2 id="Example：登录界面"><a href="#Example：登录界面" class="headerlink" title="Example：登录界面"></a>Example：登录界面</h2><h3 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h3><p>利用<strong>localstrange</strong>做一个登录、注册页面，可以立即注册和登录。</p>
-<h3 id="项目图片"><a href="#项目图片" class="headerlink" title="项目图片"></a>项目图片</h3><p><img src="/img/article/3/d49fb2dab8c35cf50fcb8b7e8f77b0fe21f25a13ecb5a9005632d2044893a975.png"></p>
-<p><img src="/img/article/3/3ed214b0ee29b297605e3108ed5a276f0cf4ba4f5f8ad0aa55df2b80bae4ca62.png"></p>
-<p>如果你有服务器，将数据存储在服务器上是不二之选。但是没有服务器，我们也可以通过一下方法完成此操作。</p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
-<li><p>确定临时变量：登录、注册的账号密码，状态</p>
-</li>
-<li><p>明确如何调用。</p>
-</li>
-</ol>
-<div class="note  warning flat fas fa-triangle-exclamation"><p>由于存储变量的单一，重复注册会覆盖之前的数据。</p>
-</div>
-
-
-<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>登录：</p>
-<ol>
-<li>HTML样式</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>定义</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>调用</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>注册：</p>
-<ol>
-<li>HTML样式：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<p>2.定义+调用</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="完整代码-–"><a href="#完整代码-–" class="headerlink" title="完整代码 –&gt;"></a>完整代码 –&gt;</h3><ul>
-<li>登录</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Login&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Login&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;loginForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;loginUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;loginUsername&quot; name=&quot;loginUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;loginPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;loginPassword&quot; name=&quot;loginPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;login()&quot;&gt;Login&lt;/button&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;window.location.href = &#x27;reg.html&#x27;;&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function login() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;loginUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;loginPassword&quot;).value;</span><br><span class="line">  var storedUsername = localStorage.getItem(&quot;username&quot;);</span><br><span class="line">  var storedPassword = localStorage.getItem(&quot;password&quot;);</span><br><span class="line">  if (username === storedUsername &amp;&amp; password === storedPassword) &#123;</span><br><span class="line">    alert(&quot;Login successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;https://minecraftsep.github.io/&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Invalid username or password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注册</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">&lt;title&gt;Register&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    font-family: Arial, sans-serif;</span><br><span class="line">    background-color: #f4f4f4;</span><br><span class="line">  &#125;</span><br><span class="line">  .container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    background-color: #fff;</span><br><span class="line">    padding: 20px;</span><br><span class="line">    border-radius: 5px;</span><br><span class="line">    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);</span><br><span class="line">  &#125;</span><br><span class="line">  h2 &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">  &#125;</span><br><span class="line">  label &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">  &#125;</span><br><span class="line">  input[type=&quot;text&quot;],</span><br><span class="line">  input[type=&quot;password&quot;],</span><br><span class="line">  button &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    margin-bottom: 10px;</span><br><span class="line">    padding: 8px;</span><br><span class="line">    box-sizing: border-box;</span><br><span class="line">  &#125;</span><br><span class="line">  button &#123;</span><br><span class="line">    background-color: #4caf50;</span><br><span class="line">    color: #fff;</span><br><span class="line">    border: none;</span><br><span class="line">    cursor: pointer;</span><br><span class="line">  &#125;</span><br><span class="line">  button:hover &#123;</span><br><span class="line">    background-color: #45a049;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;h2&gt;Register&lt;/h2&gt;</span><br><span class="line">  &lt;form id=&quot;registerForm&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;regUsername&quot;&gt;Username:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;regUsername&quot; name=&quot;regUsername&quot; required&gt;&lt;br&gt;</span><br><span class="line">    &lt;label for=&quot;regPassword&quot;&gt;Password:&lt;/label&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; id=&quot;regPassword&quot; name=&quot;regPassword&quot; required&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; onclick=&quot;register()&quot;&gt;Register&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function register() &#123;</span><br><span class="line">  var username = document.getElementById(&quot;regUsername&quot;).value;</span><br><span class="line">  var password = document.getElementById(&quot;regPassword&quot;).value;</span><br><span class="line">  if (username &amp;&amp; password) &#123;</span><br><span class="line">    localStorage.setItem(&quot;username&quot;, username);</span><br><span class="line">    localStorage.setItem(&quot;password&quot;, password);</span><br><span class="line">    alert(&quot;Registration successful!&quot;);</span><br><span class="line">    window.location.href = &#x27;index.html&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;Please enter both username and password.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="Exercise-图片中转站"><a href="#Exercise-图片中转站" class="headerlink" title="Exercise: 图片中转站"></a>Exercise: 图片中转站</h2><h3 id="项目图片-–"><a href="#项目图片-–" class="headerlink" title="项目图片 –&gt;"></a>项目图片 –&gt;</h3><p><img src="/img/article/3/fc4caee593e7510f5e9b7923700b567a9caa39c4251ddfb820eb6235a24d6b50.png"></p>
-<p>源代码请见<code>评论区</code>。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>localstrange可以临时存放数据，但不建议长久存放。</p>
-<p>版权所有©Minecraft-Sep。</p>
-]]></content>
-      <categories>
-        <category>HTML</category>
-      </categories>
-      <tags>
-        <tag>Javascript</tag>
-        <tag>HTML</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>免费域名怎么弄？常见免费域名指南</title>
     <url>//post/re8u.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要开学了！你们的作业怎么样了？<del>反正我没写完</del></p>
@@ -1260,74 +1250,73 @@
       </tags>
   </entry>
   <entry>
-    <title>博客一周年记</title>
-    <url>//post/te2r.html</url>
-    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
-<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
-<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
-<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
-<p>  我使用了Github Pages，域名仍是有效的：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
+    <title>API构建①——Bing每日一图接口</title>
+    <url>//post/r5fd.html</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>众所周知，bing的每日一图都特别beautiful，在我们的blog里也起到了很好的装饰作用。那就有人问了，HOW TO GET IT？今天我就来教你们构建属于自己的bing每日一图API！</p>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h3 id="Part1-了解bing每日一图链接规律"><a href="#Part1-了解bing每日一图链接规律" class="headerlink" title="Part1. 了解bing每日一图链接规律"></a>Part1. 了解bing每日一图链接规律</h3><p>就拿今天的做例子：<a href="https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg">https://cn.bing.com/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg</a></p>
+<p>获取到的json内容如下所示：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;startdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240730&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fullstartdate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;202407301600&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;enddate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20240731&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;urlbase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/th?id=OHR.HoodoosBryce_ZH-CN8398575172&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyright&quot;</span><span class="punctuation">:</span> <span class="string">&quot;石林，日落点，布莱斯峡谷国家公园，犹他州，美国 (© Tim Fitzharris/Minden Pictures)&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;copyrightlink&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.bing.com/search?q=%E5%B8%83%E8%8E%B1%E6%96%AF%E5%B3%A1%E8%B0%B7%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD&amp;form=hpcapt&amp;mkt=zh-cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里有“胡图”吗？&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;quiz&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20240730_HoodoosBryce%22&amp;FORM=HPQUIZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wp&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hsh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1cabac064d004edabc8b0d2e375052ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;drk&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;top&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bot&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tooltips&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span> <span class="string">&quot;正在加载...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;previous&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;next&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下一个图像&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;此图片不能下载用作壁纸。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;walls&quot;</span><span class="punctuation">:</span> <span class="string">&quot;下载今日美图。仅限用作桌面壁纸。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
-<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
-<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
-<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
-<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
-<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
-<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
-<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
-<p>  直到2024年6月，我发现了一个新主题：<strong>Solitude</strong></p>
-<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
-<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
-
-<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
-<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
-<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
-<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
-<p>  版权所有©MC-Sep 2024.</p>
-]]></content>
-      <categories>
-        <category>周年记</category>
-      </categories>
-      <tags>
-        <tag>周年记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>什么是DDos？它会对博客造成什么威胁？DDos攻击原理与防护方法</title>
-    <url>//post/76gl.html</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近我在查Vercel的Usage的时候，发现了这个东西：</p>
-<p><img src="/img/article/16/4oX5YJ0.png" alt="有DDos拦截记录"></p>
-<p>由于影响不是很大，为了他人隐私（也不能不给他机会改正吧），就不“公开处刑”了。</p>
-<p>那么，什么是DDos？它会对博客造成什么威胁？今天我就讲讲DDos攻击原理与防护方法。</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>DDoS全称Distributed Denial of Service，意思为“分布式拒绝服务”，即利用大量合法的分布式服务器对目标发送请求，从而导致正常合法用户无法获得服务。</p>
-<p>就比如，一个健身房生意十分火爆，那些“壮汉”看不下去了，就召集n个人进到他店，但是就是不健身，又堵住健身器材。这个商家看似很忙很火爆，其实啥也不是，同时，真正想要健身的顾客也没得到接待，因为店里挤得进不去。</p>
-<p>现在的DDoS让服务不仅可以直接阻断，还能够通过影响服务的客户体验实现攻击。他又这些特点：</p>
+<p>我们就可以猜出其中的规律了：</p>
+<p><a href="https://cn.bing.com/">https://cn.bing.com</a> + 上面的”url”，构成了该链接。</p>
+<h3 id="Part2-构建API"><a href="#Part2-构建API" class="headerlink" title="Part2. 构建API"></a>Part2. 构建API</h3><p>我们使用<strong>GET</strong>方法构建我们的API，名称为<code>bing.php</code>，也可以从 <a href="https://mc-sep.js.cool/api/bing.php">https://mc-sep.js.cool/api/bing.php</a> 下载！</p>
 <ol>
-<li><strong>造成“供不应求”现象</strong>。通过控制大量攻击主机同时连接网站端口，制造大流量无用数据，造成通往被攻击主机的网络拥塞，使被攻击主机无法正常和外界通信。</li>
-<li><strong>傀儡攻击</strong>。傀儡就是可以被黑客操控的机器，经常被用为DDos攻击，但是傀儡数量十分多，使后端无法准确辨识。</li>
-<li><strong>网络层攻击</strong>。通过发送伪造源IP的TCP数据包发送SYN或ACK包、发送包含错误设置的地址值等攻击方式，耗尽服务器资源，导致服务器拒绝访问。</li>
-<li><strong>CC攻击</strong>。黑客借助代理服务器生成指向受害主机的合法网页请求，实现DDoS和伪装就叫CC（全名Challenge Collapsar）。傀儡CC攻击是黑客使用CC攻击软件，控制大量傀儡发动攻击，模拟正常用户访问网站的请求，伪造成合法数据包。</li>
+<li>判断是否是随机调用（我们的API可以指定日期）</li>
 </ol>
-<p>DDos攻击原理如下：</p>
-<p><img src="/img/article/16/1.png" alt="原理"></p>
-<h1 id="抵御"><a href="#抵御" class="headerlink" title="抵御"></a>抵御</h1><p>要抵御DDos攻击，可限制同时间访问量，如：</p>
-<p><img src="/img/article/16/2.png" alt="1"></p>
-<p>Cloudflare里可以设置。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>老是有人棍去攻击你的网站，很正常，但是“不怕一万，只怕万一”，赶紧学起来！！</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>如果不是，则指定日期</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>获取Bing Json详细信息，转换为PHP数组，再提取基础URL</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>判断是否制定了图片大小，否则默认1920 * 1080</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>建立完整URL</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>获取其他信息并判断是否需要</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>不是则直接返回</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>完整代码</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;rand&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable">$gettime</span> = <span class="title function_ invoke__">rand</span>(-<span class="number">1</span>,<span class="number">7</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$gettimebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;day&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$gettimebase</span>)) &#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="number">0</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable">$gettime</span> = <span class="variable">$gettimebase</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$json_string</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=&#x27;</span>.<span class="variable">$gettime</span>.<span class="string">&#x27;&amp;n=1&#x27;</span>);</span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$json_string</span>);</span><br><span class="line"><span class="variable">$imgurlbase</span> = <span class="string">&quot;https://www.bing.com&quot;</span>.<span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;urlbase&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgsizebase</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$imgsizebase</span>))&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="string">&quot;1920x1080&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable">$imgsize</span> = <span class="variable">$imgsizebase</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$imgurl</span> = <span class="variable">$imgurlbase</span>.<span class="string">&quot;_&quot;</span>.<span class="variable">$imgsize</span>.<span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="variable">$imgtime</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;startdate&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imgtitle</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyright&quot;</span>&#125;;</span><br><span class="line"><span class="variable">$imglink</span> = <span class="variable">$data</span>-&gt;&#123;<span class="string">&quot;images&quot;</span>&#125;[<span class="number">0</span>]-&gt;&#123;<span class="string">&quot;copyrightlink&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_GET</span>[<span class="string">&#x27;info&#x27;</span>]===<span class="string">&#x27;true&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&#123;title:&quot;</span>.<span class="variable">$imgtitle</span>.<span class="string">&quot;,url:&quot;</span>.<span class="variable">$imgurl</span>.<span class="string">&quot;,link:&quot;</span>.<span class="variable">$imglink</span>.<span class="string">&quot;,time:&quot;</span>.<span class="variable">$imgtime</span>.<span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: <span class="subst">$imgurl</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>可以去参考一下API接口：</p>
+<ul>
+<li><a href="https://api.kdcc.cn/">https://api.kdcc.cn</a></li>
+<li><a href="https://api.isoyu.com/bing_images.php">https://api.isoyu.com/bing_images.php</a></li>
+<li><a href="http://api.muvip.cn//api/bing/index.php?rand=false&day=0&size=1920x1080&info=false">http://api.muvip.cn//api/bing/index.php?rand=false&amp;day=0&amp;size=1920x1080&amp;info=false</a></li>
+<li><a href="https://source.unsplash.com/random">https://source.unsplash.com/random</a></li>
+<li><a href="https://api.dujin.org/bing/1366.php">https://api.dujin.org/bing/1366.php</a></li>
+<li><a href="https://picsum.photos/">https://picsum.photos/</a></li>
+</ul>
 <p>版权所有©MC-Sep 2024.</p>
 ]]></content>
       <categories>
-        <category>实用教程</category>
+        <category>PHP</category>
       </categories>
       <tags>
-        <tag>Cloudflare</tag>
-        <tag>DDos</tag>
+        <tag>API</tag>
+        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -1493,6 +1482,45 @@
       </tags>
   </entry>
   <entry>
+    <title>博客一周年记</title>
+    <url>//post/te2r.html</url>
+    <content><![CDATA[<p>  不知不觉，我的博客已经建设一年多了。在这年里，我更换了<strong>4</strong>个主题，写了<strong>53+<strong>篇文章（无关的&#x2F;删除的42篇），更换了</strong>6</strong>次域名，网站超<strong>13000</strong>人访问，超<strong>1000</strong>个访客访问了这里！<br>  下面是我的博客历程！</p>
+<h1 id="Part1-框架Hexo"><a href="#Part1-框架Hexo" class="headerlink" title="Part1.框架Hexo"></a>Part1.框架Hexo</h1><p>  2023年的一天，我的好基友<strong>serverdream</strong>找到我说：“有兴趣搭建一个blog吗？我告诉你！”于是我便跟着他学起来<strong>Hexo</strong>，这也是我的博客始发站。</p>
+<h1 id="Part-2-第一代个人博客：Fluid"><a href="#Part-2-第一代个人博客：Fluid" class="headerlink" title="Part 2.第一代个人博客：Fluid"></a>Part 2.第一代个人博客：Fluid</h1><p>  2023年10月，我找到了一个看着不错的hexo主题：<strong>Fluid</strong>：</p>
+<p><img src="/img/article/11/03e54b7d612f8bc422da789642c98e12d582b5e2600cf8916b68850033a87837.png" alt="Fluid主题"></p>
+<p>  我使用了Github Pages，域名仍是有效的：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://sepiatruck34735.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part3-Serpblog的建设"><a href="#Part3-Serpblog的建设" class="headerlink" title="Part3.Serpblog的建设"></a>Part3.Serpblog的建设</h1><p>  同月，serverdream提出一个想法：“我们一起做一个C++的博客，让更多人学把”，我也答应了，历时三个月，也是把Serpblog建设好了：</p>
+<p><img src="/img/article/11/680406de5438f800869975fdde94dba8d250c7101fb87521d2542fc0727403a1.png" alt="Serpblog"></p>
+<p>  之后我们也搞了交流群，也有人加入了学习，但在2024年2月，群员 <strong>Crewwhite</strong> 发现来来去去就那几个人看，我便有了想放弃的想法。</p>
+<p>  2024年同月，因学业问题，Serpblog迎来“大休假”。现在的Serpblog已超2000次访问，链接仍有效：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://serpblog.github.io/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part4-第二代个人博客：Aurora"><a href="#Part4-第二代个人博客：Aurora" class="headerlink" title="Part4.第二代个人博客：Aurora"></a>Part4.第二代个人博客：Aurora</h1><p>  这是最没人气的一次更新，才用了2天就不用了（悲）</p>
+<h1 id="Part5-第三代个人博客：Anzhiyu"><a href="#Part5-第三代个人博客：Anzhiyu" class="headerlink" title="Part5.第三代个人博客：Anzhiyu"></a>Part5.第三代个人博客：Anzhiyu</h1><p>  从Serpblog受到启发，开始自己搭建anzhiyu主题。</p>
+<p>  2024年3月，我完成了我的主题，并开始了三个月不间断的更新：</p>
+<p><img src="/img/article/11/5bb94d6d8ac6f50273fe15236fc14acdb506f5cd42cc0083049823be4ac4a4df.png" alt="博客完成"></p>
+<p>  2024年4月，面对慢成Dog的Github Pages，我也发现了Gitee Pages、Cloudflare Pages和Codeberg Pages，注册了三个域名。</p>
+<p>  直到2024年6月，我发现了一个新主题：<strong>Solitude</strong></p>
+<p><img src="/img/article/11/b35a8a5858ff89fdb93bab3152f1ce5cadee599c433b19c1a4153708d2083e54.png" alt="主题Solitude简介"></p>
+<p>  对比官方已经停更的Anzhiyu，Solitude主题更有发展性。犹豫几天，也是放弃了Anzhiyu，把博客数据全部转移了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://minecraftsep.pages.dev</span><br><span class="line">https://minecraftsep.github.io</span><br></pre></td></tr></table></figure>
+
+<h1 id="Part6-第四代个人博客：Solitude"><a href="#Part6-第四代个人博客：Solitude" class="headerlink" title="Part6.第四代个人博客：Solitude"></a>Part6.第四代个人博客：Solitude</h1><p>  2024年6月底，我完成了这个博客的建设，也就是你们现在看到的。</p>
+<p>  托管方我换成了<strong>Vercel</strong>，域名更换为<strong>mc-sep.js.cool</strong>，详见<a href="/weblink"><strong>换线界面</strong></a></p>
+<h1 id="Part7-总结"><a href="#Part7-总结" class="headerlink" title="Part7.总结"></a>Part7.总结</h1><p>  这一年博客磕磕绊绊，终于算是稳定了。</p>
+<p>  这是我第一次写年度总结，希望这不是最后一次！</p>
+<p>  版权所有©MC-Sep 2024.</p>
+]]></content>
+      <categories>
+        <category>周年记</category>
+      </categories>
+      <tags>
+        <tag>周年记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>如何让你的博客更丰富？hexo常见插件推荐</title>
     <url>//post/ugr2.html</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的 hexo 博客只是普通的搭建完成，那么也会缺少一些新意。下面是一些实用的hexo插件。</p>
@@ -1639,34 +1667,6 @@
       <tags>
         <tag>Hexo</tag>
         <tag>Hexo插件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows实用软件推荐</title>
-    <url>//post/dw23.html</url>
-    <content><![CDATA[<h2 id="1-Everything"><a href="#1-Everything" class="headerlink" title="1. Everything"></a>1. Everything</h2><p>你是否在为系统自带的搜索太慢而烦恼？又或者找不到你保存的文件？没关系，Everything会出手！Everything是一款小巧便携的搜索工具，占用小但是速度明显提升！</p>
-<p>官图：</p>
-<p><img src="https://www.voidtools.com/zh-cn/support/everything/Everything.Search.Window.png"></p>
-<p>下载地址：<a href="https://www.voidtools.com/zh-cn/downloads/">Click</a></p>
-<h2 id="2-Geek"><a href="#2-Geek" class="headerlink" title="2. Geek"></a>2. Geek</h2><p>流氓软件的克星！在Geek里，你可以快速解除软件占用，强力卸载软件，系统软件也可！</p>
-<p>官图：</p>
-<p><img src="https://geekuninstaller.com/assets/images/screen_1.png"></p>
-<p>下载地址：<a href="https://geekuninstaller.com/download">Click</a></p>
-<h2 id="3-SpaceSniffer"><a href="#3-SpaceSniffer" class="headerlink" title="3. SpaceSniffer"></a>3. SpaceSniffer</h2><p>利用这个软件你可以便携的找到电脑里的大文件，找到占用多的源头！</p>
-<p>官图：</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/c5617f35d7066ade1232bab70368693e.png"></p>
-<p>下载地址：<a href="https://pan.quark.cn/s/ee2104b6863a#/list/share">Click</a></p>
-<p>(这是汉化版的，网上没有别的版本了…)</p>
-<h2 id="4-Bongocat"><a href="#4-Bongocat" class="headerlink" title="4. Bongocat"></a>4. Bongocat</h2><p>一个会在桌面上生成小猫的工具！小猫的动作和你使用鼠标、键盘的动作一样！主播必用！</p>
-<p>官图：</p>
-<p><img src="https://s41.ax1x.com/2025/12/21/pZ3RSFx.png"></p>
-<p>下载地址：<a href="https://bongocat.gjxx.dev/">Click</a></p>
-]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
       </tags>
   </entry>
 </search>
