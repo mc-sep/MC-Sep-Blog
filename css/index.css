@@ -10212,8 +10212,8 @@ span.tags-punctuation {
     height: 100%;
     top: 0;
     left: 0;
-    -webkit-box-shadow: 0 -109px 133px -9px none inset;
-    box-shadow: 0 -109px 133px -9px none inset;
+    -webkit-box-shadow: 0 -109px 133px -9px #fff inset;
+    box-shadow: 0 -109px 133px -9px #fff inset;
   }
   .topGroup .todayCard.hide {
     opacity: 0;
